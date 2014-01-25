@@ -9,4 +9,8 @@ These libraries are autonomous and reusable and used accross server/platform com
 * Any public api member *should* be commented.
 * Versioning *must* follow [Semantic Versioning](http://semver.org/).
 
+## Coding guidelines
+
+[Coding guidelines](coding-guidelines.md)
+
 Copyright (C) 2014 [serial-labs](http://www.serial-labs.com)
