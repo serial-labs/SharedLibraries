@@ -6,7 +6,9 @@
 
 ##C# coding conventions
 
-The serial-labs team uses [Allman bracing style](http://en.wikipedia.org/wiki/Indent_style#Allman_style). We are using the C# coding conventions described in this document: [C# Coding Guidelines](http://blogs.msdn.com/b/brada/archive/2005/01/26/361363.aspx) with the following exceptions:
+The serial-labs team uses [Allman bracing style](http://en.wikipedia.org/wiki/Indent_style#Allman_style).
+
+We are using the C# coding conventions described in this document: [C# Coding Guidelines](http://blogs.msdn.com/b/brada/archive/2005/01/26/361363.aspx) with the following exceptions:
 
 * Private fields are prefixed with an underscore and camel-cased.
 * Each file should not start with a copyright notice. The ones at the root of the source tree will suffice.
