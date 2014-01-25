@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{125F79
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACA3687D-70CA-4AA9-8484-97EE1D857BC4}"
 	ProjectSection(SolutionItems) = preProject
+		coding-guidelines.md = coding-guidelines.md
 		README.md = README.md
 	EndProjectSection
 EndProject
