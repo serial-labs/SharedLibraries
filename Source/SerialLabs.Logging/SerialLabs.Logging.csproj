@@ -52,6 +52,7 @@
     <Compile Include="Formatters\LogFormatter.cs" />
     <Compile Include="Formatters\TextFormatter.cs" />
     <Compile Include="Formatters\XmlLogFormatter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="LogWriter.cs" />
