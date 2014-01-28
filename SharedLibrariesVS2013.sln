@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs", "Source\SerialLabs\SerialLabs.csproj", "{0706A320-FBC4-4CFF-8A51-280A59CDA5FC}"
 EndProject
@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{3D3767
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.Tests", "Source\SerialLabs.Logging.Tests\SerialLabs.Logging.Tests.csproj", "{2812E3A1-FF28-4D83-B235-207F427BBC10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Web", "Source\SerialLabs.Web\SerialLabs.Web.csproj", "{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,14 +52,19 @@ Global
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{2399AC7C-E410-4D21-A741-A13B7A3F3398} = {3D37672D-2D58-4F52-A7B9-200B714BAC2E}
+		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC} = {3D37672D-2D58-4F52-A7B9-200B714BAC2E}
+		{F7602FE1-4723-41C1-A75E-1A5FA1D3901A} = {3D37672D-2D58-4F52-A7B9-200B714BAC2E}
 		{7DF8B9B8-A088-4671-B42A-818AC174D7AF} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
 		{2812E3A1-FF28-4D83-B235-207F427BBC10} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
-		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC} = {3D37672D-2D58-4F52-A7B9-200B714BAC2E}
-		{2399AC7C-E410-4D21-A741-A13B7A3F3398} = {3D37672D-2D58-4F52-A7B9-200B714BAC2E}
 	EndGlobalSection
 EndGlobal
