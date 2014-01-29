@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+    <Compile Include="..\..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BitwiseMaskTest.cs" />
