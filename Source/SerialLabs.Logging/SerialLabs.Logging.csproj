@@ -55,6 +55,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="LogEntry.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="LogWriter.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
