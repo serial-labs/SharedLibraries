@@ -44,6 +44,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BitwiseMask.cs" />
+    <Compile Include="Contracts\IFactory.cs" />
     <Compile Include="Contracts\IResolver.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Guard.cs" />
