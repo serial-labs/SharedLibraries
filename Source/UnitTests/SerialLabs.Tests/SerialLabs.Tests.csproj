@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="BitwiseMaskTest.cs" />
     <Compile Include="GuardTest.cs" />
+    <Compile Include="Helpers\RegexHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\CryptographyHelperTest.cs" />
   </ItemGroup>
