@@ -46,6 +46,7 @@
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="Contracts\IFactory.cs" />
     <Compile Include="Contracts\IResolver.cs" />
+    <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Helpers\CryptographyHelper.cs" />
