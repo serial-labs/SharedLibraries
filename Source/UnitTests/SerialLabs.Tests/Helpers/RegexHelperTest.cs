@@ -54,5 +54,25 @@ namespace SerialLabs.Tests
             Assert.IsFalse(RegexHelper.IsUrl("xtp://domain.com"));
             Assert.IsFalse(RegexHelper.IsUrl("http://localhost/")); // Should use 127.0.0.1
         }
+
+        [TestMethod]
+        public void IsValidTableContainerName()
+        {
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid(" 456"));
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid(".456"));
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid("ué456"));
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid("ERT-DDD"));
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid("4Name"));
+
+            Assert.IsTrue(RegexHelper.IsTableContainerNameValid("aname1321"));
+            Assert.IsTrue(RegexHelper.IsTableContainerNameValid("A1name13"));            
+
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid("78")); // Min Length = 3
+            
+            string name64Length = CryptographyHelper.ComputeMD5Hash(Guid.NewGuid().ToString()) + 
+                CryptographyHelper.ComputeMD5Hash(Guid.NewGuid().ToString());
+            Assert.IsFalse(RegexHelper.IsTableContainerNameValid(name64Length)); // MAx Length = 63
+
+        }
     }
 }
