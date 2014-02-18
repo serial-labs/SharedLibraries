@@ -93,7 +93,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SerialLabs.Logging.CloudStorage\SerialLabs.Logging.CloudStorage.csproj">
+    <ProjectReference Include="..\..\SerialLabs.Logging.CloudStorage\SerialLabs.Logging.CloudStorage.csproj">
       <Project>{910ce96c-b0ea-4b78-b01c-5d3958ffef2a}</Project>
       <Name>SerialLabs.Logging.CloudStorage</Name>
     </ProjectReference>

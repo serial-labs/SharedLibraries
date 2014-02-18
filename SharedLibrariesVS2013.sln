@@ -36,9 +36,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Data.Entity", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.Tests", "Source\UnitTests\SerialLabs.Logging.Tests\SerialLabs.Logging.Tests.csproj", "{2812E3A1-FF28-4D83-B235-207F427BBC10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.CloudStorage", "SerialLabs.Logging.CloudStorage\SerialLabs.Logging.CloudStorage.csproj", "{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.CloudStorage.Tests", "Source\UnitTests\SerialLabs.Logging.CloudStorage.Tests\SerialLabs.Logging.CloudStorage.Tests.csproj", "{AC313D39-8BAE-4A70-B373-A03228313871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.CloudStorage", "Source\SerialLabs.Logging.CloudStorage\SerialLabs.Logging.CloudStorage.csproj", "{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,14 +78,14 @@ Global
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2812E3A1-FF28-4D83-B235-207F427BBC10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC313D39-8BAE-4A70-B373-A03228313871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC313D39-8BAE-4A70-B373-A03228313871}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC313D39-8BAE-4A70-B373-A03228313871}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC313D39-8BAE-4A70-B373-A03228313871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910CE96C-B0EA-4B78-B01C-5D3958FFEF2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
