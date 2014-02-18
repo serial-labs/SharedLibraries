@@ -27,6 +27,9 @@ namespace SerialLabs.Tests
         {
             Assert.IsTrue(RegexHelper.IsEmail("b172f15bac94d30fde90@serial-labs.com"));
 
+            Assert.IsTrue(RegexHelper.IsEmail("b172f15bac94d30fde90@serial-labs"));
+
+
         }
         [TestMethod]
         public void IsAccessCodeTest()
