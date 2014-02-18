@@ -36,6 +36,12 @@ namespace SerialLabs
         /// Access Code pattern
         /// </summary>
         public const string AccessCodePattern = @"^[a-zA-Z0-9_\-\.]{10}$";
+
+        /// <summary>
+        /// Valid pattern for a Cloud Storage container name
+        /// </summary>
+        public const string CloudStorageContainerNamePattern = @"^[A-Za-z][A-Za-z0-9]{2,62}$";
+
         /// <summary>
         /// Returns true if the given value is an SHA-256 hash
         /// </summary>
@@ -90,6 +96,24 @@ namespace SerialLabs
         public static bool IsAccessCode(string value)
         {
             return IsPatternMatch(value, AccessCodePattern);
+        }
+
+        /// <summary>
+        /// Returns true if the given value is a valid CloudStorage container name
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsBlobContainerNameValid(string value)
+        {
+            if (String.IsNullOrWhiteSpace(value))
+                return false;
+
+            if (value.Equals("$root"))
+            {
+                return true;
+            }
+
+            return IsPatternMatch(value, CloudStorageContainerNamePattern);
         }
         #endregion
 
