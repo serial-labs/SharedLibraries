@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Web.Mvc", "Sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Web.Http", "Source\SerialLabs.Web.Http\SerialLabs.Web.Http.csproj", "{2A02786C-4FD4-4D91-9B54-CDA3C6E3E9D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Web.Http.Tests", "Source\UnitTests\SerialLabs.Web.Http.Tests\SerialLabs.Web.Http.Tests.csproj", "{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{2A02786C-4FD4-4D91-9B54-CDA3C6E3E9D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A02786C-4FD4-4D91-9B54-CDA3C6E3E9D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A02786C-4FD4-4D91-9B54-CDA3C6E3E9D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +114,6 @@ Global
 		{7DF8B9B8-A088-4671-B42A-818AC174D7AF} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
 		{2812E3A1-FF28-4D83-B235-207F427BBC10} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
 		{AC313D39-8BAE-4A70-B373-A03228313871} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
+		{1DFFD8DC-0597-440E-B2F9-89C3BFAE6383} = {31BD8A3B-338B-44E3-84D0-223FBAE4A6B1}
 	EndGlobalSection
 EndGlobal
