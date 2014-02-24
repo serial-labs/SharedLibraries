@@ -63,6 +63,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SerialLabs.Web\SerialLabs.Web.csproj">
+      <Project>{f7602fe1-4723-41c1-a75e-1a5fa1d3901a}</Project>
+      <Name>SerialLabs.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialLabs\SerialLabs.csproj">
+      <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
+      <Name>SerialLabs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
