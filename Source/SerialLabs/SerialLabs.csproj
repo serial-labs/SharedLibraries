@@ -47,8 +47,10 @@
     </Compile>
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="Converters\Converter.cs" />
+    <Compile Include="Converters\IPAddressConverter.cs" />
     <Compile Include="Converters\NumberBases.cs" />
     <Compile Include="Converters\NumberingSchemes.cs" />
+    <Compile Include="Extensions\IPAddressExtensions.cs" />
     <Compile Include="PlatformConstants.cs" />
     <Compile Include="Contracts\IFactory.cs" />
     <Compile Include="Contracts\IResolver.cs" />
