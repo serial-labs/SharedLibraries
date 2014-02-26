@@ -348,9 +348,9 @@ namespace SerialLabs.Converters
         private Converter(int fromRadix, NumberingSchemes fromScheme, int toRadix, NumberingSchemes toScheme)
         {
             #region Validate arguments
-            if (fromRadix < 2 || fromRadix > 36)
-                throw new ArgumentOutOfRangeException("fromRadix", "Radix can be from 2 to 36 inclusive");
-            if (toRadix < 2 || toRadix > 36)
+            if (fromRadix < 2 || fromRadix > 62)
+                throw new ArgumentOutOfRangeException("fromRadix", "Radix can be from 2 to 62 inclusive");
+            if (toRadix < 2 || toRadix > 62)
                 throw new ArgumentOutOfRangeException("toRadix", "Radix can be from 2 to 36 inclusive");
             if (fromRadix > 26 && fromScheme == NumberingSchemes.AToZ)
                 throw new ArgumentOutOfRangeException("fromRadix", "Invalid numbering scheme for specified number base");
