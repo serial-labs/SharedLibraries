@@ -54,6 +54,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BitwiseMaskTest.cs" />
+    <Compile Include="Converters\Converter.cs" />
     <Compile Include="GuardTest.cs" />
     <Compile Include="Helpers\RegexHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
