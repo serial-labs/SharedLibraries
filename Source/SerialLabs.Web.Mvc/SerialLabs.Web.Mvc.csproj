@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{12902A68-82B7-4DF4-8F92-CC941993EEDC}</ProjectGuid>
+    <ProjectGuid>{D04BB554-C107-4CA5-98B9-82BC646C8F0F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SerialLabs.Web.Mvc</RootNamespace>
@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SerialLabs.Web.Mvc.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SerialLabs.Web\SerialLabs.Web.csproj">
