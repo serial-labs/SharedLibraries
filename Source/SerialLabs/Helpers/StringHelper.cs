@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace SerialLabs.Helpers
+namespace SerialLabs
 {
     /// <summary>
     /// String manipulation helping methods

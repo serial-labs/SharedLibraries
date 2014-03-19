@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D04BB554-C107-4CA5-98B9-82BC646C8F0F}</ProjectGuid>
+    <ProjectGuid>{12902A68-82B7-4DF4-8F92-CC941993EEDC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SerialLabs.Web.Mvc</RootNamespace>
