@@ -12,6 +12,6 @@
         <description>$description$</description>
         <releaseNotes>Initial release</releaseNotes>
         <copyright>Copyright 2014</copyright>
-        <tags>seriallabs core</tags>
+        <tags>seriallabs web http webapi</tags>
     </metadata>
 </package>

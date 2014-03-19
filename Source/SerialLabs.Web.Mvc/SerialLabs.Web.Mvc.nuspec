@@ -6,12 +6,12 @@
         <title>$title$</title>
         <authors>$author$</authors>
         <owners>$author$</owners>
-        <licenseUrl>https://github.com/serial-labs/SharedLibraries</licenseUrl>
+        <licenseUrl>https://raw.github.com/serial-labs/SharedLibraries/master/LICENCE</licenseUrl>
         <projectUrl>https://github.com/serial-labs/SharedLibraries</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>$description$</description>
         <releaseNotes>Initial release</releaseNotes>
-        <copyright>Copyright 2014</copyright>
-        <tags>seriallabs core</tags>
+        <copyright>Copyright 2014 serial-labs</copyright>
+        <tags>seriallabs web mvc</tags>
     </metadata>
 </package>
