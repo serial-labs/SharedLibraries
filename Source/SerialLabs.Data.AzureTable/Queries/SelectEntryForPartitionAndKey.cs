@@ -9,16 +9,15 @@ using System.Threading.Tasks;
 namespace SerialLabs.Data.AzureTable.Queries
 {
     /// <summary>
-    /// Select the top N entity matching a given partition key
+    /// Select the entity matching a given partition key and row key
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class TopEntriesForPartition<TEntity> : TableStorageQuery<TEntity>
+    public class EntryForPartitionAndKey<TEntity> : TableStorageQuery<TEntity>
         where TEntity : ITableEntity, new()
     {
-        public const int DefaultLength = 100;
 
         private readonly string _partition;
-        private readonly int _take;
+        private readonly string _row;
         private readonly string _cacheKey;
 
         public override string UniqueIdentifier
@@ -26,31 +25,34 @@ namespace SerialLabs.Data.AzureTable.Queries
             get { return _cacheKey; }
         }
 
-        public TopEntriesForPartition(string partition)
-            : this(partition, DefaultLength)
-        { }
-        public TopEntriesForPartition(string partition, int take)
+
+        public EntryForPartitionAndKey(string partition, string row)
             : base()
         {
             Guard.ArgumentNotNullOrWhiteSpace(partition, "partition");
+            Guard.ArgumentNotNullOrWhiteSpace(row, "row");
 
             _partition = partition;
-            _take = take;
+            _row = row;
             _cacheKey = CreateCacheKey();
         }
 
         protected override TableQuery<TEntity> CreateQuery()
         {
-            //string filterCondition = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, _partition.ToUpperInvariant());
-            string filterCondition = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, _partition);
+            string filterCondition = TableQuery.CombineFilters(
+                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, _partition),
+                    TableOperators.And,
+                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, _row)
+            );
+
             TableQuery<TEntity> query = new TableQuery<TEntity>();
-            return query.Where(filterCondition).Take(_take);
+            return query.Where(filterCondition);
         }
 
         protected string CreateCacheKey()
         {
             return String.Format(CultureInfo.InvariantCulture,
-                    "TopEntriesForPartitionQuery-{0}-{1}", _partition, _take);
+                    "EntryForPartitionAndKey-{0}--{1}", _partition, _row);
         }
     }
 }

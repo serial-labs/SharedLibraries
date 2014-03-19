@@ -42,7 +42,7 @@ namespace SerialLabs.Data.AzureTable
             _query = query;
             _cacheKey = cacheKey;
 
-            if (cacheKey == null)
+            if (cache == null)
             {
                 Cache = new MemoryCache(DefaultCacheName);
             }

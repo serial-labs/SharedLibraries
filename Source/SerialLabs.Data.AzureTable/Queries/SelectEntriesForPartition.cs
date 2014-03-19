@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 namespace SerialLabs.Data.AzureTable.Queries
 {
     /// <summary>
-    /// Select the top N entity matching a given partition key
+    /// Select the entities matching a given partition key
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class TopEntriesForPartition<TEntity> : TableStorageQuery<TEntity>
+    public class EntriesForPartition<TEntity> : TableStorageQuery<TEntity>
         where TEntity : ITableEntity, new()
     {
-        public const int DefaultLength = 100;
 
         private readonly string _partition;
-        private readonly int _take;
         private readonly string _cacheKey;
 
         public override string UniqueIdentifier
@@ -26,16 +24,13 @@ namespace SerialLabs.Data.AzureTable.Queries
             get { return _cacheKey; }
         }
 
-        public TopEntriesForPartition(string partition)
-            : this(partition, DefaultLength)
-        { }
-        public TopEntriesForPartition(string partition, int take)
+
+        public EntriesForPartition(string partition)
             : base()
         {
             Guard.ArgumentNotNullOrWhiteSpace(partition, "partition");
 
             _partition = partition;
-            _take = take;
             _cacheKey = CreateCacheKey();
         }
 
@@ -44,13 +39,13 @@ namespace SerialLabs.Data.AzureTable.Queries
             //string filterCondition = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, _partition.ToUpperInvariant());
             string filterCondition = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, _partition);
             TableQuery<TEntity> query = new TableQuery<TEntity>();
-            return query.Where(filterCondition).Take(_take);
+            return query.Where(filterCondition);
         }
 
         protected string CreateCacheKey()
         {
             return String.Format(CultureInfo.InvariantCulture,
-                    "TopEntriesForPartitionQuery-{0}-{1}", _partition, _take);
+                    "EntriesForPartitionQuery-{0}", _partition);
         }
     }
 }
