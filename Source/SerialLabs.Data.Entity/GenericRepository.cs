@@ -12,8 +12,11 @@ namespace SerialLabs.Data.Entity
     /// Implements the repository pattern in a generic way
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TId"></typeparam>
     /// <see cref="http://martinfowler.com/eaaCatalog/repository.html"/>
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity, TId> : IGenericRepository<TEntity, TId>
+        where TEntity : class
+        where TId : struct
     {
         /// <summary>
         /// Context
@@ -75,7 +78,7 @@ namespace SerialLabs.Data.Entity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual TEntity GetItem(object id)
+        public virtual TEntity GetItem(TId id)
         {
             return _dbSet.Find(id);
         }
@@ -103,7 +106,7 @@ namespace SerialLabs.Data.Entity
         /// Deletes an entity from the underlying data context.
         /// </summary>
         /// <param name="id"></param>
-        public virtual void Delete(object id)
+        public virtual void Delete(TId id)
         {
             TEntity entity = _dbSet.Find(id);
 

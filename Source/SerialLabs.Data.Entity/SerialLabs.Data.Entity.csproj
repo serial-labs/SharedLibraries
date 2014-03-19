@@ -58,6 +58,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="SerialLabs.Data.Entity.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SerialLabs.Data\SerialLabs.Data.csproj">

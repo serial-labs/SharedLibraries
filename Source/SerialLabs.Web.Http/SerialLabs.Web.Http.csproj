@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SerialLabs.Web.Http.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SerialLabs.Web\SerialLabs.Web.csproj">

@@ -8,10 +8,12 @@ namespace SerialLabs.Data
     /// <summary>
     /// A contract for a repository pattern in a generic way
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TEntity">The type of the entity</typeparam>
+    /// <typeparam name="TEntity">The type of the entity identifier</typeparam>
     /// <see cref="http://martinfowler.com/eaaCatalog/repository.html"/>
-    public interface IGenericRepository<TEntity>
-     where TEntity : class
+    public interface IGenericRepository<TEntity, TId>
+        where TEntity : class
+        where TId : struct
     {
         /// <summary>
         /// Gets a list of entities from the underlying data context.
@@ -31,7 +33,7 @@ namespace SerialLabs.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        TEntity GetItem(object id);
+        TEntity GetItem(TId id);
 
         /// <summary>
         /// Inserts a new entity into the underlying data context.
@@ -49,7 +51,7 @@ namespace SerialLabs.Data
         /// Deletes an entity from the underlying data context.
         /// </summary>
         /// <param name="id"></param>
-        void Delete(object id);
+        void Delete(TId id);
 
         /// <summary>
         /// Deletes an entity from the underlying data context.
