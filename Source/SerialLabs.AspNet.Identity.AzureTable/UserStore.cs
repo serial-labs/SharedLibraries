@@ -21,6 +21,7 @@ namespace SerialLabs.Identity.CloudStorage
         IUserEmailStore<TUser>, IUserTwoFactorStore<TUser>
         where TUser : IdentityUser
     {
+        private bool _disposed = false;
         private readonly IPartitionKeyResolver<string> _partitionKeyResolver;
         private readonly CloudTable _userTableReference;
         private readonly CloudTable _loginTableReference;
@@ -40,10 +41,23 @@ namespace SerialLabs.Identity.CloudStorage
             _loginTableReference.CreateIfNotExists();
         }
 
+        #region IDisposable
         public void Dispose()
         {
-
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                // Free managed
+            }
+            _disposed = true;
+        }
+        #endregion
 
         #region IUserStore
         // This method doesn't perform uniqueness. That's the responsability of the session provider.
@@ -325,6 +339,6 @@ namespace SerialLabs.Identity.CloudStorage
             await GetUserTable().ExecuteAsync(operation);
         }
 
-        
+
     }
 }
