@@ -10,9 +10,17 @@ namespace SerialLabs.Identity.CloudStorage
     /// </summary>
     public class IdentityUser : TableEntity, IUser
     {
+
+
         // Keeping it simple and mapping IUser.Id to IUser.UserName.
         // This allows easy, efficient lookup by setting this to be the rowkey in table storage
         public string Id { get { return UserName; } }
+
+        public virtual bool TwoFactorEnabled { get; set; }
+
+        public string Email { get; set; }
+
+        public bool IsVerified { get; set; }
 
         /// <summary>
         /// Username is rowkey
@@ -29,15 +37,14 @@ namespace SerialLabs.Identity.CloudStorage
             }
         }
 
+        public string TokenString { get; set; }
+
         public string PasswordHash { get; set; }
 
         public string SecurityStamp { get; set; }
 
         #region Logins
         private IList<IdentityUserLogin> _logins;
-        /// <summary>
-        /// Serialization pivot for <see cref="IList{IdentityUserLogin}"/> (logins)
-        /// </summary>
         public string SerializedLogins
         {
             get
@@ -51,9 +58,7 @@ namespace SerialLabs.Identity.CloudStorage
                 _logins = JsonConvert.DeserializeObject<IList<IdentityUserLogin>>(value) ?? new List<IdentityUserLogin>();
             }
         }
-        /// <summary>
-        /// User Logins
-        /// </summary>
+
         [IgnoreProperty]
         public IList<IdentityUserLogin> Logins
         {
@@ -71,9 +76,7 @@ namespace SerialLabs.Identity.CloudStorage
 
         #region Roles
         private IList<string> _roles;
-        /// <summary>
-        /// Serialization pivot for <see cref="IList{string}"/> (roles) 
-        /// </summary>
+
         public string SerializedRoles
         {
             get
@@ -105,9 +108,6 @@ namespace SerialLabs.Identity.CloudStorage
 
         #region Claims
         private IList<IdentityUserClaim> _claims;
-        /// <summary>
-        /// Serialization pivot for <see cref="IList{IdentityUserClaim}"/> (claims)
-        /// </summary>
         public string SerializedClaims
         {
             get
@@ -121,10 +121,6 @@ namespace SerialLabs.Identity.CloudStorage
                 _claims = JsonConvert.DeserializeObject<IList<IdentityUserClaim>>(value) ?? new List<IdentityUserClaim>();
             }
         }
-        /// <summary>
-        /// User Claims
-        /// </summary>
-        [IgnoreProperty]
         public IList<IdentityUserClaim> Claims
         {
             get
@@ -139,4 +135,5 @@ namespace SerialLabs.Identity.CloudStorage
         }
         #endregion
     }
+
 }
