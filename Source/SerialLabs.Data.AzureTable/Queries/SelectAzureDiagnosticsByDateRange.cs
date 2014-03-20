@@ -1,11 +1,15 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SuperMassive.Storage.TableStorage.Queries
+namespace SerialLabs.Data.AzureTable.Queries
 {
     public class SelectAzureDiagnosticsByDateRange<TEntity> : TableStorageQuery<TEntity>
-        where TEntity : ITableEntity, new()
+       where TEntity : ITableEntity, new()
     {
         private readonly string _tableStartPartition;
         private readonly string _tableEndPartition;
