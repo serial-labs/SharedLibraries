@@ -3,8 +3,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 using SerialLabs.Data.AzureTable.Queries;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SerialLabs.Data.AzureTable.Tests
@@ -231,8 +229,8 @@ namespace SerialLabs.Data.AzureTable.Tests
         {
             public FakeEntryForPartitionAndKey(string a, string b)
                 : base(a, b) { }
-            public string CreateCacheKey() { return base.CreateCacheKey(); }
-            public TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
+            public new string CreateCacheKey() { return base.CreateCacheKey(); }
+            public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }
 
 
@@ -240,8 +238,8 @@ namespace SerialLabs.Data.AzureTable.Tests
         {
             public FakeEntriesForPartition(string a)
                 : base(a) { }
-            public string CreateCacheKey() { return base.CreateCacheKey(); }
-            public TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
+            public new string CreateCacheKey() { return base.CreateCacheKey(); }
+            public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }
 
 
@@ -249,8 +247,8 @@ namespace SerialLabs.Data.AzureTable.Tests
         {
             public FakeTopEntriesForPartition(string a)
                 : base(a) { }
-            public string CreateCacheKey() { return base.CreateCacheKey(); }
-            public TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
+            public new string CreateCacheKey() { return base.CreateCacheKey(); }
+            public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }
     }
 }

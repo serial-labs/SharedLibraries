@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 namespace SerialLabs.Data.AzureTable
 {
     public class TableStorageQueryCache<TEntity> : ITableStorageQuery<TEntity>
-        where TEntity : ITableEntity, new()
+            where TEntity : ITableEntity, new()
     {
         public const string DefaultCacheName = "TableStorageQueryCache";
+        private static ObjectCache Cache;
 
         private readonly ITableStorageQuery<TEntity> _query;
         private readonly CacheItemPolicy _cacheItemPolicy;
-        private readonly string _cacheKey = String.Empty;
-        private static ObjectCache Cache;
 
         public string UniqueIdentifier
         {
@@ -23,24 +22,19 @@ namespace SerialLabs.Data.AzureTable
         }
 
         public TableStorageQueryCache(ITableStorageQuery<TEntity> query)
-            : this(query, String.Empty, null, null)
+            : this(query, null, null)
         { }
-        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, string cacheKey)
-            : this(query, cacheKey, null, null)
+        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, ObjectCache cache)
+            : this(query, cache, null)
         { }
-        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, string cacheKey, ObjectCache cache)
-            : this(query, cacheKey, cache, null)
+        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, CacheItemPolicy policy)
+            : this(query, null, policy)
         { }
-        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, string cacheKey, CacheItemPolicy policy)
-            : this(query, cacheKey, null, policy)
-        { }
-        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, string cacheKey, ObjectCache cache, CacheItemPolicy policy)
+        public TableStorageQueryCache(ITableStorageQuery<TEntity> query, ObjectCache cache, CacheItemPolicy policy)
         {
             Guard.ArgumentNotNull(query, "query");
-            Guard.ArgumentNotNull(cacheKey, "cacheKey");
 
             _query = query;
-            _cacheKey = cacheKey;
 
             if (cache == null)
             {
@@ -80,7 +74,7 @@ namespace SerialLabs.Data.AzureTable
         private string CreateCacheKey(CloudTable table)
         {
             return CryptographyHelper.ComputeSHA1Hash(String.Format(CultureInfo.InvariantCulture,
-                "{0}-{1}-{2}", _query.UniqueIdentifier, _cacheKey, table.Uri));
+                "{0}-{1}", table.Uri, _query.UniqueIdentifier));
         }
     }
 }
