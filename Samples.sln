@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Data.AzureTable"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs", "Source\SerialLabs\SerialLabs.csproj", "{0706A320-FBC4-4CFF-8A51-280A59CDA5FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Data", "Source\SerialLabs.Data\SerialLabs.Data.csproj", "{04E35A96-3802-493B-BFCC-4E425CB9657A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E35A96-3802-493B-BFCC-4E425CB9657A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E35A96-3802-493B-BFCC-4E425CB9657A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E35A96-3802-493B-BFCC-4E425CB9657A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E35A96-3802-493B-BFCC-4E425CB9657A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 		{D0848109-81E6-43E6-934C-71850906F6D4} = {31950456-9C3F-4ECA-96AD-DE985DE6D7E6}
 		{C2235FA7-8901-4D83-A5D8-827B9C03D6AA} = {31950456-9C3F-4ECA-96AD-DE985DE6D7E6}
 		{0706A320-FBC4-4CFF-8A51-280A59CDA5FC} = {31950456-9C3F-4ECA-96AD-DE985DE6D7E6}
+		{04E35A96-3802-493B-BFCC-4E425CB9657A} = {31950456-9C3F-4ECA-96AD-DE985DE6D7E6}
 	EndGlobalSection
 EndGlobal
