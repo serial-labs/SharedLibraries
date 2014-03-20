@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Runtime.Caching;
 
 namespace SerialLabs.Data.AzureTable.Tests
 {
@@ -9,8 +10,8 @@ namespace SerialLabs.Data.AzureTable.Tests
         [TestMethod]
         public void TableStorageQueryCache_Execute()
         {
-            MemoryCache cache = new MemoryCache(DefaultCacheName);
-            TableStorageQueryCache query = TableStorageQueryCache(ITableStorageQuery < TEntity > query);
+            ObjectCache cache = new MemoryCache("");
+            //TableStorageQueryCache query = TableStorageQueryCache(query);
         }
     }
 }
