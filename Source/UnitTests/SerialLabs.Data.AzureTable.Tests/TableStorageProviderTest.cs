@@ -65,7 +65,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             }
 
-            public CloudTable GetTableReference(CloudStorageAccount storageAccount, string tableName)
+            public new CloudTable GetTableReference(CloudStorageAccount storageAccount, string tableName)
             {
                 return base.GetTableReference(storageAccount, tableName);
             }

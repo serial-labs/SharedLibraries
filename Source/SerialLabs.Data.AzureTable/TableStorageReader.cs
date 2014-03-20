@@ -9,10 +9,9 @@ namespace SerialLabs.Data.AzureTable
     public class TableStorageReader : TableStorageProvider
     {
         private CacheItemPolicy _cachePolicy;
-        private string _cacheKey = String.Empty;
 
-        public TableStorageReader(string tableName, string connectionString)
-            : base(tableName, connectionString)
+        public TableStorageReader(string tableName, string connectionStringSettingName)
+            : base(tableName, connectionStringSettingName)
         { }
 
         public async Task<ICollection<TEntity>> ExecuteAsync<TEntity>(ITableStorageQuery<TEntity> query)
@@ -25,8 +24,7 @@ namespace SerialLabs.Data.AzureTable
                 if (_cachePolicy == null)
                     return query.Execute(_table);
 
-                TableStorageQueryCache<TEntity> cachedQuery = new TableStorageQueryCache<TEntity>(query, _cacheKey, _cachePolicy);
-                //TableStorageQueryCache<TEntity> cachedQuery = new TableStorageQueryCache<TEntity>(query, query.UniqueIdentifier, _cachePolicy);
+                TableStorageQueryCache<TEntity> cachedQuery = new TableStorageQueryCache<TEntity>(query, _cachePolicy);
                 return cachedQuery.Execute(_table);
             });
         }
@@ -37,15 +35,10 @@ namespace SerialLabs.Data.AzureTable
         }
         public TableStorageReader WithCache(CacheItemPolicy policy)
         {
-            return WithCache(policy, String.Empty);
-        }
-        public TableStorageReader WithCache(CacheItemPolicy policy, string cacheKey)
-        {
             Guard.ArgumentNotNull(policy, "policy");
-            Guard.ArgumentNotNull(cacheKey, "cacheKey");
+
 
             _cachePolicy = policy;
-            _cacheKey = cacheKey;
 
             return this;
         }
