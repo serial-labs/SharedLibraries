@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using SerialLabs.Storage.CloudStorage;
+using SerialLabs.Data.AzureTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,20 +10,17 @@ using System.Threading.Tasks;
 
 namespace SerialLabs.Identity.CloudStorage
 {
-    /// <summary>
-    /// UserStore implementation for Azure Table Storage
-    /// </summary>
-    /// <typeparam name="TUser"></typeparam>
+
     public class UserStore<TUser> :
         IUserStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
         IUserRoleStore<TUser>,
         IUserSecurityStampStore<TUser>,
-        IUserClaimStore<TUser>
+        IUserClaimStore<TUser>,
+        IUserEmailStore<TUser>, IUserTwoFactorStore<TUser>
         where TUser : IdentityUser
     {
-        private bool _disposed = false;
         private readonly IPartitionKeyResolver<string> _partitionKeyResolver;
         private readonly CloudTable _userTableReference;
         private readonly CloudTable _loginTableReference;
@@ -43,6 +40,11 @@ namespace SerialLabs.Identity.CloudStorage
             _loginTableReference.CreateIfNotExists();
         }
 
+        public void Dispose()
+        {
+
+        }
+
         #region IUserStore
         // This method doesn't perform uniqueness. That's the responsability of the session provider.
         public async Task CreateAsync(TUser user)
@@ -50,8 +52,11 @@ namespace SerialLabs.Identity.CloudStorage
             Guard.ArgumentNotNull(user, "user");
 
             user.PartitionKey = _partitionKeyResolver.Resolve(user.Id);
+
             var operation = TableOperation.Insert(user);
             await GetUserTable().ExecuteAsync(operation);
+
+
         }
 
         public async Task UpdateAsync(TUser user)
@@ -248,21 +253,61 @@ namespace SerialLabs.Identity.CloudStorage
         }
         #endregion
 
-        #region IDisposable
-        public void Dispose()
+        #region IUserEmailStore
+        public Task<TUser> FindByEmailAsync(string email)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Guard.ArgumentNotNull(email, "email");
+            var partitionKey = _partitionKeyResolver.Resolve(email);
+            var operation = TableOperation.Retrieve<TUser>(partitionKey, email);
+            //Not Completed yet//
+            return null;
         }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed) return;
 
-            if (disposing)
-            {
-                // Free managed
-            }
-            _disposed = true;
+        public Task<string> GetEmailAsync(TUser user)
+        {
+            Guard.ArgumentNotNull(user, "user");
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(TUser user)
+        {
+            Guard.ArgumentNotNull(user, "user");
+            return Task.FromResult(user.IsVerified);
+        }
+
+        public Task SetEmailAsync(TUser user, string email)
+        {
+            Guard.ArgumentNotNull(user, "user");
+            Guard.ArgumentNotNull(email, "email");
+            user.Email = email;
+
+            return Task.FromResult(0);
+        }
+
+        public Task SetEmailConfirmedAsync(TUser user, bool confirmed)
+        {
+            Guard.ArgumentNotNull(user, "user");
+            user.IsVerified = confirmed;
+            return Task.FromResult(0);
+
+        }
+
+        #endregion
+
+        #region TwoFactorEnabled
+
+        public Task<bool> GetTwoFactorEnabledAsync(TUser user)
+        {
+            Guard.ArgumentNotNull(user, "user");
+
+            return Task.FromResult<bool>(user.TwoFactorEnabled);
+        }
+
+        public Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
+        {
+            Guard.ArgumentNotNull(user, "user");
+            user.TwoFactorEnabled = enabled;
+            return Task.FromResult<int>(0);
         }
         #endregion
 
@@ -279,5 +324,7 @@ namespace SerialLabs.Identity.CloudStorage
             var operation = TableOperation.Replace(user);
             await GetUserTable().ExecuteAsync(operation);
         }
+
+        
     }
 }

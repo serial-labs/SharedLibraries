@@ -1,4 +1,4 @@
-﻿using SerialLabs.Storage.CloudStorage;
+﻿using SerialLabs.Data.AzureTable;
 using System;
 
 namespace SerialLabs.Identity.CloudStorage

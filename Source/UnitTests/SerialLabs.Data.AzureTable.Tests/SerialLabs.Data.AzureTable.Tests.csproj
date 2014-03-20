@@ -60,7 +60,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Services.Client" />
+<<<<<<< HEAD
     <Reference Include="System.Runtime.Caching" />
+=======
+>>>>>>> origin/master
     <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
@@ -102,6 +105,9 @@
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
       <Name>SerialLabs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
