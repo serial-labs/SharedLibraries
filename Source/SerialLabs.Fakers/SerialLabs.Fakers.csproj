@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Color.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Constants.cs" />
@@ -59,6 +62,9 @@
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
       <Name>SerialLabs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SerialLabs.Fakers.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
