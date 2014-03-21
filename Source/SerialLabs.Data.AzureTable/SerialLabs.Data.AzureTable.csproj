@@ -73,9 +73,9 @@
     <Compile Include="IPartitionKeyResolver.cs" />
     <Compile Include="ITableStorageQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\SelectEntriesForPartition.cs" />
-    <Compile Include="Queries\SelectEntryForPartitionAndKey.cs" />
-    <Compile Include="Queries\SelectTopEntriesForPartition.cs" />
+    <Compile Include="Queries\EntriesForPartition.cs" />
+    <Compile Include="Queries\EntryForPartitionAndKey.cs" />
+    <Compile Include="Queries\TopEntriesForPartition.cs" />
     <Compile Include="TableStorageConfiguration.cs" />
     <Compile Include="TableStorageProvider.cs" />
     <Compile Include="TableStorageQuery.cs" />

@@ -80,7 +80,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="MapperTest.cs" />
     <Compile Include="SelectQueriesTest.cs" />
     <Compile Include="DynamicEntityTest.cs" />
     <Compile Include="EmptyQuery.cs" />
@@ -95,13 +94,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Mapper\Mapper.csproj">
-      <Project>{f6d34edb-0113-44e6-9f30-e2942f41c20e}</Project>
-      <Name>Mapper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs.Data.AzureTable\SerialLabs.Data.AzureTable.csproj">
       <Project>{c2235fa7-8901-4d83-a5d8-827b9c03d6aa}</Project>
       <Name>SerialLabs.Data.AzureTable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SerialLabs.Fakers\SerialLabs.Fakers.csproj">
+      <Project>{84d1524f-7ce6-4f6d-8daa-4666f158c676}</Project>
+      <Name>SerialLabs.Fakers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs\SerialLabs.csproj">
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
