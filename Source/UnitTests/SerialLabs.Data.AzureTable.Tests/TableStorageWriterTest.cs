@@ -47,7 +47,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 
@@ -65,7 +65,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
             fakeStorage.Delete<DynamicEntity>(dynEnt);
             fakeStorage.Execute();
@@ -92,7 +92,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 
@@ -109,16 +109,16 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
-            dynEnt.Add("Extra", "Extra");
+            dynEnt.Set("Extra", "Extra");
             fakeStorage.Merge<DynamicEntity>(dynEnt);
             fakeStorage.Execute();
 
             actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 
@@ -135,16 +135,16 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
-            dynEnt.Add("Extra", "Extra");
+            dynEnt.Set("Extra", "Extra");
             fakeStorage.InsertOrMerge<DynamicEntity>(dynEnt);
             fakeStorage.Execute();
 
             actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 
@@ -161,7 +161,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
             dynEnt.Set("Number", 987);
             fakeStorage.Replace<DynamicEntity>(dynEnt);
@@ -170,7 +170,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 
@@ -187,7 +187,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
             dynEnt.Set("Number", 987);
             fakeStorage.InsertOrReplace<DynamicEntity>(dynEnt);
@@ -196,7 +196,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.AreEqual(dynEnt, actual[0]);
+            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
 
         }
 

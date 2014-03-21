@@ -44,6 +44,11 @@ namespace SerialLabs.Data.AzureTable
         {
             return _properties;
         }
+
+        public void Add(string key, EntityProperty value)
+        {
+            _properties.Add(key, value);
+        }
         public void Set(string key, EntityProperty value)
         {
             _properties[key] = value;
@@ -56,6 +61,10 @@ namespace SerialLabs.Data.AzureTable
             value = prop;
         }
 
+        public void Add(string key, bool value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, bool value)
         {
             _properties[key] = new EntityProperty(value);
@@ -68,6 +77,10 @@ namespace SerialLabs.Data.AzureTable
             value = (bool)prop.BooleanValue;
         }
 
+        public void Add(string key, byte[] value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, byte[] value)
         {
             _properties[key] = new EntityProperty(value);
@@ -80,6 +93,10 @@ namespace SerialLabs.Data.AzureTable
             value = prop.BinaryValue;
         }
 
+        public void Add(string key, DateTime? value)
+        {
+            Add(key, value.Value);
+        }
         public void Set(string key, DateTime? value)
         {
             Set(key, value.Value);
@@ -92,6 +109,10 @@ namespace SerialLabs.Data.AzureTable
             value = val;
         }
 
+        public void Add(string key, DateTime value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, DateTime value)
         {
             _properties[key] = new EntityProperty(value);
@@ -104,6 +125,10 @@ namespace SerialLabs.Data.AzureTable
             value = prop.DateTimeOffsetValue.Value.LocalDateTime;
         }
 
+        public void Add(string key, DateTimeOffset? value)
+        {
+            Add(key, value.Value);
+        }
         public void Set(string key, DateTimeOffset? value)
         {
             Set(key, value.Value);
@@ -115,6 +140,10 @@ namespace SerialLabs.Data.AzureTable
             value = val;
         }
 
+        public void Add(string key, DateTimeOffset value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, DateTimeOffset value)
         {
             _properties[key] = new EntityProperty(value);
@@ -126,6 +155,10 @@ namespace SerialLabs.Data.AzureTable
             value = (DateTimeOffset)prop.DateTimeOffsetValue;
         }
 
+        public void Add(string key, double value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, double value)
         {
             _properties[key] = new EntityProperty(value);
@@ -136,7 +169,10 @@ namespace SerialLabs.Data.AzureTable
             _properties.TryGetValue(key, out prop);
             value = (double)prop.DoubleValue;
         }
-
+        public void Add(string key, Guid value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, Guid value)
         {
             _properties[key] = new EntityProperty(value);
@@ -147,7 +183,10 @@ namespace SerialLabs.Data.AzureTable
             _properties.TryGetValue(key, out prop);
             value = (Guid)prop.GuidValue;
         }
-
+        public void Add(string key, int value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, int value)
         {
             _properties[key] = new EntityProperty(value);
@@ -158,7 +197,10 @@ namespace SerialLabs.Data.AzureTable
             _properties.TryGetValue(key, out prop);
             value = (int)prop.Int32Value;
         }
-
+        public void Add(string key, long value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, long value)
         {
             _properties[key] = new EntityProperty(value);
@@ -169,7 +211,10 @@ namespace SerialLabs.Data.AzureTable
             _properties.TryGetValue(key, out prop);
             value = (long)prop.Int64Value;
         }
-
+        public void Add(string key, string value)
+        {
+            _properties.Add(key, new EntityProperty(value));
+        }
         public void Set(string key, string value)
         {
             _properties[key] = new EntityProperty(value);
@@ -182,16 +227,22 @@ namespace SerialLabs.Data.AzureTable
         }
 
         /// <summary>
-        /// Set complex types
+        /// Add complex types
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void Set<T>(string key, T value)
+        public void Add<T>(string key, T value)
             where T : new()
         {
             if (!_knownTypes.ContainsKey(key))
                 _knownTypes.Add(key, typeof(T));
+            string json = JsonConvert.SerializeObject(value);
+            _properties.Add(key, new EntityProperty(json));
 
+        }
+        public void Set<T>(string key, T value)
+            where T : new()
+        {
             string json = JsonConvert.SerializeObject(value);
             _properties[key] = new EntityProperty(json);
 
@@ -199,49 +250,32 @@ namespace SerialLabs.Data.AzureTable
 
         public void Get<T>(string key, out T value)
         {
-            if (typeof(T) == typeof(string))
-            {
-
-            }
-            if (typeof(T) == typeof(int))
-            {
-
-            }
-
-            // 
             EntityProperty prop;
             _properties.TryGetValue(key, out prop);
             value = JsonConvert.DeserializeObject<T>(prop.StringValue);
         }
-    }
 
-    class Test
-    {
-        public Test()
+
+        public override bool Equals(Object obj)
         {
-            DynamicEntity entity = new DynamicEntity();
-            entity.ETag = "*";
-            entity.Set<Address>("address", new Address { ZipCode = 78900 });
-            // Save
-
-            Address address;
-            entity.Get<Address>("address", out address);
 
 
-            // Read from cloud
-            //DynamicEntity entity = ReadFromStorage(id);            
-            entity.Get<Address>("address");
-            Person p = new Person();
-            p.Address = entity.Get<string>("address");
+            if (obj == null) { return false; }
+            if (!(obj is DynamicEntity)) { return false; }
+
+            DynamicEntity dynamicEntity = (DynamicEntity)obj;
+
+            if (dynamicEntity._properties.Count != _properties.Count) { return false; }
+
+            foreach (var pair in _properties)
+            {
+                if (!dynamicEntity._properties[pair.Key].Equals(pair.Value))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
-    }
-    class Person
-    {
-        public string Name { get; set; }
-        public Address Address { get; set; }
-    }
-    class Address
-    {
-        public int ZipCode { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace SerialLabs.Data.AzureTable
 {
     public class DynamicEntity : TableEntity
     {
-        private IDictionary<string, EntityProperty> _properties = new Dictionary<string, EntityProperty>();
+        protected IDictionary<string, EntityProperty> _properties = new Dictionary<string, EntityProperty>();
         private IDictionary<string, Type> _knownTypes = new Dictionary<string, Type>();
 
         public DynamicEntity(string partitionKey, DateTime dateTime)
@@ -35,6 +35,11 @@ namespace SerialLabs.Data.AzureTable
         public DynamicEntity()
         { }
 
+        protected DynamicEntity(DynamicEntity entity)
+        {
+            _properties = entity._properties;
+        }
+
         public override void ReadEntity(IDictionary<string, EntityProperty> properties, OperationContext operationContext)
         {
             _properties = properties;
@@ -44,238 +49,158 @@ namespace SerialLabs.Data.AzureTable
         {
             return _properties;
         }
-
-        public void Add(string key, EntityProperty value)
-        {
-            _properties.Add(key, value);
-        }
         public void Set(string key, EntityProperty value)
         {
             _properties[key] = value;
         }
 
-        public void Get(string key, out EntityProperty value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = prop;
-        }
+        
 
-        public void Add(string key, bool value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
         public void Set(string key, bool value)
         {
             _properties[key] = new EntityProperty(value);
         }
 
-        public void Get(string key, out bool value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (bool)prop.BooleanValue;
-        }
+       
 
-        public void Add(string key, byte[] value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
         public void Set(string key, byte[] value)
         {
             _properties[key] = new EntityProperty(value);
         }
 
-        public void Get(string key, out byte[] value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = prop.BinaryValue;
-        }
-
-        public void Add(string key, DateTime? value)
-        {
-            Add(key, value.Value);
-        }
+        
         public void Set(string key, DateTime? value)
         {
             Set(key, value.Value);
         }
 
-        public void Get(string key, out DateTime? value)
-        {
-            DateTime val;
-            Get(key, out val);
-            value = val;
-        }
+        
 
-        public void Add(string key, DateTime value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
         public void Set(string key, DateTime value)
         {
             _properties[key] = new EntityProperty(value);
         }
 
-        public void Get(string key, out DateTime value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = prop.DateTimeOffsetValue.Value.LocalDateTime;
-        }
+        
 
-        public void Add(string key, DateTimeOffset? value)
-        {
-            Add(key, value.Value);
-        }
         public void Set(string key, DateTimeOffset? value)
         {
             Set(key, value.Value);
         }
-        public void Get(string key, out DateTimeOffset? value)
-        {
-            DateTimeOffset val;
-            Get(key, out val);
-            value = val;
-        }
+        
 
-        public void Add(string key, DateTimeOffset value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
         public void Set(string key, DateTimeOffset value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out DateTimeOffset value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (DateTimeOffset)prop.DateTimeOffsetValue;
-        }
+        
 
-        public void Add(string key, double value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
         public void Set(string key, double value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out double value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (double)prop.DoubleValue;
-        }
-        public void Add(string key, Guid value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
+        
+
         public void Set(string key, Guid value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out Guid value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (Guid)prop.GuidValue;
-        }
-        public void Add(string key, int value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
+        
+
         public void Set(string key, int value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out int value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (int)prop.Int32Value;
-        }
-        public void Add(string key, long value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
+        
+
         public void Set(string key, long value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out long value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (long)prop.Int64Value;
-        }
-        public void Add(string key, string value)
-        {
-            _properties.Add(key, new EntityProperty(value));
-        }
+        
+
         public void Set(string key, string value)
         {
             _properties[key] = new EntityProperty(value);
         }
-        public void Get(string key, out string value)
-        {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = (string)prop.StringValue;
-        }
+        
 
         /// <summary>
-        /// Add complex types
+        /// Set complex types
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void Add<T>(string key, T value)
+        public void Set<T>(string key, T value)
             where T : new()
         {
             if (!_knownTypes.ContainsKey(key))
                 _knownTypes.Add(key, typeof(T));
-            string json = JsonConvert.SerializeObject(value);
-            _properties.Add(key, new EntityProperty(json));
 
-        }
-        public void Set<T>(string key, T value)
-            where T : new()
-        {
             string json = JsonConvert.SerializeObject(value);
             _properties[key] = new EntityProperty(json);
 
         }
 
-        public void Get<T>(string key, out T value)
+        public T Get<T>(string key) 
         {
-            EntityProperty prop;
-            _properties.TryGetValue(key, out prop);
-            value = JsonConvert.DeserializeObject<T>(prop.StringValue);
-        }
-
-
-        public override bool Equals(Object obj)
-        {
-
-
-            if (obj == null) { return false; }
-            if (!(obj is DynamicEntity)) { return false; }
-
-            DynamicEntity dynamicEntity = (DynamicEntity)obj;
-
-            if (dynamicEntity._properties.Count != _properties.Count) { return false; }
-
-            foreach (var pair in _properties)
+            if (!_properties.ContainsKey(key))
             {
-                if (!dynamicEntity._properties[pair.Key].Equals(pair.Value))
-                {
-                    return false;
-                }
+                throw new ArgumentException();
             }
-
-            return true;
+            if((typeof(T)==typeof(DateTimeOffset?))||((typeof(T)==typeof(DateTime?))))
+            {
+                if(Nullable.GetUnderlyingType(typeof(T))==typeof(DateTime))
+                {
+                    return (T)Convert.ChangeType(_properties[key].DateTimeOffsetValue.Value.LocalDateTime, Nullable.GetUnderlyingType(typeof(T)));
+                }
+                if (Nullable.GetUnderlyingType(typeof(T)) == typeof(DateTimeOffset))
+                {
+                    return (T)Convert.ChangeType(_properties[key].DateTimeOffsetValue, Nullable.GetUnderlyingType(typeof(T)));
+                }   
+            }
+            if (typeof(T) == typeof(string))
+            {                
+                return (T)Convert.ChangeType(_properties[key].StringValue, typeof(T));                
+            }
+            if (typeof(T) == typeof(int))
+            {
+                return (T)Convert.ChangeType(_properties[key].Int32Value, typeof(T));                
+            }
+            if (typeof(T) == typeof(long))
+            {
+                return (T)Convert.ChangeType(_properties[key].Int64Value, typeof(T));
+            }
+            if (typeof(T) == typeof(bool))
+            {
+                return (T)Convert.ChangeType(_properties[key].BooleanValue, typeof(T));
+            }
+            if (typeof(T) == typeof(DateTime))
+            {
+                return (T)Convert.ChangeType(_properties[key].DateTimeOffsetValue.Value.LocalDateTime, typeof(T));
+            }
+            if(typeof(T)==typeof(DateTimeOffset))
+            {
+                return (T)Convert.ChangeType(_properties[key].DateTimeOffsetValue, typeof(T));
+            }
+            if (typeof(T) == typeof(double))
+            {
+                return (T)Convert.ChangeType(_properties[key].DoubleValue, typeof(T));
+            }
+            if (typeof(T) == typeof(Guid))
+            {
+                return (T)Convert.ChangeType(_properties[key].GuidValue, typeof(T));
+            }
+            if (typeof(T) == typeof(EntityProperty))
+            {
+                return (T)Convert.ChangeType(_properties[key], typeof(T));
+            }
+            if (typeof(T) == typeof(Byte[]))
+            {
+                return (T)Convert.ChangeType(_properties[key].BinaryValue, typeof(T));
+            }
+            
+            return JsonConvert.DeserializeObject<T>(_properties[key].StringValue);
         }
     }
+
 }

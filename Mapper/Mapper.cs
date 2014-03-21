@@ -13,16 +13,14 @@ namespace Mapper
         public DynamicEntity DomainToDto(T domain)
         {
             DynamicEntity dto = new DynamicEntity();
-            dto.Add("Id", domain.Id);
+            dto.Set("Id", domain.Id);
             return dto;
         }
 
         public T DtoToDomain(DynamicEntity dto)
         {
             T domain= new T();
-            V v = new V();
-            dto.Get("Id",out v);
-            domain.Id = v;
+            domain.Id = dto.Get<V>("Id");
             return domain;
         }
     }
@@ -33,16 +31,14 @@ namespace Mapper
         public virtual DynamicEntity DomainToDto(T domain)
         {
             DynamicEntity dto = new DynamicEntity();
-            dto.Add("Id", domain.Id);
+            dto.Set("Id", domain.Id);
             return dto;
         }
 
         public virtual T DtoToDomain(DynamicEntity dto)
         {
-            T domain = new T();
-            string v = "";
-            dto.Get("Id", out v);
-            domain.Id = v;
+            T domain = new T();            
+            domain.Id = dto.Get<string>("Id");
             return domain;
         }
     }

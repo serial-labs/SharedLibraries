@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +11,7 @@ namespace SerialLabs.Data.AzureTable.Tests
     /// <summary>
     ///  This class helps for generating values for tests
     /// </summary>
-    class Helper
+    public class Helper
     {
         //const string ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://ipv4.fiddler";
         public const string ConnectionStringForTest = "UseDevelopmentStorage=true";
@@ -33,25 +35,26 @@ namespace SerialLabs.Data.AzureTable.Tests
         {
             Person p = new Person();
             DynamicEntity dynEnt = new DynamicEntity(partitionKey, p.Id);
-            dynEnt.Add("FirstName", p.FirstName);
-            dynEnt.Add("LastName", p.LastName);
-            dynEnt.Add("Date", p.Date);
-            dynEnt.Add("Number", p.Number);
-            dynEnt.Add("Adr", p.Adr);
+            dynEnt.Set("FirstName", p.FirstName);
+            dynEnt.Set("LastName", p.LastName);
+            dynEnt.Set("Date", p.Date);
+            dynEnt.Set("Number", p.Number);
+            dynEnt.Set("Adr", p.Adr);
             return dynEnt;
         }
         public static DynamicEntity GeneratePersonDynamicEntity(Mapper.Person p)
         {
             DynamicEntity dynEnt = new DynamicEntity(partitionKey, p.Id);
-            dynEnt.Add("Id", p.Id);
-            dynEnt.Add("FirstName", p.FirstName);
-            dynEnt.Add("LastName", p.LastName);
-            dynEnt.Add("Date", p.Date);
-            dynEnt.Add("Number", p.Number);
-            dynEnt.Add("Adr", p.Adr);
+            dynEnt.Set("Id", p.Id);
+            dynEnt.Set("FirstName", p.FirstName);
+            dynEnt.Set("LastName", p.LastName);
+            dynEnt.Set("Date", p.Date);
+            dynEnt.Set("Number", p.Number);
+            dynEnt.Set("Adr", p.Adr);
             return dynEnt;
         }
 
+        // Example Entities
         public class Person
         {
             public static string defaultId = "1";
@@ -104,5 +107,41 @@ namespace SerialLabs.Data.AzureTable.Tests
             public string Street { get; set; }
 
         }
+
+        // Dynamic Entity Compare
+
+        public static bool AssertCompare(DynamicEntity dE1, DynamicEntity dE2)
+        {
+            FakeDynamicEntity e1 = new FakeDynamicEntity(dE1);
+            FakeDynamicEntity e2 = new FakeDynamicEntity(dE2);
+            
+            if (e1 == null || e2 == null) { return false; }
+
+
+            if (e1.getProperties().Count != e2.getProperties().Count) { return false; }
+
+            foreach (var pair in e1.getProperties())
+            {
+                if (!e2.getProperties()[pair.Key].Equals(pair.Value))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public class FakeDynamicEntity : DynamicEntity
+        {
+            public FakeDynamicEntity(DynamicEntity e):base(e)
+            {
+                
+            }
+            public IDictionary<string,EntityProperty> getProperties()
+            {
+                return _properties;
+            }
+        }
+
     }
 }

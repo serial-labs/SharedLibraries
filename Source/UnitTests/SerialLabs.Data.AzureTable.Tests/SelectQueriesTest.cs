@@ -111,7 +111,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(topEntries);
             Assert.AreEqual(1, results.Count);
-            Assert.AreEqual(Helper.GeneratePersonDynamicEntity(), results[0]);
+            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
         }
 
         [TestMethod]
@@ -129,6 +129,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
         }
 
         [TestMethod]
@@ -146,7 +147,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results.Count);
-            Assert.AreEqual<DynamicEntity>(Helper.GeneratePersonDynamicEntity(), results[0]);
+            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
         }
 
         [TestMethod]
@@ -166,12 +167,12 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results.Count);
-            Assert.AreEqual(Helper.GeneratePersonDynamicEntity(), results[0]);
+            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));            
 
             // read from cache
             results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results.Count);
-            Assert.AreEqual(Helper.GeneratePersonDynamicEntity(), results[0]);
+            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));            
         }
 
         [TestMethod]
@@ -192,7 +193,8 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results.Count);
-            Assert.AreEqual(expected, results[0]);
+            Assert.IsTrue(Helper.AssertCompare(expected, results[0]));            
+            
 
             expected.Set("Number", 654);
             writer.InsertOrReplace<DynamicEntity>(expected);
@@ -201,7 +203,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             // read from cache
             List<DynamicEntity> results2 = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
             Assert.AreEqual(1, results2.Count);
-            Assert.AreEqual(expected, results2[0]);
+            Assert.IsTrue(Helper.AssertCompare(expected, results2[0]));            
         }
 
         [TestMethod]
