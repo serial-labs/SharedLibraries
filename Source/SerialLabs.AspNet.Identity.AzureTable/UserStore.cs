@@ -22,17 +22,20 @@ namespace SerialLabs.Identity.CloudStorage
         where TUser : IdentityUser
     {
         private bool _disposed = false;
+        private readonly string _storageConnectionString;
         private readonly IPartitionKeyResolver<string> _partitionKeyResolver;
         private readonly CloudTable _userTableReference;
         private readonly CloudTable _loginTableReference;
 
-        public UserStore(CloudStorageAccount storageAccount, IPartitionKeyResolver<string> partitionKeyResolver)
+        public UserStore(string storageConnectionString, IPartitionKeyResolver<string> partitionKeyResolver)
         {
-            Guard.ArgumentNotNull(storageAccount, "storageAccount");
+            Guard.ArgumentNotNull(storageConnectionString, "storageConnectionString");
             Guard.ArgumentNotNull(partitionKeyResolver, "partitionKeyResolver");
 
+            _storageConnectionString = storageConnectionString;
             _partitionKeyResolver = partitionKeyResolver;
-            var tableClient = storageAccount.CreateCloudTableClient();
+
+            var tableClient = GetCloudTableClient(storageConnectionString);
 
             _userTableReference = tableClient.GetTableReference("Users");
             _userTableReference.CreateIfNotExists();
@@ -69,8 +72,6 @@ namespace SerialLabs.Identity.CloudStorage
 
             var operation = TableOperation.Insert(user);
             await GetUserTable().ExecuteAsync(operation);
-
-
         }
 
         public async Task UpdateAsync(TUser user)
@@ -325,6 +326,12 @@ namespace SerialLabs.Identity.CloudStorage
         }
         #endregion
 
+        private CloudTableClient GetCloudTableClient(string storageConnectionString)
+        {
+            Guard.ArgumentNotNullOrWhiteSpace(storageConnectionString, "storageConnectionString");
+            CloudStorageAccount account = CloudStorageAccount.Parse(storageConnectionString);
+            return account.CreateCloudTableClient();
+        }
         private CloudTable GetUserTable()
         {
             return _userTableReference;
