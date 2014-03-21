@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLabs.Data.AzureTable.Tests
 {
@@ -40,17 +36,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             dynEnt.Add("Adr", p.Adr);
             return dynEnt;
         }
-        public static DynamicEntity GeneratePersonDynamicEntity(Mapper.Person p)
-        {
-            DynamicEntity dynEnt = new DynamicEntity(partitionKey, p.Id);
-            dynEnt.Add("Id", p.Id);
-            dynEnt.Add("FirstName", p.FirstName);
-            dynEnt.Add("LastName", p.LastName);
-            dynEnt.Add("Date", p.Date);
-            dynEnt.Add("Number", p.Number);
-            dynEnt.Add("Adr", p.Adr);
-            return dynEnt;
-        }
+
 
         public class Person
         {
@@ -72,25 +58,6 @@ namespace SerialLabs.Data.AzureTable.Tests
             public DateTime? Date { get; set; }
             public Address Adr { get; set; }
 
-            public override bool Equals(Object obj)
-            {
-
-                if (obj == null) { return false; }
-                if (!(obj is Person)) { return false; }
-
-                Person p2 = (Person)obj;
-
-                if (!Id.Equals(p2.Id)) { return false; }
-                if (!FirstName.Equals(p2.FirstName)) { return false; }
-                if (!LastName.Equals(p2.LastName)) { return false; }
-                if (!Number.Equals(p2.Number)) { return false; }
-                if (!Date.Equals(p2.Date)) { return false; }
-                if (!Adr.Number.Equals(p2.Adr.Number)) { return false; }
-                if (!Adr.Street.Equals(p2.Adr.Street)) { return false; }
-
-
-                return true;
-            }
         }
 
         public class Address

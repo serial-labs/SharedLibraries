@@ -19,8 +19,8 @@ namespace SerialLabs.Data.AzureTable
             get { return _operations.Count; }
         }
 
-        public TableStorageWriter(string tableName, string connectionStringSettingName)
-            : base(tableName, connectionStringSettingName)
+        public TableStorageWriter(string tableName, string connectionString)
+            : base(tableName, connectionString)
         {
             _operations = new ConcurrentQueue<Tuple<ITableEntity, TableOperation>>();
         }

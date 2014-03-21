@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
-//using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
-using SuperMassive.Identity.TableStorage;
+using SerialLabs;
+using SerialLabs.Identity.CloudStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,8 @@ namespace SuperMassive.Identity.TableStorageTests
     [TestClass]
     public class UserStoreTest
     {
+        public const string StorageConnectionString = "UseDevelopmentStorage=true";
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public async Task CreateAsync_WithNullUser_ShouldFail()
@@ -231,7 +233,7 @@ namespace SuperMassive.Identity.TableStorageTests
         }
         static UserStore<IdentityUser> GetUserStore()
         {
-            return new UserStore<IdentityUser>(GetStorageAccount(), GetPartitionKeyResolver());
+            return new UserStore<IdentityUser>("UseDevelopmentStorage=true", GetPartitionKeyResolver());
         }
         static IdentityUser CreateRandomUser()
         {
