@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNet.Identity;
-using SerialLabs.Fakers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
 using SerialLabs;
