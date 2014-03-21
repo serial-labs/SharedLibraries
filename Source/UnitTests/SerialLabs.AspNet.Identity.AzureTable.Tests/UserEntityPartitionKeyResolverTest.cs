@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SuperMassive.Identity.TableStorage;
+using SerialLabs.Identity.CloudStorage;
 using System;
 
-namespace SuperMassive.Identity.TableStorageTests
+namespace SerialLabs.AspNet.Identity.AzureTable.Tests
 {
     [TestClass]
     public class UserEntityPartitionKeyResolverTest

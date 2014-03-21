@@ -2,13 +2,15 @@
 //using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
-using SuperMassive.Identity.TableStorage;
+using SerialLabs.Fakers;
+using SerialLabs.Identity.CloudStorage;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SuperMassive.Identity.TableStorageTests
+namespace SerialLabs.AspNet.Identity.AzureTable.Tests
 {
     [TestClass]
     public class UserStoreTest
@@ -216,10 +218,68 @@ namespace SuperMassive.Identity.TableStorageTests
 
             string passwordHash = CryptographyHelper.ComputeSHA256Hash(Guid.NewGuid().ToString());
             await store.SetPasswordHashAsync(user, passwordHash);
-
-
-
         }
+
+        [TestMethod]
+        public async Task SetEmail_WithSucess()
+        {
+            IdentityUser user = await CreateAndPersistRandomUserAsync();
+            UserStore<IdentityUser> store = GetUserStore();
+            string expected = "unitTest@email.com";
+            await store.SetEmailAsync(user,expected);
+            Assert.IsNotNull(user.Email);
+            Assert.AreEqual(expected, user.Email);
+           
+       }
+
+        [TestMethod]
+        public async Task GetEmail_WithSucess()
+        {
+            
+            IdentityUser user = await CreateAndPersistUserWithEmailAsync("unitTest@email.com");
+            UserStore<IdentityUser> store = GetUserStore();
+            string expected = "unitTest@email.com";
+            string existing=await store.GetEmailAsync(user);
+            Assert.AreEqual(existing, expected);
+        }
+
+        [TestMethod]
+        public async Task SetConfirmed_WithSucess()
+        {
+            IdentityUser user = await CreateAndPersistRandomUserAsync();
+            UserStore<IdentityUser> store = GetUserStore();
+            await store.SetEmailConfirmedAsync(user, true);
+            Assert.IsTrue(user.IsVerified);
+        }
+
+        [TestMethod]
+        public async Task GetConfirmed_WithSucess()
+        {
+            IdentityUser user = await CreateAndPersistRandomUserAsync();
+            UserStore<IdentityUser> store = GetUserStore();
+            user.IsVerified = true;
+            Assert.IsTrue(await store.GetEmailConfirmedAsync(user));         
+        }
+
+        [TestMethod]
+        public async Task SetTowFactorEnabled_WithSucess()
+        {
+            IdentityUser user = await CreateAndPersistRandomUserAsync();
+            UserStore<IdentityUser> store = GetUserStore();
+            await store.SetTwoFactorEnabledAsync(user, true);
+            Assert.IsTrue(user.TwoFactorEnabled);
+        }
+
+        [TestMethod]
+        public async Task GetTowFactorEnabled_WithSucess()
+        {
+            IdentityUser user = await CreateAndPersistRandomUserAsync();
+            UserStore<IdentityUser> store = GetUserStore();
+            user.TwoFactorEnabled = true;
+            Assert.IsTrue(await store.GetTwoFactorEnabledAsync(user));
+        }
+
+        
         #region Utilities
         static CloudStorageAccount GetStorageAccount()
         {
@@ -257,6 +317,14 @@ namespace SuperMassive.Identity.TableStorageTests
         {
             UserStore<IdentityUser> store = GetUserStore();
             IdentityUser user = CreateRandomUser();
+            await store.CreateAsync(user);
+            return user;
+        }
+        static async Task<IdentityUser> CreateAndPersistUserWithEmailAsync(String email)
+        {
+            UserStore<IdentityUser> store = GetUserStore();
+            IdentityUser user = CreateRandomUser();
+            user.Email = email;
             await store.CreateAsync(user);
             return user;
         }

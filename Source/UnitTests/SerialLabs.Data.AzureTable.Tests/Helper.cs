@@ -40,7 +40,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             dynEnt.Add("Adr", p.Adr);
             return dynEnt;
         }
-        public static DynamicEntity GeneratePersonDynamicEntity(Mapper.Person p)
+        public static DynamicEntity GeneratePersonDynamicEntity(Person p)
         {
             DynamicEntity dynEnt = new DynamicEntity(partitionKey, p.Id);
             dynEnt.Add("Id", p.Id);
