@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLabs.Data.AzureTable.Tests
 {
@@ -259,23 +255,23 @@ namespace SerialLabs.Data.AzureTable.Tests
         }
 
 
-        [TestMethod]
-        public void DynamicEntity_AddGetSet_Complex()
-        {
-            DynamicEntity testEntity = new DynamicEntity();
-            Helper.Person actual, expected = new Helper.Person();
+        //[TestMethod]
+        //public void DynamicEntity_AddGetSet_Complex()
+        //{
+        //    DynamicEntity testEntity = new DynamicEntity();
+        //    Helper.Person actual, expected = new Helper.Person();
 
-            testEntity.Add("Complex", expected);
-            testEntity.Get("Complex", out actual);
+        //    testEntity.Add("Complex", expected);
+        //    testEntity.Get("Complex", out actual);
 
-            Assert.AreEqual(actual, expected);
+        //    Assert.AreEqual(actual, expected);
 
-            expected.Number = 654;
-            testEntity.Set("Complex", expected);
-            testEntity.Get("Complex", out actual);
+        //    expected.Number = 654;
+        //    testEntity.Set("Complex", expected);
+        //    testEntity.Get("Complex", out actual);
 
-            Assert.AreEqual(actual, expected);
+        //    Assert.AreEqual(actual, expected);
 
-        }
+        //}
     }
 }

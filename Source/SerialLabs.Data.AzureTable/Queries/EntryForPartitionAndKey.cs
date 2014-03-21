@@ -25,7 +25,6 @@ namespace SerialLabs.Data.AzureTable.Queries
             get { return _cacheKey; }
         }
 
-
         public EntryForPartitionAndKey(string partition, string row)
             : base()
         {

@@ -38,8 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.0.0-beta1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
@@ -101,9 +102,9 @@
       <Project>{c2235fa7-8901-4d83-a5d8-827b9c03d6aa}</Project>
       <Name>SerialLabs.Data.AzureTable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SerialLabs.Fakers\SerialLabs.Fakers.csproj">
-      <Project>{84d1524f-7ce6-4f6d-8daa-4666f158c676}</Project>
-      <Name>SerialLabs.Fakers</Name>
+    <ProjectReference Include="..\..\SerialLabs.Data\SerialLabs.Data.csproj">
+      <Project>{04e35a96-3802-493b-bfcc-4e425cb9657a}</Project>
+      <Name>SerialLabs.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs\SerialLabs.csproj">
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>

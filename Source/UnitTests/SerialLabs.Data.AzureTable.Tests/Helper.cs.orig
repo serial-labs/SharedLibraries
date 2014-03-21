@@ -36,6 +36,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             dynEnt.Add("Adr", p.Adr);
             return dynEnt;
         }
+<<<<<<< HEAD
         public static DynamicEntity GeneratePersonDynamicEntity(Person p)
         {
             DynamicEntity dynEnt = new DynamicEntity(partitionKey, p.Id);
@@ -47,8 +48,9 @@ namespace SerialLabs.Data.AzureTable.Tests
             dynEnt.Add("Adr", p.Adr);
             return dynEnt;
         }
+=======
 
-
+>>>>>>> origin/dev
 
         public class Person
         {

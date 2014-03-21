@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using SerialLabs.Data.AzureTable;
+using SerialLabs.Data.AzureTable.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,59 +18,46 @@ namespace SerialLabs.Identity.CloudStorage
         IUserRoleStore<TUser>,
         IUserSecurityStampStore<TUser>,
         IUserClaimStore<TUser>,
-        IUserEmailStore<TUser>, IUserTwoFactorStore<TUser>
-        where TUser : IdentityUser
+        IUserEmailStore<TUser>
+        //IUserTwoFactorStore<TUser, TKey>
+        where TUser : IdentityUser, new()
     {
         private bool _disposed = false;
+        private readonly TableStorageWriter _userTableWriter;
+        private readonly TableStorageReader _userTableReader;
+        private readonly TableStorageWriter _loginTableWriter;
+        private readonly TableStorageReader _loginTableReader;
+        private readonly string _storageConnectionString;
         private readonly IPartitionKeyResolver<string> _partitionKeyResolver;
-        private readonly CloudTable _userTableReference;
-        private readonly CloudTable _loginTableReference;
 
-        public UserStore(CloudStorageAccount storageAccount, IPartitionKeyResolver<string> partitionKeyResolver)
+        public UserStore(string storageConnectionString)
+            : this(storageConnectionString, new UserPartitionKeyResolver())
+        { }
+        public UserStore(string storageConnectionString, IPartitionKeyResolver<string> partitionKeyResolver)
         {
-            Guard.ArgumentNotNull(storageAccount, "storageAccount");
+            Guard.ArgumentNotNull(storageConnectionString, "storageConnectionString");
             Guard.ArgumentNotNull(partitionKeyResolver, "partitionKeyResolver");
 
+            _storageConnectionString = storageConnectionString;
             _partitionKeyResolver = partitionKeyResolver;
-            var tableClient = storageAccount.CreateCloudTableClient();
 
-            _userTableReference = tableClient.GetTableReference("Users");
-            _userTableReference.CreateIfNotExists();
+            _userTableWriter = new TableStorageWriter("Users", storageConnectionString);
+            _userTableReader = new TableStorageReader("Users", storageConnectionString);
 
-            _loginTableReference = tableClient.GetTableReference("Logins");
-            _loginTableReference.CreateIfNotExists();
+            _loginTableWriter = new TableStorageWriter("Logins", storageConnectionString);
+            _loginTableReader = new TableStorageReader("Logins", storageConnectionString);
         }
 
-        #region IDisposable
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed) return;
-
-            if (disposing)
-            {
-                // Free managed
-            }
-            _disposed = true;
-        }
-        #endregion
 
         #region IUserStore
-        // This method doesn't perform uniqueness. That's the responsability of the session provider.
         public async Task CreateAsync(TUser user)
         {
             Guard.ArgumentNotNull(user, "user");
 
             user.PartitionKey = _partitionKeyResolver.Resolve(user.Id);
 
-            var operation = TableOperation.Insert(user);
-            await GetUserTable().ExecuteAsync(operation);
-
-
+            _userTableWriter.Insert(user);
+            await _userTableWriter.ExecuteAsync();
         }
 
         public async Task UpdateAsync(TUser user)
@@ -86,9 +73,10 @@ namespace SerialLabs.Identity.CloudStorage
             Guard.ArgumentNotNullOrWhiteSpace(userId, "userId");
 
             var partitionKey = _partitionKeyResolver.Resolve(userId);
-            var operation = TableOperation.Retrieve<TUser>(partitionKey, userId);
-            TableResult result = await GetUserTable().ExecuteAsync(operation);
-            return (TUser)result.Result;
+            var result = await _userTableReader.ExecuteAsync<TUser>(new EntryForPartitionAndKey<TUser>(partitionKey, userId));
+            if (result == null)
+                return null;
+            return result.FirstOrDefault();
         }
 
         public Task<TUser> FindByNameAsync(string userName)
@@ -103,8 +91,8 @@ namespace SerialLabs.Identity.CloudStorage
             Guard.ArgumentNotNull(user, "user");
 
             user.ETag = "*";
-            var operation = TableOperation.Delete(user);
-            await GetUserTable().ExecuteAsync(operation);
+            _userTableWriter.Delete(user);
+            await _userTableWriter.ExecuteAsync();
         }
 
         #endregion
@@ -118,8 +106,8 @@ namespace SerialLabs.Identity.CloudStorage
             user.Logins.Add(new IdentityUserLogin(user.Id, login));
             await UpdateUser(user);
 
-            var operation = TableOperation.Insert(new IdentityUserLogin(user.Id, login));
-            await GetLoginTable().ExecuteAsync(operation);
+            _loginTableWriter.Insert(new IdentityUserLogin(user.Id, login));
+            await _loginTableWriter.ExecuteAsync();
         }
 
         public async Task<TUser> FindAsync(UserLoginInfo login)
@@ -127,12 +115,11 @@ namespace SerialLabs.Identity.CloudStorage
             Guard.ArgumentNotNull(login, "login");
 
             var lie = new IdentityUserLogin("", login);
-            var operation = TableOperation.Retrieve<IdentityUserLogin>(lie.PartitionKey, lie.RowKey);
-            var result = await GetLoginTable().ExecuteAsync(operation);
-            var loginInfoEntity = (IdentityUserLogin)result.Result;
-            if (loginInfoEntity == null)
+            var result = await _loginTableReader.ExecuteAsync(
+                new EntryForPartitionAndKey<IdentityUserLogin>(lie.PartitionKey, lie.RowKey));
+            if (result == null || result.Count == 0)
                 return null;
-            return await FindByIdAsync(loginInfoEntity.UserId);
+            return await FindByIdAsync(result.FirstOrDefault().UserId);
         }
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user)
@@ -152,8 +139,9 @@ namespace SerialLabs.Identity.CloudStorage
             {
                 user.Logins.Remove(identityLogin);
                 await UpdateUser(user);
-                var operation = TableOperation.Delete(new IdentityUserLogin(user.Id, login) { ETag = "*" });
-                await GetLoginTable().ExecuteAsync(operation);
+
+                _loginTableWriter.Delete(new IdentityUserLogin(user.Id, login) { ETag = "*" });
+                await _loginTableWriter.ExecuteAsync();
             }
         }
         #endregion
@@ -325,20 +313,28 @@ namespace SerialLabs.Identity.CloudStorage
         }
         #endregion
 
-        private CloudTable GetUserTable()
-        {
-            return _userTableReference;
-        }
-        private CloudTable GetLoginTable()
-        {
-            return _loginTableReference;
-        }
         private async Task UpdateUser(TUser user)
         {
-            var operation = TableOperation.Replace(user);
-            await GetUserTable().ExecuteAsync(operation);
+            _userTableWriter.Replace(user);
+            await _userTableWriter.ExecuteAsync();
         }
 
+        #region IDisposable
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
 
+            if (disposing)
+            {
+                // Free managed
+            }
+            _disposed = true;
+        }
+        #endregion
     }
 }
