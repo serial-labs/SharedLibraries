@@ -99,7 +99,7 @@ namespace SerialLabs
         }
 
         /// <summary>
-        /// Returns true if the given value is a valid CloudStorage container name
+        /// Returns true if the given value is a valid Azure CloudStorage container name
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
