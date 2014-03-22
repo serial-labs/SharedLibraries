@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
+using SerialLabs.Data.AzureTable.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,9 @@ namespace SerialLabs.Data.AzureTable
         /// <returns></returns>
         public virtual TEntity GetItem(string partitionKey, string rowKey)
         {
+            Guard.ArgumentNotNullOrWhiteSpace(rowKey, "rowKey");
+
+            //ICollection<TEntity> entries = Task.FromResult<ICollection<TEntity>>(_reader.ExecuteAsync(new EntryForPartitionAndKey<TEntity>(partitionKey, rowKey)));
             throw new NotImplementedException();
         }
 
@@ -71,7 +75,7 @@ namespace SerialLabs.Data.AzureTable
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async virtual Task InsertAsync(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity)
         {
             Guard.ArgumentNotNull(entity, "entity");
 
@@ -96,7 +100,7 @@ namespace SerialLabs.Data.AzureTable
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async virtual Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             Guard.ArgumentNotNull(entity, "entity");
 
@@ -126,7 +130,7 @@ namespace SerialLabs.Data.AzureTable
         /// <param name="partitionKey"></param>
         /// <param name="rowKey"></param>
         /// <returns></returns>
-        public async virtual Task DeleteAsync(string partitionKey, string rowKey)
+        public virtual async Task DeleteAsync(string partitionKey, string rowKey)
         {
             Guard.ArgumentNotNullOrWhiteSpace(partitionKey, "partitionKey");
             Guard.ArgumentNotNullOrWhiteSpace(rowKey, "rowKey");
@@ -155,7 +159,7 @@ namespace SerialLabs.Data.AzureTable
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async virtual Task DeleteAsync(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity)
         {
             Guard.ArgumentNotNull(entity, "entity");
 

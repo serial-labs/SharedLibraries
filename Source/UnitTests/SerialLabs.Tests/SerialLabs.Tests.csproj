@@ -57,7 +57,11 @@
     <Compile Include="BitwiseMaskTest.cs" />
     <Compile Include="Converters\IPAddressConverterTest.cs" />
     <Compile Include="GuardTest.cs" />
+    <Compile Include="Helpers\DateTimeExtensionsTest.cs" />
+    <Compile Include="Helpers\EnumerationExtensionsTest.cs" />
+    <Compile Include="Helpers\RandomizerTest.cs" />
     <Compile Include="Helpers\RegexHelperTest.cs" />
+    <Compile Include="Helpers\StringHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\CryptographyHelperTest.cs" />
   </ItemGroup>
