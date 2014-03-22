@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using System.Collections.Generic;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
@@ -8,10 +7,11 @@ namespace SerialLabs.Data.AzureTable
 {
     public class TableStorageReader : TableStorageProvider
     {
-        private CacheItemPolicy _cachePolicy;
-
-        public TableStorageReader(string tableName, string connectionStringSettingName)
-            : base(tableName, connectionStringSettingName)
+        public TableStorageReader(string tableName, string storageConnectionString)
+            : base(TableStorageConfiguration.CreateDefault(tableName, storageConnectionString))
+        { }
+        public TableStorageReader(TableStorageConfiguration configuration)
+            : base(configuration)
         { }
 
         public async Task<ICollection<TEntity>> ExecuteAsync<TEntity>(ITableStorageQuery<TEntity> query)
@@ -21,31 +21,29 @@ namespace SerialLabs.Data.AzureTable
 
             return await Task.Run(() =>
             {
-                if (_cachePolicy == null)
+                if (_configuration.CacheItemPolicy == null)
                     return query.Execute(_table);
 
-                TableStorageQueryCache<TEntity> cachedQuery = new TableStorageQueryCache<TEntity>(query, _cachePolicy);
+                TableStorageQueryCache<TEntity> cachedQuery = new TableStorageQueryCache<TEntity>(query, _configuration.CacheItemPolicy);
                 return cachedQuery.Execute(_table);
             });
         }
 
-        public TableStorageReader WithCache()
+        public TableStorageReader WithCache(CacheItemPolicy cacheItemPolicy = null)
         {
-            return WithCache(TableStorageConfiguration.DefaultQueryCacheItemPolicy());
-        }
-        public TableStorageReader WithCache(CacheItemPolicy policy)
-        {
-            Guard.ArgumentNotNull(policy, "policy");
-
-
-            _cachePolicy = policy;
-
+            if (cacheItemPolicy == null)
+                cacheItemPolicy = TableStorageConfiguration.DefaultQueryCacheItemPolicy();
+            _configuration.CacheItemPolicy = cacheItemPolicy;
             return this;
         }
 
-        public static TableStorageReader Table(string tableName, string connectionString)
+        public static TableStorageReader Table(TableStorageConfiguration configuration)
         {
-            return new TableStorageReader(tableName, connectionString);
+            return new TableStorageReader(configuration);
+        }
+        public static TableStorageReader Table(string tableName, string storageConnectionString)
+        {
+            return new TableStorageReader(TableStorageConfiguration.CreateDefault(tableName, storageConnectionString));
         }
     }
 }

@@ -1,32 +1,23 @@
-﻿using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System;
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace SerialLabs.Data.AzureTable
 {
     public abstract class TableStorageProvider
     {
         protected readonly CloudTable _table;
+        protected readonly TableStorageConfiguration _configuration;
 
-        protected TableStorageProvider(string tableName, string connectionString)
+        protected TableStorageProvider(TableStorageConfiguration configuration)
         {
-            Guard.ArgumentNotNullOrWhiteSpace(tableName, "tableName");
+            TableStorageConfiguration.ValidateConfiguration(configuration);
+            _configuration = configuration;
 
-            // Table name must correspond to a format
-            if (!(new Regex("^[A-Za-z][A-Za-z0-9]{2,62}$")).IsMatch(tableName))
-            {
-                throw new FormatException();
-            }
-
-            Guard.ArgumentNotNullOrWhiteSpace(connectionString, "connectionString");
-
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration.StorageConnectionString);
             // http://msmvps.com/blogs/nunogodinho/archive/2013/11/20/windows-azure-storage-performance-best-practices.aspx
-            ServicePointManager.FindServicePoint(storageAccount.TableEndpoint).UseNagleAlgorithm = false;
-            _table = GetTableReference(storageAccount, tableName);
+            ServicePointManager.FindServicePoint(storageAccount.TableEndpoint).UseNagleAlgorithm = _configuration.UseNaggleAlgorithm;
+            _table = GetTableReference(storageAccount, _configuration.TableName);
         }
 
         protected CloudTable GetTableReference(CloudStorageAccount storageAccount, string tableName)

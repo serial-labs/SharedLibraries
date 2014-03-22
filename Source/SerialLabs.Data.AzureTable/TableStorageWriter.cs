@@ -19,11 +19,16 @@ namespace SerialLabs.Data.AzureTable
             get { return _operations.Count; }
         }
 
-        public TableStorageWriter(string tableName, string connectionString)
-            : base(tableName, connectionString)
+        public TableStorageWriter(string tableName, string storageConnectionString)
+            : this(TableStorageConfiguration.CreateDefault(tableName, storageConnectionString))
+        { }
+
+        public TableStorageWriter(TableStorageConfiguration configuration)
+            : base(configuration)
         {
             _operations = new ConcurrentQueue<Tuple<ITableEntity, TableOperation>>();
         }
+
 
         public void Insert<TEntity>(TEntity entity)
             where TEntity : ITableEntity
@@ -124,14 +129,12 @@ namespace SerialLabs.Data.AzureTable
 
         private void ExecuteBatchWithRetries(TableBatchOperation batchOperation)
         {
-            TableRequestOptions options = TableStorageConfiguration.DefaultRequestOptions();
-            _table.ExecuteBatch(batchOperation, options);
+            _table.ExecuteBatch(batchOperation, _configuration.RequestOptions);
         }
 
         private async Task ExecuteBatchWithRetriesAsync(TableBatchOperation batch, OperationContext context, CancellationToken cancellationToken)
         {
-            TableRequestOptions requestOptions = TableStorageConfiguration.DefaultRequestOptions();
-            await _table.ExecuteBatchAsync(batch, requestOptions, context, cancellationToken);
+            await _table.ExecuteBatchAsync(batch, _configuration.RequestOptions, context, cancellationToken);
         }
 
         private List<Tuple<ITableEntity, TableOperation>> CreateWorkload(int quantity)
