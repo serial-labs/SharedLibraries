@@ -26,25 +26,25 @@ namespace Mapper
         public DateTime? Date { get; set; }
         public Address Adr { get; set; }
 
-        public override bool Equals(Object obj)
-        {
+        //public override bool Equals(Object obj)
+        //{
 
-            if (obj == null) { return false; }
-            if (!(obj is Person)) { return false; }
+        //    if (obj == null) { return false; }
+        //    if (!(obj is Person)) { return false; }
 
-            Person p2 = (Person)obj;
+        //    Person p2 = (Person)obj;
 
-            if (!Id.Equals(p2.Id)) { return false; }
-            if (!FirstName.Equals(p2.FirstName)) { return false; }
-            if (!LastName.Equals(p2.LastName)) { return false; }
-            if (!Number.Equals(p2.Number)) { return false; }
-            if (!Date.Equals(p2.Date)) { return false; }
-            if (!Adr.Number.Equals(p2.Adr.Number)) { return false; }
-            if (!Adr.Street.Equals(p2.Adr.Street)) { return false; }
+        //    if (!Id.Equals(p2.Id)) { return false; }
+        //    if (!FirstName.Equals(p2.FirstName)) { return false; }
+        //    if (!LastName.Equals(p2.LastName)) { return false; }
+        //    if (!Number.Equals(p2.Number)) { return false; }
+        //    if (!Date.Equals(p2.Date)) { return false; }
+        //    if (!Adr.Number.Equals(p2.Adr.Number)) { return false; }
+        //    if (!Adr.Street.Equals(p2.Adr.Street)) { return false; }
 
 
-            return true;
-        }
+        //    return true;
+        //}
     }
     public class Address
     {

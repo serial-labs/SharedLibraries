@@ -15,6 +15,7 @@ using System.Diagnostics;
 using SerialLabs.Identity.CloudStorage;
 using SerialLabs.Data.AzureTable;
 using TestIdentity;
+using Microsoft.WindowsAzure;
 
 
 namespace TestIdentity.Controllers
@@ -26,7 +27,7 @@ namespace TestIdentity.Controllers
 
         static IPartitionKeyResolver<string> userPartitionKeyResolver = new UserPartitionKeyResolver();
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(CloudStorageAccount.DevelopmentStorageAccount, userPartitionKeyResolver)) { UserTokenProvider = new EmailTokenProvider<ApplicationUser, string>() })
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(CloudConfigurationManager.GetSetting("StorageConnectionString"), userPartitionKeyResolver)) { UserTokenProvider = new EmailTokenProvider<ApplicationUser, string>() })
         {
 
         }
