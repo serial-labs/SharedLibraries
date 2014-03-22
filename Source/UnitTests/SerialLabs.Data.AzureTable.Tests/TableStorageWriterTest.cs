@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
 using SerialLabs.Data.AzureTable.Queries;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SerialLabs.Data.AzureTable.Tests
@@ -18,188 +15,202 @@ namespace SerialLabs.Data.AzureTable.Tests
         [ExpectedException(typeof(StorageException))]
         public void TableStorageWriter_DuplicateInsertBatch_WithException()
         {
-            string tableName = Helper.NewTableName();
-            DynamicEntity example = Helper.GeneratePersonDynamicEntity();
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
             Assert.AreEqual(fakeStorage.PendingOperations, 0);
-            fakeStorage.Insert<DynamicEntity>(example);
-            fakeStorage.Insert<DynamicEntity>(example);
+            fakeStorage.Insert<DynamicEntity>(entity);
+            fakeStorage.Insert<DynamicEntity>(entity);
             Assert.AreEqual(fakeStorage.PendingOperations, 2);
             fakeStorage.Execute();
-
-
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertAndExecute()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
             Assert.AreEqual(fakeStorage.PendingOperations, 0);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            fakeStorage.Insert<DynamicEntity>(entity);
             Assert.AreEqual(fakeStorage.PendingOperations, 1);
 
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertAndDelete()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
+            fakeStorage.Insert<DynamicEntity>(entity);
 
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
+            Comparers.AssertCompare(entity, actual[0]);
 
-            fakeStorage.Delete<DynamicEntity>(dynEnt);
+            fakeStorage.Delete<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(0, actual.Count);
-
         }
 
         [TestMethod]
         async public Task TableStorageWriter_InsertAndExecuteAsync()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
             Assert.AreEqual(fakeStorage.PendingOperations, 0);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            fakeStorage.Insert<DynamicEntity>(entity);
             Assert.AreEqual(fakeStorage.PendingOperations, 1);
 
             await fakeStorage.ExecuteAsync();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertAndMerge()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
+            fakeStorage.Insert<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
+            Comparers.AssertCompare(entity, actual[0]);
 
-            dynEnt.Set("Extra", "Extra");
-            fakeStorage.Merge<DynamicEntity>(dynEnt);
+            entity.Set("Extra", "Extra");
+            fakeStorage.Merge<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertOrMerge()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
+            fakeStorage.Insert<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
+            Comparers.AssertCompare(entity, actual[0]);
 
-            dynEnt.Set("Extra", "Extra");
-            fakeStorage.InsertOrMerge<DynamicEntity>(dynEnt);
+            entity.Set("Extra", "Extra");
+            fakeStorage.InsertOrMerge<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertAndReplace()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
+            fakeStorage.Insert<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
+            Comparers.AssertCompare(entity, actual[0]);
 
-            dynEnt.Set("Number", 987);
-            fakeStorage.Replace<DynamicEntity>(dynEnt);
+            entity.Set("Number", 987);
+            fakeStorage.Replace<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
 
         [TestMethod]
         public async Task TableStorageWriter_InsertOrReplace()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.ConnectionStringForTest);
-            DynamicEntity dynEnt = Helper.GeneratePersonDynamicEntity();
-            fakeStorage.Insert<DynamicEntity>(dynEnt);
+            string tableName = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
+
+            FakeStorageWriter fakeStorage = new FakeStorageWriter(tableName, Helper.StorageConnectionString);
+
+            fakeStorage.Insert<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            TableStorageReader reader = new TableStorageReader(tableName, Helper.ConnectionStringForTest);
-            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            TableStorageReader reader = new TableStorageReader(tableName, Helper.StorageConnectionString);
+            List<DynamicEntity> actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
+            Comparers.AssertCompare(entity, actual[0]);
 
-            dynEnt.Set("Number", 987);
-            fakeStorage.InsertOrReplace<DynamicEntity>(dynEnt);
+            entity.Set("Number", 987);
+            fakeStorage.InsertOrReplace<DynamicEntity>(entity);
             fakeStorage.Execute();
 
-            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(dynEnt.PartitionKey));
+            actual = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(new EntriesForPartition<DynamicEntity>(entity.PartitionKey));
 
             Assert.AreEqual(1, actual.Count);
-            Assert.IsTrue(Helper.AssertCompare(dynEnt, actual[0]));
-
+            Comparers.AssertCompare(entity, actual[0]);
         }
-
 
         class FakeStorageWriter : TableStorageWriter
         {
@@ -208,11 +219,6 @@ namespace SerialLabs.Data.AzureTable.Tests
             {
 
             }
-
         }
-
-
-
-
     }
 }

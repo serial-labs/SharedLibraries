@@ -39,28 +39,28 @@ namespace SerialLabs.Data.AzureTable.Tests
         public void CreateTableStorageProvider_BadTableName()
         {
             string tableName = Guid.NewGuid().ToString();
-            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.ConnectionStringForTest);
+            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.StorageConnectionString);
         }
 
         [TestMethod]
         public void CreateTableStorageProvider()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.ConnectionStringForTest);
+            string tableName = Helper.DailyTableName;
+            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.StorageConnectionString);
         }
 
         [TestMethod]
         public void TableStorageProvider_GetTableReference()
         {
-            string tableName = Helper.NewTableName();
-            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.ConnectionStringForTest);
-            fakeStorage.GetTableReference(CloudStorageAccount.Parse(Helper.ConnectionStringForTest), tableName);
+            string tableName = Helper.DailyTableName;
+            FakeStorageProvider fakeStorage = new FakeStorageProvider(tableName, Helper.StorageConnectionString);
+            fakeStorage.GetTableReference(CloudStorageAccount.Parse(Helper.StorageConnectionString), tableName);
         }
 
         class FakeStorageProvider : TableStorageProvider
         {
-            public FakeStorageProvider(string tableName, string connectionStringSettingName)
-                : base(tableName, connectionStringSettingName)
+            public FakeStorageProvider(string tableName, string storageConnectionString)
+                : base(TableStorageConfiguration.CreateDefault(tableName, storageConnectionString))
             {
 
             }

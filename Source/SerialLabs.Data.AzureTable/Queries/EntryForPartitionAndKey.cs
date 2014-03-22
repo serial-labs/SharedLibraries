@@ -1,10 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLabs.Data.AzureTable.Queries
 {
@@ -25,14 +21,14 @@ namespace SerialLabs.Data.AzureTable.Queries
             get { return _cacheKey; }
         }
 
-        public EntryForPartitionAndKey(string partition, string row)
+        public EntryForPartitionAndKey(string partitionKey, string rowKey)
             : base()
         {
-            Guard.ArgumentNotNullOrWhiteSpace(partition, "partition");
-            Guard.ArgumentNotNullOrWhiteSpace(row, "row");
+            Guard.ArgumentNotNullOrWhiteSpace(partitionKey, "partitionKey");
+            Guard.ArgumentNotNullOrWhiteSpace(rowKey, "rowKey");
 
-            _partition = partition;
-            _row = row;
+            _partition = partitionKey;
+            _row = rowKey;
             _cacheKey = CreateCacheKey();
         }
 

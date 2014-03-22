@@ -14,212 +14,239 @@ namespace SerialLabs.Data.AzureTable.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateSelectEntriesForPartition_NoPartition()
         {
-            EntriesForPartition<DynamicEntity> a = new EntriesForPartition<DynamicEntity>("");
+            new EntriesForPartition<DynamicEntity>("");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CreateSelectTopEntriesForPartition_NoPartition()
         {
-            TopEntriesForPartition<DynamicEntity> a = new TopEntriesForPartition<DynamicEntity>("");
+            new TopEntriesForPartition<DynamicEntity>("");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CreateSelectEntryForPartitionAndKey_NoPartition()
         {
-            EntryForPartitionAndKey<DynamicEntity> a = new EntryForPartitionAndKey<DynamicEntity>("", "aa");
+            new EntryForPartitionAndKey<DynamicEntity>("", "aa");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CreateSelectEntryForPartitionAndKey_NoRow()
         {
-            EntryForPartitionAndKey<DynamicEntity> a = new EntryForPartitionAndKey<DynamicEntity>("aa", "");
+            new EntryForPartitionAndKey<DynamicEntity>("aa", "");
         }
 
         [TestMethod]
 
         public void CreateSelectEntriesForPartition_Success()
         {
-            EntriesForPartition<DynamicEntity> a = new EntriesForPartition<DynamicEntity>(Helper.partitionKey);
-            Assert.IsNotNull(a);
+            EntriesForPartition<DynamicEntity> query = new EntriesForPartition<DynamicEntity>(Helper.RandomPartitionKey);
+            Assert.IsNotNull(query);
         }
 
         [TestMethod]
 
         public void CreateSelectTopEntriesForPartition_Success()
         {
-            TopEntriesForPartition<DynamicEntity> a = new TopEntriesForPartition<DynamicEntity>(Helper.partitionKey);
-            Assert.IsNotNull(a);
+            TopEntriesForPartition<DynamicEntity> query = new TopEntriesForPartition<DynamicEntity>(Helper.RandomPartitionKey);
+            Assert.IsNotNull(query);
         }
 
         [TestMethod]
 
         public void CreateSelectEntryForPartitionAndKey_Success()
         {
-            EntryForPartitionAndKey<DynamicEntity> a = new EntryForPartitionAndKey<DynamicEntity>(Helper.partitionKey, Helper.Person.defaultId);
-            Assert.IsNotNull(a);
+            EntryForPartitionAndKey<DynamicEntity> query = new EntryForPartitionAndKey<DynamicEntity>(Helper.RandomPartitionKey, Helper.RandomRowKey);
+            Assert.IsNotNull(query);
         }
 
         [TestMethod]
         public void Selects_CreateCache_Success()
         {
-            FakeEntryForPartitionAndKey a1 = new FakeEntryForPartitionAndKey(Helper.partitionKey, Helper.Person.defaultId);
-            Assert.IsNotNull(a1);
-            Assert.IsNotNull(a1.CreateCacheKey());
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
 
-            FakeTopEntriesForPartition a2 = new FakeTopEntriesForPartition(Helper.partitionKey);
-            Assert.IsNotNull(a2);
-            Assert.IsNotNull(a2.CreateCacheKey());
+            FakeEntryForPartitionAndKey query1 = new FakeEntryForPartitionAndKey(partitionKey, rowKey);
+            Assert.IsNotNull(query1);
+            Assert.IsNotNull(query1.CreateCacheKey());
 
-            FakeEntriesForPartition a3 = new FakeEntriesForPartition(Helper.partitionKey);
-            Assert.IsNotNull(a3);
-            Assert.IsNotNull(a3.CreateCacheKey());
+            FakeTopEntriesForPartition query2 = new FakeTopEntriesForPartition(partitionKey);
+            Assert.IsNotNull(query2);
+            Assert.IsNotNull(query2.CreateCacheKey());
+
+            FakeEntriesForPartition query3 = new FakeEntriesForPartition(partitionKey);
+            Assert.IsNotNull(query3);
+            Assert.IsNotNull(query3.CreateCacheKey());
 
         }
 
         [TestMethod]
         public void Selects_CreateQuery_Success()
         {
-            FakeEntryForPartitionAndKey a1 = new FakeEntryForPartitionAndKey(Helper.partitionKey, Helper.Person.defaultId);
-            Assert.IsNotNull(a1);
-            Assert.IsNotNull(a1.CreateQuery());
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
 
-            FakeTopEntriesForPartition a2 = new FakeTopEntriesForPartition(Helper.partitionKey);
-            Assert.IsNotNull(a2);
-            Assert.IsNotNull(a2.CreateQuery());
+            FakeEntryForPartitionAndKey query1 = new FakeEntryForPartitionAndKey(partitionKey, rowKey);
+            Assert.IsNotNull(query1);
+            Assert.IsNotNull(query1.CreateQuery());
 
-            FakeEntriesForPartition a3 = new FakeEntriesForPartition(Helper.partitionKey);
-            Assert.IsNotNull(a3);
-            Assert.IsNotNull(a3.CreateQuery());
+            FakeTopEntriesForPartition query2 = new FakeTopEntriesForPartition(partitionKey);
+            Assert.IsNotNull(query2);
+            Assert.IsNotNull(query2.CreateQuery());
+
+            FakeEntriesForPartition query3 = new FakeEntriesForPartition(partitionKey);
+            Assert.IsNotNull(query3);
+            Assert.IsNotNull(query3.CreateQuery());
 
         }
 
         [TestMethod]
         public async Task SelectTopEntriesForPartition_InsertAndRead()
         {
-            string table = Helper.NewTableName();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            TopEntriesForPartition<DynamicEntity> topEntries = new TopEntriesForPartition<DynamicEntity>(Helper.partitionKey);
+            EntryForPartitionAndKey<DynamicEntity> query =
+                new EntryForPartitionAndKey<DynamicEntity>(partitionKey, rowKey);
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
+            TopEntriesForPartition<DynamicEntity> topEntries = new TopEntriesForPartition<DynamicEntity>(partitionKey);
 
-            writer.Insert<DynamicEntity>(Helper.GeneratePersonDynamicEntity());
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = new TableStorageReader(table, Helper.StorageConnectionString);
+
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
             List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(topEntries);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
+            Comparers.AssertCompare(entity, results[0]);
         }
 
         [TestMethod]
         public async Task SelectEntriesForPartition_InsertAndRead()
         {
-            string table = Helper.NewTableName();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            EntriesForPartition<DynamicEntity> Entries = new EntriesForPartition<DynamicEntity>(Helper.partitionKey);
+            EntriesForPartition<DynamicEntity> query = new EntriesForPartition<DynamicEntity>(partitionKey);
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = new TableStorageReader(table, Helper.StorageConnectionString);
 
-            writer.Insert<DynamicEntity>(Helper.GeneratePersonDynamicEntity());
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
-            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
+            Comparers.AssertCompare(entity, results[0]);
         }
 
         [TestMethod]
         public async Task SelectEntryForPartitionAndKey_InsertAndRead()
         {
-            string table = Helper.NewTableName();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            EntryForPartitionAndKey<DynamicEntity> Entries = new EntryForPartitionAndKey<DynamicEntity>(Helper.partitionKey, Helper.Person.defaultId);
+            EntryForPartitionAndKey<DynamicEntity> query = new EntryForPartitionAndKey<DynamicEntity>(partitionKey, rowKey);
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = new TableStorageReader(table, Helper.StorageConnectionString);
 
-            writer.Insert<DynamicEntity>(Helper.GeneratePersonDynamicEntity());
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
-            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));                        
+            Comparers.AssertCompare(entity, results[0]);
         }
 
         [TestMethod]
         public async Task SelectEntryForPartitionAndKey_InsertAndRead_WithCache()
         {
-            string table = Helper.NewTableName();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            EntryForPartitionAndKey<DynamicEntity> Entries = new EntryForPartitionAndKey<DynamicEntity>(Helper.partitionKey, Helper.Person.defaultId);
+            EntryForPartitionAndKey<DynamicEntity> query = new EntryForPartitionAndKey<DynamicEntity>(partitionKey, rowKey);
 
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = new TableStorageReader(table, Helper.StorageConnectionString).WithCache();
             reader.WithCache();
 
-            writer.Insert<DynamicEntity>(Helper.GeneratePersonDynamicEntity());
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
-            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));            
+            Comparers.AssertCompare(entity, results[0]);
 
             // read from cache
-            results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(Helper.GeneratePersonDynamicEntity(), results[0]));            
+            Comparers.AssertCompare(entity, results[0]);
         }
 
         [TestMethod]
         public async Task SelectEntryForPartitionAndKey_InsertAndRead_WithCacheAfterChange()
         {
-            string table = Helper.NewTableName();
-            DynamicEntity expected = Helper.GeneratePersonDynamicEntity();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            EntryForPartitionAndKey<DynamicEntity> Entries = new EntryForPartitionAndKey<DynamicEntity>(Helper.partitionKey, Helper.Person.defaultId);
+            EntryForPartitionAndKey<DynamicEntity> query = new EntryForPartitionAndKey<DynamicEntity>(partitionKey, rowKey);
 
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = TableStorageReader.Table(table, Helper.StorageConnectionString);
             reader.WithCache();
 
-            writer.Insert<DynamicEntity>(expected);
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
-            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(Helper.AssertCompare(expected, results[0]));            
-            
+            Comparers.AssertCompare(entity, results[0]);
 
-            expected.Set("Number", 654);
-            writer.InsertOrReplace<DynamicEntity>(expected);
+            entity.Set("Number", 654);
+            writer.InsertOrReplace<DynamicEntity>(entity);
             writer.Execute();
 
             // read from cache
-            List<DynamicEntity> results2 = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            List<DynamicEntity> results2 = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(1, results2.Count);
-            Assert.IsTrue(Helper.AssertCompare(expected, results2[0]));            
+            Comparers.AssertCompare(entity, results2[0]);
         }
 
         [TestMethod]
         public async Task SelectEntryForPartitionAndKey_InsertAndRead_NotExistant()
         {
-            string table = Helper.NewTableName();
+            string table = Helper.DailyTableName;
+            string partitionKey = Helper.RandomPartitionKey;
+            string rowKey = Helper.RandomRowKey;
+            DynamicEntity entity = Helper.CreateFakeDynamicPerson(partitionKey, rowKey);
 
-            EntryForPartitionAndKey<DynamicEntity> Entries = new EntryForPartitionAndKey<DynamicEntity>(Helper.partitionKey, "25");
 
-            TableStorageWriter writer = new TableStorageWriter(table, Helper.ConnectionStringForTest);
-            TableStorageReader reader = TableStorageReader.Table(table, Helper.ConnectionStringForTest);
 
-            writer.Insert<DynamicEntity>(Helper.GeneratePersonDynamicEntity());
+            TableStorageWriter writer = new TableStorageWriter(table, Helper.StorageConnectionString);
+            TableStorageReader reader = TableStorageReader.Table(table, Helper.StorageConnectionString);
+
+            writer.Insert<DynamicEntity>(entity);
             writer.Execute();
 
-            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(Entries);
+            EntryForPartitionAndKey<DynamicEntity> query = new EntryForPartitionAndKey<DynamicEntity>(partitionKey, Guid.NewGuid().ToString()); // row key should be unknown
+
+            List<DynamicEntity> results = (List<DynamicEntity>)await reader.ExecuteAsync<DynamicEntity>(query);
             Assert.AreEqual(0, results.Count);
         }
 
@@ -229,8 +256,8 @@ namespace SerialLabs.Data.AzureTable.Tests
 
         class FakeEntryForPartitionAndKey : EntryForPartitionAndKey<DynamicEntity>
         {
-            public FakeEntryForPartitionAndKey(string a, string b)
-                : base(a, b) { }
+            public FakeEntryForPartitionAndKey(string partitionKey, string rowKey)
+                : base(partitionKey, rowKey) { }
             public new string CreateCacheKey() { return base.CreateCacheKey(); }
             public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }
@@ -238,8 +265,8 @@ namespace SerialLabs.Data.AzureTable.Tests
 
         class FakeEntriesForPartition : EntriesForPartition<DynamicEntity>
         {
-            public FakeEntriesForPartition(string a)
-                : base(a) { }
+            public FakeEntriesForPartition(string partitionKey)
+                : base(partitionKey) { }
             public new string CreateCacheKey() { return base.CreateCacheKey(); }
             public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }
@@ -247,8 +274,8 @@ namespace SerialLabs.Data.AzureTable.Tests
 
         class FakeTopEntriesForPartition : TopEntriesForPartition<DynamicEntity>
         {
-            public FakeTopEntriesForPartition(string a)
-                : base(a) { }
+            public FakeTopEntriesForPartition(string partitionKey)
+                : base(partitionKey) { }
             public new string CreateCacheKey() { return base.CreateCacheKey(); }
             public new TableQuery<DynamicEntity> CreateQuery() { return base.CreateQuery(); }
         }

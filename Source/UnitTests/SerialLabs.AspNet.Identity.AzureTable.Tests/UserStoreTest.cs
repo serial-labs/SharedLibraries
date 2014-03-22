@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
-using SerialLabs;
 using SerialLabs.Identity.CloudStorage;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             UserStore<IdentityUser> store = GetUserStore();
             IdentityUser actual = await store.FindByIdAsync(expected.Id);
 
-            AreEquals(expected, actual);
+            Comparers.AreEquals(expected, actual);
         }
 
         [TestMethod]
@@ -50,7 +49,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             UserStore<IdentityUser> store = GetUserStore();
             IdentityUser actual = await store.FindByNameAsync(expected.UserName);
 
-            AreEquals(expected, actual);
+            Comparers.AreEquals(expected, actual);
         }
 
         [TestMethod]
@@ -79,7 +78,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             IdentityUser actual = await store.FindByIdAsync(user.Id);
             IdentityUserClaim updatedClaim = actual.Claims.FirstOrDefault(x => x.ClaimType == newClaim.ClaimType);
             Assert.IsNotNull(updatedClaim);
-            AreEquals(newClaim, updatedClaim);
+            Comparers.AreEquals(newClaim, updatedClaim);
         }
 
         [TestMethod]
@@ -104,7 +103,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             IdentityUser actual = await store.FindAsync(newLoginInfo);
 
             Assert.IsNotNull(actual);
-            AreEquals(expected, actual);
+            Comparers.AreEquals(expected, actual);
         }
 
         [TestMethod]
@@ -226,20 +225,20 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             IdentityUser user = await CreateAndPersistRandomUserAsync();
             UserStore<IdentityUser> store = GetUserStore();
             string expected = "unitTest@email.com";
-            await store.SetEmailAsync(user,expected);
+            await store.SetEmailAsync(user, expected);
             Assert.IsNotNull(user.Email);
             Assert.AreEqual(expected, user.Email);
-           
-       }
+
+        }
 
         [TestMethod]
         public async Task GetEmail_WithSucess()
         {
-            
+
             IdentityUser user = await CreateAndPersistUserWithEmailAsync("unitTest@email.com");
             UserStore<IdentityUser> store = GetUserStore();
             string expected = "unitTest@email.com";
-            string existing=await store.GetEmailAsync(user);
+            string existing = await store.GetEmailAsync(user);
             Assert.AreEqual(existing, expected);
         }
 
@@ -258,7 +257,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             IdentityUser user = await CreateAndPersistRandomUserAsync();
             UserStore<IdentityUser> store = GetUserStore();
             user.IsVerified = true;
-            Assert.IsTrue(await store.GetEmailConfirmedAsync(user));         
+            Assert.IsTrue(await store.GetEmailConfirmedAsync(user));
         }
 
         [TestMethod]
@@ -279,7 +278,7 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             Assert.IsTrue(await store.GetTwoFactorEnabledAsync(user));
         }
 
-        
+
         #region Utilities
         static CloudStorageAccount GetStorageAccount()
         {
@@ -301,7 +300,9 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             {
                 UserName = userName,
                 Claims = new List<IdentityUserClaim> { CreateRandomUserClaim() },
-                Logins = new List<IdentityUserLogin> { new IdentityUserLogin(userName, CreateRandomUserLoginInfo()) },
+                Logins = new List<IdentityUserLogin> { 
+                    new IdentityUserLogin(userName, CreateRandomUserLoginInfo())
+                },
                 Roles = new List<string> { "Administrator", "User" }
             };
         }
@@ -329,99 +330,35 @@ namespace SerialLabs.AspNet.Identity.AzureTable.Tests
             return user;
         }
 
-        static void AreEquals(IdentityUser expected, IdentityUser actual)
-        {
-            CheckNullReferences(expected, actual);
-            if (expected == null) return;
 
-            Assert.AreEqual(expected.ETag, actual.ETag);
-            Assert.AreEqual(expected.Id, actual.Id);
-            Assert.AreEqual(expected.PartitionKey, actual.PartitionKey);
-            Assert.AreEqual(expected.PasswordHash, actual.PasswordHash);
-            Assert.AreEqual(expected.RowKey, actual.RowKey);
-            Assert.AreEqual(expected.SecurityStamp, actual.SecurityStamp);
-            Assert.AreEqual(expected.SerializedClaims, actual.SerializedClaims);
-            Assert.AreEqual(expected.SerializedLogins, actual.SerializedLogins);
-            Assert.AreEqual(expected.SerializedRoles, actual.SerializedRoles);
-            AreSimilar(expected.Timestamp, actual.Timestamp);
-            Assert.AreEqual(expected.UserName, actual.UserName);
-            AreCollectionEquals(expected.Logins, actual.Logins, AreEquals);
-            AreCollectionEquals(expected.Roles, actual.Roles, Assert.AreEqual);
-            AreCollectionEquals(expected.Claims, actual.Claims, AreEquals);
-        }
+        //static void AreSimilar(DateTimeOffset expected, DateTimeOffset actual)
+        //{
+        //    if (expected == DateTimeOffset.MinValue && actual != DateTimeOffset.MinValue)
+        //        Assert.Fail("Expected is not set while actual has a value");
+        //    if (expected != DateTimeOffset.MinValue && actual == DateTimeOffset.MinValue)
+        //        Assert.Fail("Expected has a value while actual is not set");
+        //    string dateFormat = "yyyy/MM/dd HH:mm:ss";
+        //    Assert.AreEqual(expected.ToString(dateFormat), actual.ToString(dateFormat));
+        //}
+        //static void AreCollectionEquals<T>(IEnumerable<T> expected, IEnumerable<T> actual, Action<T, T> comparer)
+        //{
+        //    CheckNullReferences(expected, actual);
+        //    if (expected == null)
+        //        return;
+        //    Assert.AreEqual(expected.Count(), actual.Count());
+        //    for (int i = 0; i < expected.Count(); i++)
+        //    {
+        //        comparer(expected.ElementAt(i), actual.ElementAt(i));
+        //    }
+        //}
 
-        static void AreEquals(IdentityUserLogin expected, IdentityUserLogin actual)
-        {
-            CheckNullReferences(expected, actual);
-            if (expected == null) return;
-
-            Assert.AreEqual(expected.ETag, actual.ETag);
-            Assert.AreEqual(expected.PartitionKey, actual.PartitionKey);
-            Assert.AreEqual(expected.RowKey, actual.RowKey);
-            AreSimilar(expected.Timestamp, actual.Timestamp);
-            Assert.AreEqual(expected.UserId, actual.UserId);
-            Assert.AreEqual(expected.LoginProvider, actual.LoginProvider);
-            Assert.AreEqual(expected.ProviderKey, actual.ProviderKey);
-        }
-
-        static void AreEquals(IList<IdentityUserLogin> expected, IList<IdentityUserLogin> actual)
-        {
-            AreCollectionEquals(expected, actual, AreEquals);
-        }
-
-        static void AreEquals(UserLoginInfo expected, UserLoginInfo actual)
-        {
-            CheckNullReferences(expected, actual);
-            if (expected == null) return;
-            Assert.AreEqual(expected.LoginProvider, actual.LoginProvider);
-            Assert.AreEqual(expected.ProviderKey, actual.ProviderKey);
-        }
-        static void AreEquals(IList<UserLoginInfo> expected, IList<UserLoginInfo> actual)
-        {
-            AreCollectionEquals(expected, actual, AreEquals);
-        }
-
-        static void AreEquals(IdentityUserClaim expected, IdentityUserClaim actual)
-        {
-            CheckNullReferences(expected, actual);
-
-            Assert.AreEqual(expected.ClaimType, actual.ClaimType);
-            Assert.AreEqual(expected.ClaimValue, actual.ClaimValue);
-        }
-
-        static void AreEquals(IList<IdentityUserClaim> expected, IList<IdentityUserClaim> actual)
-        {
-            AreCollectionEquals(expected, actual, AreEquals);
-        }
-
-        static void AreSimilar(DateTimeOffset expected, DateTimeOffset actual)
-        {
-            if (expected == DateTimeOffset.MinValue && actual != DateTimeOffset.MinValue)
-                Assert.Fail("Expected is not set while actual has a value");
-            if (expected != DateTimeOffset.MinValue && actual == DateTimeOffset.MinValue)
-                Assert.Fail("Expected has a value while actual is not set");
-            string dateFormat = "yyyy/MM/dd HH:mm:ss";
-            Assert.AreEqual(expected.ToString(dateFormat), actual.ToString(dateFormat));
-        }
-        static void AreCollectionEquals<T>(IEnumerable<T> expected, IEnumerable<T> actual, Action<T, T> comparer)
-        {
-            CheckNullReferences(expected, actual);
-            if (expected == null)
-                return;
-            Assert.AreEqual(expected.Count(), actual.Count());
-            for (int i = 0; i < expected.Count(); i++)
-            {
-                comparer(expected.ElementAt(i), actual.ElementAt(i));
-            }
-        }
-
-        static void CheckNullReferences<T>(T expected, T actual) where T : class
-        {
-            if (expected == null && actual != null)
-                Assert.Fail("Expected is null, actual is not null");
-            if (expected != null && actual == null)
-                Assert.Fail("Expected is not null, actual is null");
-        }
+        //static void CheckNullReferences<T>(T expected, T actual) where T : class
+        //{
+        //    if (expected == null && actual != null)
+        //        Assert.Fail("Expected is null, actual is not null");
+        //    if (expected != null && actual == null)
+        //        Assert.Fail("Expected is not null, actual is null");
+        //}
         #endregion
     }
 }
