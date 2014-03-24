@@ -86,7 +86,7 @@
     <Compile Include="TableStorageQuery.cs" />
     <Compile Include="TableStorageQueryCache.cs" />
     <Compile Include="TableStorageReader.cs" />
-    <Compile Include="TableSet.cs" />
+    <Compile Include="TableRepository.cs" />
     <Compile Include="TableStorageWriter.cs" />
   </ItemGroup>
   <ItemGroup>
