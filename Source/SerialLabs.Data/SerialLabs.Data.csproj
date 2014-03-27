@@ -44,6 +44,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CompositeId\CompositeId.cs" />
+    <Compile Include="CompositeId\CompositeIdAsc.cs" />
+    <Compile Include="CompositeId\CompositeIdDesc.cs" />
     <Compile Include="DataException.cs" />
     <Compile Include="IGenericRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
