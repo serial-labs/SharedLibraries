@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SerialLabs.Web.Monitoring
+namespace SerialLabs
 {
-    public class MonitoringManager
+    class CompositeId
     {
     }
 }

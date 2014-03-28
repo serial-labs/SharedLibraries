@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace SerialLabs.Web.Monitoring
+namespace SerialLabs.Monitoring
 {
     /// <summary>
     /// Status Check Item
     /// </summary>
-    public class MonitoringJob
+    public class MonitoringResult
     {
         /// <summary>
         /// Title of the check

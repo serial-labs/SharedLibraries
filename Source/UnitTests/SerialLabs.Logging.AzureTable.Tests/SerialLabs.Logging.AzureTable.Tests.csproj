@@ -84,7 +84,7 @@
     <Compile Include="..\..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CloudStorageLogEntityManagerTest.cs" />
+    <Compile Include="ApplicationLogEntityManagerTest.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="FormattedCloudStorageTraceListenerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

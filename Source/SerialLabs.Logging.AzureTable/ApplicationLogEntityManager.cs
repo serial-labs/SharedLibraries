@@ -11,6 +11,42 @@ namespace SerialLabs.Logging.AzureTable
     public static class ApplicationLogEntityManager
     {
         /// <summary>
+        /// Returns a formatted row key
+        /// </summary>
+        /// <param name="sortOrder"></param>
+        /// <returns></returns>
+        public static string CreateRowKey(SortOrder sortOrder = SortOrder.Descending)
+        {
+            return CreateRowKey(Guid.NewGuid(), DateTime.UtcNow, sortOrder);
+        }
+
+        /// <summary>
+        /// Returns a formatted row key
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public static string CreateRowKey(Guid guid, SortOrder sortOrder = SortOrder.Descending)
+        {
+            return CreateRowKey(guid, DateTime.UtcNow, sortOrder);
+        }
+
+        /// <summary>
+        /// Returns a formatted row key
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="date"></param>
+        /// <param name="sortOrder"></param>
+        /// <returns></returns>
+        public static string CreateRowKey(Guid guid, DateTime date, SortOrder sortOrder)
+        {
+            long ticks = date.Ticks;
+            if (sortOrder == SortOrder.Descending)
+                ticks = DateTime.MaxValue.Ticks - date.Ticks;
+
+            return String.Format(CultureInfo.InvariantCulture, "{0:D19}_{1}", ticks, guid.ToString());
+        }
+
+        /// <summary>
         /// Returns a formatted partition key
         /// </summary>
         /// <param name="applicationName"></param>
@@ -20,7 +56,7 @@ namespace SerialLabs.Logging.AzureTable
         {
             Guard.ArgumentNotNullOrWhiteSpace<PlatformException>(applicationName, "applicationName");
 
-            return String.Format(CultureInfo.InvariantCulture, "{0}-{1}",
+            return String.Format(CultureInfo.InvariantCulture, "{0}_{1}",
                 applicationName.Trim(),
                 timeStamp.ToString("yyyyMM"));
         }
