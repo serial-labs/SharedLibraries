@@ -1,5 +1,5 @@
 ﻿
-namespace SerialLabs
+namespace SerialLabs.Data.AzureTable
 {
     /// <summary>
     /// Encapsulates a query logic

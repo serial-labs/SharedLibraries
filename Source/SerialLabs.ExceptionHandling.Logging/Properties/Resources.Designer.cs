@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SerialLabs.ExceptionHandling.Logging.Properties {
-    using System;
-    
-    
+namespace SerialLabs.ExceptionHandling.Logging.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

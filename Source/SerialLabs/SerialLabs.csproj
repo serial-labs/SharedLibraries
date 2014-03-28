@@ -50,7 +50,6 @@
     </Compile>
     <Compile Include="BaseObjects\BaseObject.cs" />
     <Compile Include="BitwiseMask.cs" />
-    <Compile Include="Contracts\IModelQuery.cs" />
     <Compile Include="Converters\IPAddressConverter.cs" />
     <Compile Include="Extensions\DataAnnotationExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -62,7 +61,6 @@
     <Compile Include="Randomizer.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="PlatformConstants.cs" />
-    <Compile Include="Contracts\IFactory.cs" />
     <Compile Include="Contracts\IResolver.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />

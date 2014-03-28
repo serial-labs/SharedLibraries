@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SerialLabs.ExceptionHandling.Properties;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SerialLabs.ExceptionHandling.Properties;
 
 namespace SerialLabs.ExceptionHandling
 {

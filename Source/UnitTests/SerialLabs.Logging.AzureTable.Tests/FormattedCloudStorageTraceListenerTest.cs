@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SerialLabs.Logging.AzureTable;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SerialLabs.Logging.AzureTable.Tests
