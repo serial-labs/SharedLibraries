@@ -16,6 +16,11 @@ namespace SerialLabs.Monitoring
         /// </summary>
         public string Label { get; protected set; }
 
+        /// <summary>
+        /// Type
+        /// </summary>
+        public string Type { get; protected set; }
+
         protected MonitoringTask()
             : this("Unamed task")
         { }

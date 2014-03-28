@@ -20,7 +20,7 @@ namespace SerialLabs.Data
             long date = /*DateTime.MaxValue.Ticks - */long.Parse(inversedDate);
 
             result.Guid = Guid.Parse(guid);
-            result.TimeStamp = new DateTimeOffset(date, new TimeSpan(0));
+            result.Timestamp = new DateTimeOffset(date, new TimeSpan(0));
 
             return result;
         }
@@ -30,14 +30,14 @@ namespace SerialLabs.Data
             AscendingSortedGuid result = new AscendingSortedGuid();
 
             result.Guid = Guid.NewGuid();
-            result.TimeStamp = DateTimeOffset.UtcNow;
+            result.Timestamp = DateTimeOffset.UtcNow;
 
             return result;
         }
 
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "{0:D19}{1}{2}", TimeStamp.Ticks, Separator, Guid);
+            return String.Format(CultureInfo.InvariantCulture, "{0:D19}{1}{2}", Timestamp.Ticks, Separator, Guid);
         }
     }
 }

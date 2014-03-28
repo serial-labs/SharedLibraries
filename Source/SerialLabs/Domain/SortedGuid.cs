@@ -14,7 +14,7 @@ namespace SerialLabs.Data
         /// <summary>
         /// TimeStamp
         /// </summary>
-        public DateTimeOffset TimeStamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
         /// Guid

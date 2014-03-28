@@ -91,7 +91,7 @@ namespace SerialLabs.Tests.Domain
         private static void AssertCompare(SortedGuid expected, SortedGuid actual)
         {
             Assert.AreEqual(expected.Guid, actual.Guid);
-            Assert.AreEqual(expected.TimeStamp, actual.TimeStamp);
+            Assert.AreEqual(expected.Timestamp, actual.Timestamp);
         }
 
         class FakeItem<IdType>

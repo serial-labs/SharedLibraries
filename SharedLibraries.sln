@@ -66,7 +66,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Logging.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Monitoring", "Source\SerialLabs.Monitoring\SerialLabs.Monitoring.csproj", "{8827F756-1E45-4255-BF62-30129A134D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Monitoring.Tests", "SerialLabs.Monitoring.Tests\SerialLabs.Monitoring.Tests.csproj", "{100D2328-E8B4-4596-9A89-9624F5A7D4C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLabs.Monitoring.Tests", "Source\UnitTests\SerialLabs.Monitoring.Tests\SerialLabs.Monitoring.Tests.csproj", "{100D2328-E8B4-4596-9A89-9624F5A7D4C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

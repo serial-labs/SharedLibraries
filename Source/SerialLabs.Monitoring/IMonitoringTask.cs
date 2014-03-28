@@ -9,5 +9,7 @@ namespace SerialLabs.Monitoring
     {
         MonitoringResult Execute();
         Task<MonitoringResult> ExecuteAsync();
+        string Label { get; }
+        string Type { get; }
     }
 }

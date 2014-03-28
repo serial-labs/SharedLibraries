@@ -1,6 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,11 +92,11 @@ namespace SerialLabs.Monitoring.Tests
             Assert.AreEqual(TestTaskLabel, result.Title);
         }
 
-        private CloudTable GetTestCloudTable(string storageConnectionString, string tableName)
-        {
-            CloudStorageAccount account = CloudStorageAccount.Parse(storageConnectionString);
-            CloudTableClient client = account.CreateCloudTableClient();
-            return client.GetTableReference(tableName);
-        }
+        //private CloudTable GetTestCloudTable(string storageConnectionString, string tableName)
+        //{
+        //    CloudStorageAccount account = CloudStorageAccount.Parse(storageConnectionString);
+        //    CloudTableClient client = account.CreateCloudTableClient();
+        //    return client.GetTableReference(tableName);
+        //}
     }
 }

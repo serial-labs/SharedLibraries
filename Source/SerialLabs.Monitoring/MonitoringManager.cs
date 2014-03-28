@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SerialLabs.Monitoring
 {
@@ -15,6 +16,20 @@ namespace SerialLabs.Monitoring
             {
                 yield return item.Execute();
             }
+        }
+
+        public static async Task<IEnumerable<MonitoringResult>> ExecuteTasksAsync(IEnumerable<IMonitoringTask> tasks)
+        {
+            Guard.ArgumentNotNull(tasks, "tasks");
+
+            List<MonitoringResult> result = new List<MonitoringResult>();
+
+            foreach (var item in tasks)
+            {
+                result.Add(await item.ExecuteAsync());
+            }
+
+            return result;
         }
 
         /// <summary>
