@@ -63,9 +63,9 @@ namespace SerialLabs.UnitTestHelpers
         /// <param name="actual"></param>
         public static void AreSimilar(DateTime expected, DateTime actual)
         {
-            if (expected == DateTimeOffset.MinValue && actual != DateTimeOffset.MinValue)
+            if (expected == DateTime.MinValue && actual != DateTime.MinValue)
                 Assert.Fail("Expected is not set while actual has a value");
-            if (expected != DateTimeOffset.MinValue && actual == DateTimeOffset.MinValue)
+            if (expected != DateTime.MinValue && actual == DateTime.MinValue)
                 Assert.Fail("Expected has a value while actual is not set");
             string dateFormat = "yyyy/MM/dd HH:mm:ss";
             Assert.AreEqual(expected.ToString(dateFormat), actual.ToString(dateFormat));
