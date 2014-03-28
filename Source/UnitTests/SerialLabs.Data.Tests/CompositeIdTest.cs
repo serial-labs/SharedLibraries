@@ -64,7 +64,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
             actual = expected.OrderBy(x => x.Id.ToString()).ToList();
 
-            /* not complete */
+            AssertCompare(expected.First(), actual.Last());
 
         }
 
@@ -85,8 +85,8 @@ namespace SerialLabs.Data.AzureTable.Tests
             List<FakeItem<CompositeIdAsc>> actual = new List<FakeItem<CompositeIdAsc>>();
 
             actual = expected.OrderBy(x => x.Id.ToString()).ToList();
-
-            /* not complete */
+            
+            AssertCompare(expected.First(),actual.First());
 
         }
 
@@ -98,7 +98,19 @@ namespace SerialLabs.Data.AzureTable.Tests
             Assert.AreEqual(expected.DateUtc, actual.DateUtc);
         }
 
-        public class FakeItem<IdType>
+        private static void AssertCompare(FakeItem<CompositeIdDesc> expected, FakeItem<CompositeIdDesc> actual)
+        {
+            AssertCompare(expected.Id, actual.Id);
+            Assert.AreEqual(expected.Name, actual.Name);
+        }
+
+        private static void AssertCompare(FakeItem<CompositeIdAsc> expected, FakeItem<CompositeIdAsc> actual)
+        {
+            AssertCompare(expected.Id, actual.Id);
+            Assert.AreEqual(expected.Name, actual.Name);
+        }
+
+        class FakeItem<IdType>
         {
             public IdType Id { get; set; }
             public string Name { get; set; }
