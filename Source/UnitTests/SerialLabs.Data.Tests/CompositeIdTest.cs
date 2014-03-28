@@ -12,12 +12,12 @@ namespace SerialLabs.Data.AzureTable.Tests
         [TestMethod]
         public void CompositeIdTest_New()
         {
-            CompositeId idAsc = CompositeIdAsc.NewCompositeId();
+            SortedGuid idAsc = CompositeIdAsc.NewCompositeId();
             Assert.IsNotNull(idAsc);
 
             Console.WriteLine(idAsc.ToString());
 
-            CompositeId idDesc = CompositeIdDesc.NewCompositeId();
+            SortedGuid idDesc = CompositeIdDesc.NewCompositeId();
             Assert.IsNotNull(idDesc);
 
             Console.WriteLine(idDesc.ToString());
@@ -27,20 +27,20 @@ namespace SerialLabs.Data.AzureTable.Tests
         [TestMethod]
         public void CompositeIdAsc_Parse()
         {
-            CompositeId expected = CompositeIdAsc.NewCompositeId();
+            SortedGuid expected = CompositeIdAsc.NewCompositeId();
 
-            CompositeId actual = CompositeIdAsc.Parse(expected.ToString());
+            SortedGuid actual = CompositeIdAsc.Parse(expected.ToString());
 
             AssertCompare(expected, actual);
-            
+
         }
 
         [TestMethod]
         public void CompositeIdDesc_Parse()
         {
-            CompositeId expected = CompositeIdDesc.NewCompositeId();
+            SortedGuid expected = CompositeIdDesc.NewCompositeId();
 
-            CompositeId actual = CompositeIdDesc.Parse(expected.ToString());
+            SortedGuid actual = CompositeIdDesc.Parse(expected.ToString());
 
             AssertCompare(expected, actual);
 
@@ -56,7 +56,7 @@ namespace SerialLabs.Data.AzureTable.Tests
             for (int i = 0; i < 3; i++)
             {
                 var item = NewItemDesc();
-                expected.Add(item);                
+                expected.Add(item);
                 Thread.Sleep(10); // slowing down                
             }
 
@@ -92,7 +92,7 @@ namespace SerialLabs.Data.AzureTable.Tests
 
 
 
-        private static void AssertCompare(CompositeId expected, CompositeId actual)
+        private static void AssertCompare(SortedGuid expected, SortedGuid actual)
         {
             Assert.AreEqual(expected.GuId, actual.GuId);
             Assert.AreEqual(expected.DateUtc, actual.DateUtc);
