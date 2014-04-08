@@ -56,6 +56,7 @@
     <Compile Include="Domain\AscendingSortedGuid.cs" />
     <Compile Include="Domain\DescendingSortedGuid.cs" />
     <Compile Include="Converters\IPAddressConverter.cs" />
+    <Compile Include="ExpressionComposer.cs" />
     <Compile Include="Extensions\DataAnnotationExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
