@@ -51,6 +51,7 @@
     <Compile Include="BaseObjects\BaseObject.cs" />
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="CompositeId.cs" />
+    <Compile Include="Converters\NumberConverters.cs" />
     <Compile Include="Domain\SortedGuid.cs" />
     <Compile Include="Domain\AscendingSortedGuid.cs" />
     <Compile Include="Domain\DescendingSortedGuid.cs" />
