@@ -274,5 +274,19 @@ namespace SerialLabs
             byte[] bytes = System.Convert.FromBase64String(encodedValue);
             return System.Text.Encoding.UTF8.GetString(bytes);
         }
+        
+        ///
+        public static string EncodeToCrc32(string value)
+        {
+            Crc32 crc32 = new Crc32();
+            String hash = String.Empty;
+
+            foreach (byte b in crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value)))
+            {
+                hash += b.ToString("x2").ToUpperInvariant();
+            }
+
+            return hash;
+        }
     }
 }

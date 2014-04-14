@@ -27,7 +27,8 @@ namespace SerialLabs.Tests
         }
         /// <summary>
         /// Test pour ComputeSHA256Hash
-        /// </summary>        
+        /// </summary>  
+        [TestMethod]
         public void ComputeSHA256HashTest()
         {
             string input = "abcdefgh";
@@ -44,6 +45,38 @@ namespace SerialLabs.Tests
             expected = "27718ccffef4e1cce1cff2a7ac4bde42ef51f6dc9efdd2e1728c9fdddb3450d7";
             actual = CryptographyHelper.ComputeSHA256Hash(input);
             Assert.AreEqual<string>(expected, actual);
+        }
+
+
+        [TestMethod]
+        public void ComputeCRC32HashTest()
+        {
+
+
+            string input = "123456789";
+            string expected = "CBF43926";
+            string actual = CryptographyHelper.EncodeToCrc32(input);
+            Assert.AreEqual<string>(expected, actual);
+
+            input = "abcdefgh";
+            expected = "AEEF2A50";
+            actual = CryptographyHelper.EncodeToCrc32(input);
+            Assert.AreEqual<string>(expected, actual);
+
+            input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
+            expected = "EFF6144A";
+            actual = CryptographyHelper.EncodeToCrc32(input);
+            Assert.AreEqual<string>(expected, actual);
+
+            //input = "Alain Méreaux";
+            //expected = "4DB64EC0";
+            //actual = CryptographyHelper.EncodeToCrc32(input);
+            //Assert.AreEqual<string>(expected, actual);
+
+            //input = "Un algorithme est un processus systématique de résolution, par le calcul, d'un problème permettant de présenter les étapes vers le résultat à une autre personne physique (un autre humain) ou virtuelle (un calculateur). En d'autres termes, un algorithme est un énoncé d’une suite finie et non-ambiguë d’opérations permettant de donner la réponse à un problème. Il décrit formellement une procédure concrète. Si ces opérations s’exécutent en séquence, on parle d’algorithme séquentiel. Si les opérations s’exécutent sur plusieurs processeurs en parallèle, on parle d’algorithme parallèle. Si les tâches s’exécutent sur un réseau de processeurs on parle d’algorithme réparti ou distribué.";
+            //expected = "60CD3A33";
+            //actual = CryptographyHelper.EncodeToCrc32(input);
+            //Assert.AreEqual<string>(expected, actual);
         }
     }
 }
