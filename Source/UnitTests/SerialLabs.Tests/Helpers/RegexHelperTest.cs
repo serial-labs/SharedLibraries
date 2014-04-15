@@ -89,17 +89,17 @@ namespace SerialLabs.Tests
         [TestMethod]
         public void IsSortedGuid()
         {
-            Assert.IsTrue(RegexHelper.IsSortedGuid("0000000000000000000_00000000-0000-0000-0000-000000000000"));
-            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_b77ad6f9-624a-4c28-96e8-545923e56502"));
-            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_B77AD6F9-624A-4C28-96E8-545923E56502"));
-            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_00000000-0000-0000-0000-000000000000"));
-            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_00000000-0000-0000-0000-000000000000"));
+            Assert.IsTrue(RegexHelper.IsSortedGuid("0000000000000000000_00000000000000000000000000000000"));
+            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_b77ad6f9624a4c2896e8545923e56502"));
+            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_B77AD6F9624A4C2896E8545923E56502"));
+            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_00000000000000000000000000000000"));
+            Assert.IsTrue(RegexHelper.IsSortedGuid("0635318522499400050_00000000000000000000000000000000"));
 
 
             Assert.IsFalse(RegexHelper.IsSortedGuid("63531852249940005_000000000-0000-0000-0000-000000000000"));
             Assert.IsFalse(RegexHelper.IsSortedGuid("635318522499400050_000000000-0000-0000-0000-00000000000"));
             Assert.IsFalse(RegexHelper.IsSortedGuid("635318522499400050_000000000-0000-0000-000-000000000000"));
-            Assert.IsFalse(RegexHelper.IsSortedGuid("635318522499400050_000000000-0000-0000-0000-00000000000G"));
+            Assert.IsFalse(RegexHelper.IsSortedGuid("635318522499400050_00000000000000000000000000000000G"));
         }
     }
 }
