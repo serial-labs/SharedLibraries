@@ -61,6 +61,7 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumerationExtensions.cs" />
     <Compile Include="Extensions\IPAddressExtensions.cs" />
+    <Compile Include="Helpers\Crc32.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Inflector.cs" />
     <Compile Include="Randomizer.cs" />
