@@ -56,7 +56,7 @@
     </Compile>
     <Compile Include="BitwiseMaskTest.cs" />
     <Compile Include="Converters\IPAddressConverterTest.cs" />
-    <Compile Include="Domain\SortedGuidTest.cs" />
+    <Compile Include="Types\AscendingGuidTest.cs" />
     <Compile Include="GuardTest.cs" />
     <Compile Include="Helpers\DateTimeExtensionsTest.cs" />
     <Compile Include="Helpers\EnumerationExtensionsTest.cs" />
@@ -65,11 +65,21 @@
     <Compile Include="Helpers\StringHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\CryptographyHelperTest.cs" />
+    <Compile Include="Types\DescendingGuidTest.cs" />
+    <Compile Include="FakeItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SerialLabs.Fakers\SerialLabs.Fakers.csproj">
+      <Project>{84d1524f-7ce6-4f6d-8daa-4666f158c676}</Project>
+      <Name>SerialLabs.Fakers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs\SerialLabs.csproj">
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
       <Name>SerialLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialLabs.UnitTestHelpers\SerialLabs.UnitTestHelpers.csproj">
+      <Project>{9a1e9d09-4ded-40f6-9d64-4d17307ef070}</Project>
+      <Name>SerialLabs.UnitTestHelpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

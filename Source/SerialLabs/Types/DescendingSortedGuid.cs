@@ -191,12 +191,10 @@ namespace SerialLabs.Data
         public int CompareTo(object value)
         {
             if (value == null)
-                return -1;
+                return 1;
 
             Guard.IsInstanceOfType(typeof(DescendingSortedGuid), value, "value");
-
             return CompareTo((DescendingSortedGuid)value);
-
         }
 
         /// <summary>
@@ -207,9 +205,9 @@ namespace SerialLabs.Data
         public int CompareTo(DescendingSortedGuid other)
         {
             if (this.Timestamp < other.Timestamp)
-                return -1;
-            if (this.Timestamp > other.Timestamp)
                 return 1;
+            if (this.Timestamp > other.Timestamp)
+                return -1;
             // Timestamp are equal, check guid now
             return this.Guid.CompareTo(other.Guid);
         }

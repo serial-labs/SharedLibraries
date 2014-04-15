@@ -8,7 +8,7 @@ namespace SerialLabs.Data
     /// This is a composite guid which is associated with a time stamp.
     /// This time stamp helps to order the guid in a table storage.
     /// </summary>
-    public struct AscendingSortedGuid
+    public struct AscendingSortedGuid : IComparable, IComparable<AscendingSortedGuid>, IEquatable<AscendingSortedGuid>
     {
         private const char Separator = '_';
 
@@ -133,17 +133,17 @@ namespace SerialLabs.Data
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is DescendingSortedGuid))
+            if (obj == null || !(obj is AscendingSortedGuid))
                 return false;
-            return Equals((DescendingSortedGuid)obj);
+            return Equals((AscendingSortedGuid)obj);
         }
 
         /// <summary>
-        /// Returns true if the given <see cref="DescendingSortedGuid"/> is equal to the given instance
+        /// Returns true if the given <see cref="AscendingSortedGuid"/> is equal to the given instance
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(DescendingSortedGuid other)
+        public bool Equals(AscendingSortedGuid other)
         {
             if (other == null)
             {
