@@ -55,7 +55,8 @@ namespace SerialLabs
         /// <summary>
         /// Valid pattern for a Sorted Guid (timestamped guid)
         /// </summary>
-        public const string SortedGuidPattern = @"^[0-9]{19}_[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}$";
+        /// <example>2012010100000000000-3e1a5b4546d888a79887a98a795623a4</example>
+        public const string SortedGuidPattern = @"^[0-9]{19}_[A-F0-9]{32}$";
 
         /// <summary>
         /// Returns true if the given value is an SHA-256 hash

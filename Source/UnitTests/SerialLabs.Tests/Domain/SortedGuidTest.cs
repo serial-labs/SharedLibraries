@@ -24,6 +24,20 @@ namespace SerialLabs.Tests.Domain
             Console.WriteLine(idDesc.ToString());
         }
 
+        [TestMethod]
+        public void TryParseAscendingGuid_WithSuccess()
+        {
+            AscendingSortedGuid guid;
+            Assert.IsTrue(AscendingSortedGuid.TryParse("0635318522499400050_B77AD6F9624A4C2896E8545923E56502", out guid));
+            Assert.AreEqual("0635318522499400050_b77ad6f9624a4c2896e8545923e56502", guid.ToString());
+        }
+        [TestMethod]
+        public void TryParseDescendingGuid_WithSuccess()
+        {
+            AscendingSortedGuid guid;
+            Assert.IsTrue(AscendingSortedGuid.TryParse("0635318522499400050_B77AD6F9624A4C2896E8545923E56502", out guid));
+            Assert.AreEqual("0635318522499400050_b77ad6f9624a4c2896e8545923e56502", guid.ToString());
+        }
 
         [TestMethod]
         public void ParseAscendingSortedGuid_WithSuccess()
@@ -68,8 +82,6 @@ namespace SerialLabs.Tests.Domain
         public void AscendingSortedGuid_Order_WithSuccess()
         {
             List<FakeItem<AscendingSortedGuid>> expected = new List<FakeItem<AscendingSortedGuid>>();
-
-
 
             for (int i = 0; i < 3; i++)
             {
