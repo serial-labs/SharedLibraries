@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace SerialLabs.Identity.CloudStorage
+namespace SerialLabs.AspNet.Identity.AzureTable
 {
     /// <summary>
     /// A table storage implementation of <see cref="IUser"/>

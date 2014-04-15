@@ -5,8 +5,20 @@ namespace SerialLabs.Data
     /// <summary>
     /// A sorted guid with a lexicographic order based on its inverted timestamp value.
     /// </summary>
-    public class DescendingSortedGuid : SortedGuid
+    public struct DescendingSortedGuid
     {
+        private const char Separator = '_';
+
+        /// <summary>
+        /// TimeStamp
+        /// </summary>
+        public DateTimeOffset Timestamp { get; set; }
+
+        /// <summary>
+        /// Guid
+        /// </summary>
+        public Guid Guid { get; set; }
+
         /// <summary>
         /// Parse a string value into a <see cref="DescendingSortedGuid"/>
         /// </summary>

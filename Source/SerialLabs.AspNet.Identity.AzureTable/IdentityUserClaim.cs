@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace SerialLabs.Identity.CloudStorage
+namespace SerialLabs.AspNet.Identity.AzureTable
 {
     /// <summary>
     /// Encapsulates a claim logic adn provide a serializable constructor

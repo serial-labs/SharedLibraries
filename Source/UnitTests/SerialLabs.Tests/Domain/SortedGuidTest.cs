@@ -13,12 +13,12 @@ namespace SerialLabs.Tests.Domain
         [TestMethod]
         public void CreateSortedGuid_WithSuccess()
         {
-            SortedGuid idAsc = AscendingSortedGuid.NewSortedGuid();
+            AscendingSortedGuid idAsc = AscendingSortedGuid.NewSortedGuid();
             Assert.IsNotNull(idAsc);
 
             Console.WriteLine(idAsc.ToString());
 
-            SortedGuid idDesc = DescendingSortedGuid.NewSortedGuid();
+            DescendingSortedGuid idDesc = DescendingSortedGuid.NewSortedGuid();
             Assert.IsNotNull(idDesc);
 
             Console.WriteLine(idDesc.ToString());
@@ -99,8 +99,14 @@ namespace SerialLabs.Tests.Domain
         }
 
 
+        private static void AssertCompare(DescendingSortedGuid expected, DescendingSortedGuid actual)
+        {
+            Assert.AreEqual(expected.Guid, actual.Guid);
+            Assert.AreEqual(expected.Timestamp, actual.Timestamp);
+        }
 
-        private static void AssertCompare(SortedGuid expected, SortedGuid actual)
+
+        private static void AssertCompare(AscendingSortedGuid expected, AscendingSortedGuid actual)
         {
             Assert.AreEqual(expected.Guid, actual.Guid);
             Assert.AreEqual(expected.Timestamp, actual.Timestamp);

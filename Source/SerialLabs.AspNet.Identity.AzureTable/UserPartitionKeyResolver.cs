@@ -1,7 +1,7 @@
 ﻿using SerialLabs.Data.AzureTable;
 using System;
 
-namespace SerialLabs.Identity.CloudStorage
+namespace SerialLabs.AspNet.Identity.AzureTable
 {
     /// <summary>
     /// Encapsulates the partition key generation logic

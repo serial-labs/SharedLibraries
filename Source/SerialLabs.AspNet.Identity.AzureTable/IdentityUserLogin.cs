@@ -2,7 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Web;
 
-namespace SerialLabs.Identity.CloudStorage
+namespace SerialLabs.AspNet.Identity.AzureTable
 {
     public class IdentityUserLogin : TableEntity
     {

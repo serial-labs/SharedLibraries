@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SerialLabs.Identity.CloudStorage
+namespace SerialLabs.AspNet.Identity.AzureTable
 {
 
     public class UserStore<TUser> :

@@ -51,9 +51,8 @@
     <Compile Include="BaseObjects\BaseObject.cs" />
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="CompositeId.cs" />
-    <Compile Include="Domain\SortedGuid.cs" />
-    <Compile Include="Domain\AscendingSortedGuid.cs" />
-    <Compile Include="Domain\DescendingSortedGuid.cs" />
+    <Compile Include="Types\AscendingSortedGuid.cs" />
+    <Compile Include="Types\DescendingSortedGuid.cs" />
     <Compile Include="Converters\IPAddressConverter.cs" />
     <Compile Include="ExpressionComposer.cs" />
     <Compile Include="Extensions\DataAnnotationExtensions.cs" />

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SerialLabs.Identity.CloudStorage;
 using System;
 
 namespace SerialLabs.AspNet.Identity.AzureTable.Tests

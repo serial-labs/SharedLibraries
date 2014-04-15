@@ -7,9 +7,9 @@ namespace SerialLabs.Data
     /// This is a composite guid which is associated with a time stamp.
     /// This time stamp helps to order the guid in a table storage.
     /// </summary>
-    public class SortedGuid
+    public struct SortedGuid
     {
-        protected const char Separator = '_';
+        private const char Separator = '_';
 
         /// <summary>
         /// TimeStamp

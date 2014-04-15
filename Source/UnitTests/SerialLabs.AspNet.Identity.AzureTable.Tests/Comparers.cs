@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SerialLabs.Identity.CloudStorage;
 using SerialLabs.UnitTestHelpers;
 using System.Collections.Generic;
 

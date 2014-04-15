@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.Storage;
-using SerialLabs.Identity.CloudStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;

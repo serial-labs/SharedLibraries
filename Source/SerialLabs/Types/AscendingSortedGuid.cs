@@ -6,8 +6,20 @@ namespace SerialLabs.Data
     /// <summary>
     /// A sorted guid with a lexicographic order based on its natural timestamp value.
     /// </summary>
-    public class AscendingSortedGuid : SortedGuid
+    public struct AscendingSortedGuid
     {
+        private const char Separator = '_';
+
+        /// <summary>
+        /// TimeStamp
+        /// </summary>
+        public DateTimeOffset Timestamp { get; set; }
+
+        /// <summary>
+        /// Guid
+        /// </summary>
+        public Guid Guid { get; set; }
+
         /// <summary>
         /// Parse a string value into an <see cref="AscendingSortedGuid"/>
         /// </summary>
