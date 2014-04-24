@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="ColorTest.cs" />
     <Compile Include="DateSequenceTest.cs" />
+    <Compile Include="InternetTest.cs" />
     <Compile Include="NameTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
