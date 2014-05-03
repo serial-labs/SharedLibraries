@@ -17,6 +17,7 @@ namespace SerialLabs
         {
             _random = new Random();
         }
+
         /// <summary>
         /// Sets the seed used to generate the random numbers.
         /// </summary>
@@ -25,6 +26,7 @@ namespace SerialLabs
         {
             _random = new Random(seed);
         }
+
         /// <summary>
         /// Gets a random int between 0 and max (half-inclusive)
         /// </summary>
@@ -34,6 +36,7 @@ namespace SerialLabs
         {
             return _random.Next(max);
         }
+
         /// <summary>
         /// Gets a random int between min and max (half-inclusive)
         /// </summary>
@@ -44,6 +47,7 @@ namespace SerialLabs
         {
             return Int(max - min) + min;
         }
+
         /// <summary>
         /// Gets a random int between 0 and max (full inclusive).
         /// </summary>
@@ -62,6 +66,7 @@ namespace SerialLabs
         {
             return IntInclusive(max - min) + min;
         }
+
         /// <summary>
         /// Gets a random float between 0 and 1 (full inclusive)
         /// </summary>
@@ -70,6 +75,7 @@ namespace SerialLabs
         {
             return Float(1);
         }
+
         /// <summary>
         /// Gets a random float between 0 and max (full inclusive)
         /// </summary>
@@ -80,6 +86,7 @@ namespace SerialLabs
 
             return (float)_random.NextDouble() * max;
         }
+
         /// <summary>
         /// Gets a random float between min and max.
         /// </summary>
@@ -91,6 +98,7 @@ namespace SerialLabs
 
             return Float(max - min) + min;
         }
+
         /// <summary>
         /// Gets a random item from the given list.
         /// </summary>
@@ -98,6 +106,25 @@ namespace SerialLabs
         {
             return items[Int(items.Count)];
         }
+
+        /// <summary>
+        /// Gets a random sequence of 32 bit integers
+        /// </summary>
+        /// <param name="length">Length of the sequence</param>
+        /// <param name="min">Minimum value which can found in the sequence (inclusive)</param>
+        /// <param name="max">Maximum value which can be found in the sequence (exclusive)</param>
+        /// <returns></returns>
+        public static IEnumerable<int> IntSequence(int length, int min = 0, int max = Int32.MaxValue)
+        {
+            if (length == 0) throw new ArgumentOutOfRangeException("Length must be greated than 0");
+            int[] result = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = Int(min, max);
+            }
+            return result;
+        }
+
         /// <summary>
         /// Generates one Bernoulli Trial.
         /// </summary>
@@ -113,6 +140,7 @@ namespace SerialLabs
 
             return 0;
         }
+
         /// <summary>
         /// Generates one Bernoulli Trial.
         /// </summary>
@@ -124,6 +152,7 @@ namespace SerialLabs
                 return 1;
             return 0;
         }
+
         /// <summary>
         /// A simple flip coin trial. Returns 0 or 1 with equal probability.
         /// </summary>
@@ -132,6 +161,7 @@ namespace SerialLabs
         {
             return RandomNumberGenerator.DoBernoulliTrial(0.5);
         }
+
         /// <summary>
         /// Choose a random member of a set with a given chance of selection.
         /// </summary>
@@ -158,5 +188,6 @@ namespace SerialLabs
 
             return argCount - 1;
         }
+
     }
 }

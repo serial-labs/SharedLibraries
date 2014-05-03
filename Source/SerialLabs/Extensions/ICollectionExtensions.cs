@@ -3,7 +3,7 @@
 namespace SerialLabs
 {
     /// <summary>
-    /// Extends ICollection
+    /// Provides extension methods for the <see cref="ICollection"/> interface.
     /// </summary>
     public static class ICollectionExtensions
     {
