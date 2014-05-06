@@ -28,6 +28,7 @@ namespace SerialLabs
         /// <returns>The nullable date-time in UTC time.</returns>
         public static DateTime? AsUtc(this DateTime? value)
         {
+            if (!value.HasValue) { return null; }
             if (value.Value.Kind == DateTimeKind.Unspecified)
             {
                 return new DateTime(value.Value.Ticks, DateTimeKind.Utc);
