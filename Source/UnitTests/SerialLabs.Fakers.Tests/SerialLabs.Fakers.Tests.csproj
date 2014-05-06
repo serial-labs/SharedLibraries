@@ -59,6 +59,7 @@
     <Compile Include="DateSequenceTest.cs" />
     <Compile Include="InternetTest.cs" />
     <Compile Include="NameTest.cs" />
+    <Compile Include="PathTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
