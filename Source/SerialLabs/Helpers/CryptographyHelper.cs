@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Collections.Generic;
 using System.Text;
 
 
@@ -276,7 +276,7 @@ namespace SerialLabs
             byte[] bytes = System.Convert.FromBase64String(encodedValue);
             return System.Text.Encoding.UTF8.GetString(bytes);
         }
-        
+
         /// <summary>
         /// This method encodes a string into CRC32
         /// </summary>
@@ -289,7 +289,7 @@ namespace SerialLabs
 
             foreach (byte b in crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value)))
             {
-                hash += b.ToString("x2").ToUpperInvariant();
+                hash += b.ToString("x2");
             }
 
             return hash;
