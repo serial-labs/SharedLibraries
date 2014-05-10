@@ -97,10 +97,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SerialLabs.AspNet.Identity.AzureTable\SerialLabs.AspNet.Identity.AzureTable.csproj">
-      <Project>{d0848109-81e6-43e6-934c-71850906f6d4}</Project>
-      <Name>SerialLabs.AspNet.Identity.AzureTable</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs.Data.AzureTable\SerialLabs.Data.AzureTable.csproj">
       <Project>{c2235fa7-8901-4d83-a5d8-827b9c03d6aa}</Project>
       <Name>SerialLabs.Data.AzureTable</Name>

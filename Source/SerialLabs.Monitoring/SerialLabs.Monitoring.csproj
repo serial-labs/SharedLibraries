@@ -111,6 +111,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="SerialLabs.Monitoring.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe">

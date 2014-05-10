@@ -13,5 +13,6 @@
         <releaseNotes>Initial release</releaseNotes>
         <copyright>Copyright 2014 serial-labs</copyright>
         <tags>seriallabs data entityframework</tags>
+        <iconUrl>http://serial-labs.com/Content/images/serial-labs-LOGO-4website.png</iconUrl>
     </metadata>
 </package>
