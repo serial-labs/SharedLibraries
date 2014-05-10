@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SerialLabs.Logging.CloudStorage")]
+[assembly: AssemblyTitle("SerialLabs.Logging.AzureTable")]
 [assembly: AssemblyDescription("Azure Table Storage logging")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
