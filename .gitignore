@@ -180,4 +180,4 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-[Nn]u[Gg]et-[Pp]ub/
+[Nn]u[Gg]et-[Pp]ub/*/*.nupkg
