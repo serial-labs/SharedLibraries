@@ -1,3 +1,7 @@
+@ECHO OFF
+ECHO Delete Existing Packages
+for /r %%f in (*.nupkg) do del %%f
+ECHO Packing Projects
 NuGet Pack ../Source/SerialLabs/SerialLabs.csproj -OutputDirectory ".\SerialLabs" -Build -IncludeReferencedProjects -Prop Configuration=Release -Symbols
 NuGet Pack ../Source/SerialLabs.Data/SerialLabs.Data.csproj -OutputDirectory ".\SerialLabs.Data" -Build -IncludeReferencedProjects -Prop Configuration=Release -Symbols
 NuGet Pack ../Source/SerialLabs.Data.AzureTable/SerialLabs.Data.AzureTable.csproj -OutputDirectory ".\SerialLabs.Data.AzureTable" -Build -IncludeReferencedProjects -Prop Configuration=Release -Symbols
