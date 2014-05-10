@@ -14,3 +14,5 @@ These libraries are autonomous and reusable and used accross server/platform com
 [Coding guidelines](coding-guidelines.md)
 
 Copyright (C) 2014 [serial-labs](http://www.serial-labs.com)
+
+![Serial-Labs Logo](http://serial-labs.com/Content/images/serial-labs-LOGO-4website.png "Serial-Labs")
