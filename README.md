@@ -1,3 +1,5 @@
+[![NuGet version](https://badge.fury.io/nu/seriallabs.svg)](http://badge.fury.io/nu/seriallabs)
+
 #[SharedLibraries](https://github.com/serial-labs/SharedLibraries)
 
 This repository contains serial-labs' **core libraries.**
