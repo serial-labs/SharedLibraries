@@ -58,6 +58,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="RestApiController.cs" />
     <Compile Include="Filters\RequireHttpsAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

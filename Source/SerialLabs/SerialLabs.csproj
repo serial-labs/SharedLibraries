@@ -53,8 +53,10 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BaseObjects\BaseObject.cs" />
+    <Compile Include="BaseObjects\PagedCollection.cs" />
+    <Compile Include="BaseObjects\PagedCollectionFilterOptions.cs" />
     <Compile Include="BitwiseMask.cs" />
-    <Compile Include="CompositeId.cs" />
+    <Compile Include="Contracts\IMapper.cs" />
     <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
