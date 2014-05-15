@@ -282,7 +282,7 @@ namespace SerialLabs
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string EncodeToCrc32(string value)
+        public static string ComputeCRC32Hash(string value)
         {
             Crc32 crc32 = new Crc32();
             String hash = String.Empty;
@@ -293,6 +293,13 @@ namespace SerialLabs
             }
 
             return hash;
+        }
+        public static Byte[] ComputeCRC32HashByte(string value)
+        {
+            Crc32 crc32 = new Crc32();
+            String hash = String.Empty;
+
+            return crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value));
         }
 
 

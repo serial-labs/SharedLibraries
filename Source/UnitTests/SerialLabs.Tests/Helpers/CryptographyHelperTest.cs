@@ -55,17 +55,32 @@ namespace SerialLabs.Tests
 
             input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
             expected = "eff6144a";
-            actual = CryptographyHelper.EncodeToCrc32(input);
+            actual = CryptographyHelper.ComputeCRC32Hash(input);
             Assert.AreEqual<string>(expected, actual);
 
             input = "Alain Méreaux";
             expected = "f7e24167";
-            actual = CryptographyHelper.EncodeToCrc32(input);
+            actual = CryptographyHelper.ComputeCRC32Hash(input);
             Assert.AreEqual<string>(expected, actual);
 
             input = "Un algorithme est un processus systématique de résolution, par le calcul, d'un problème permettant de présenter les étapes vers le résultat à une autre personne physique (un autre humain) ou virtuelle (un calculateur). En d'autres termes, un algorithme est un énoncé d’une suite finie et non-ambiguë d’opérations permettant de donner la réponse à un problème. Il décrit formellement une procédure concrète. Si ces opérations s’exécutent en séquence, on parle d’algorithme séquentiel. Si les opérations s’exécutent sur plusieurs processeurs en parallèle, on parle d’algorithme parallèle. Si les tâches s’exécutent sur un réseau de processeurs on parle d’algorithme réparti ou distribué.";
             expected = "efe19c36";
-            actual = CryptographyHelper.EncodeToCrc32(input);
+            actual = CryptographyHelper.ComputeCRC32Hash(input);
+            Assert.AreEqual<string>(expected, actual);
+        }
+        [TestMethod]
+        public void ComputeCRC32HashByteTest()
+        {
+            string input, expected;
+            string actual = "";
+
+            input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
+            expected = "eff6144a";
+
+            foreach (byte b in CryptographyHelper.ComputeCRC32HashByte(input))
+            {
+                actual += b.ToString("x2");
+            }
             Assert.AreEqual<string>(expected, actual);
         }
     }
