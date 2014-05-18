@@ -110,8 +110,6 @@ namespace SerialLabs.Monitoring
         private void QueryCloudBlob()
         {
             CloudBlobContainer container = GetBlobContainer();
-            //if(CreateIfNotExist)
-            //container.
         }
 
         private void QueryCloudQueue()
@@ -122,29 +120,29 @@ namespace SerialLabs.Monitoring
         private CloudTable GetCloudTable()
         {
             CloudTableClient client = GetStorageAccount().CreateCloudTableClient();
-            client.RetryPolicy = new ExponentialRetry();
-            client.ServerTimeout = new TimeSpan(0, 0, 0, 5);
-            client.PayloadFormat = TablePayloadFormat.JsonNoMetadata;
-            client.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
-            client.LocationMode = LocationMode.PrimaryOnly;
+            client.DefaultRequestOptions.RetryPolicy = new ExponentialRetry();
+            client.DefaultRequestOptions.ServerTimeout = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.PayloadFormat = TablePayloadFormat.JsonNoMetadata;
+            client.DefaultRequestOptions.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.LocationMode = LocationMode.PrimaryOnly;
             return client.GetTableReference(ContainerName);
         }
 
         private CloudBlobContainer GetBlobContainer()
         {
             CloudBlobClient client = GetStorageAccount().CreateCloudBlobClient();
-            client.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
-            client.RetryPolicy = new ExponentialRetry();
-            client.ServerTimeout = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.RetryPolicy = new ExponentialRetry();
+            client.DefaultRequestOptions.ServerTimeout = new TimeSpan(0, 0, 0, 5);
             return client.GetContainerReference(ContainerName);
         }
 
         private CloudQueue GetQueueContainer()
         {
             CloudQueueClient client = GetStorageAccount().CreateCloudQueueClient();
-            client.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
-            client.RetryPolicy = new ExponentialRetry();
-            client.ServerTimeout = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.MaximumExecutionTime = new TimeSpan(0, 0, 0, 5);
+            client.DefaultRequestOptions.RetryPolicy = new ExponentialRetry();
+            client.DefaultRequestOptions.ServerTimeout = new TimeSpan(0, 0, 0, 5);
             return client.GetQueueReference(ContainerName);
         }
 
