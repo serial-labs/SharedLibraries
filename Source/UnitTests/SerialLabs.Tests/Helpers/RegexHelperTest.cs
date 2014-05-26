@@ -27,16 +27,14 @@ namespace SerialLabs.Tests
         {
             Assert.IsTrue(RegexHelper.IsEmail("b172f15bac94d30fde90@serial-labs.com"));
         }
-        [TestMethod]
-        public void IsAccessCodeTest()
-        {
-            Assert.IsFalse(RegexHelper.IsAccessCode("12345678901")); //  11 chars
-            Assert.IsFalse(RegexHelper.IsAccessCode("123456789@")); //   Unauthorized char
-            Assert.IsFalse(RegexHelper.IsAccessCode("123456789é")); //   Unauthorized char
 
-            Assert.IsTrue(RegexHelper.IsAccessCode("1234567890"));
-            Assert.IsTrue(RegexHelper.IsAccessCode("123.456.78"));
-            Assert.IsTrue(RegexHelper.IsAccessCode("123-456-78"));
+        [TestMethod]
+        public void IsCRC32Test()
+        {
+            Assert.IsTrue(RegexHelper.IsCRC32Hash(CryptographyHelper.ComputeCRC32Hash(Guid.Empty.ToString())));
+            Assert.IsTrue(RegexHelper.IsCRC32Hash(CryptographyHelper.ComputeCRC32Hash(Guid.NewGuid().ToString())));
+
+            Assert.IsFalse(RegexHelper.IsCRC32Hash("aaaaaaaaaa"));
         }
         [TestMethod]
         public void IsUrlTest()

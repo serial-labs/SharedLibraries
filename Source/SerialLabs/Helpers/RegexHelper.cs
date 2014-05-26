@@ -20,9 +20,9 @@ namespace SerialLabs
         public const string MD5Pattern = @"^[a-fA-F\d]{32}$";
 
         /// <summary>
-        /// Secret Key Regex pattern
+        /// CRC32 Regex Pattern
         /// </summary>
-        public const string SecretKeyPattern = @"^[a-zA-Z\d]{16}$";
+        public const string CRC32Pattern = @"^[a-fA-F\d]{8}$";
 
         /// <summary>
         /// Email Regex pattern
@@ -36,11 +36,6 @@ namespace SerialLabs
         /// Url Regex pattern
         /// </summary>
         public const string UrlPattern = @"^(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$";
-
-        /// <summary>
-        /// Access Code pattern
-        /// </summary>
-        public const string AccessCodePattern = @"^[a-zA-Z0-9_\-\.]{10}$";
 
         /// <summary>
         /// Valid pattern for a Azure Table container name
@@ -79,13 +74,13 @@ namespace SerialLabs
         }
 
         /// <summary>
-        /// Returns true if the given value is a secret key
+        /// Returns true if the given value is a CRC32 hash
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool IsSecretKey(string value)
+        public static bool IsCRC32Hash(string value)
         {
-            return IsPatternMatch(value, SecretKeyPattern);
+            return IsPatternMatch(value, CRC32Pattern);
         }
 
         /// <summary>
@@ -107,16 +102,6 @@ namespace SerialLabs
         {
             return IsPatternMatch(value, UrlPattern);
             //return Uri.IsWellFormedUriString(value, UriKind.RelativeOrAbsolute);
-        }
-
-        /// <summary>
-        /// Returns true if the given value is an access code
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsAccessCode(string value)
-        {
-            return IsPatternMatch(value, AccessCodePattern);
         }
 
         /// <summary>
