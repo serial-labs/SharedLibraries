@@ -294,6 +294,17 @@ namespace SerialLabs
 
             return hash;
         }
+        public static string ComputeCRC16Hash(string value)
+        {
+            String hash = String.Empty;
+            Crc16 crc16 = new Crc16();
+            foreach (byte b in crc16.ComputeChecksumBytes(System.Text.Encoding.UTF8.GetBytes(value)))
+            {
+                hash += b.ToString("x2");
+            }
+
+            return hash;
+        }
         public static Byte[] ComputeCRC32HashByte(string value)
         {
             Crc32 crc32 = new Crc32();
@@ -414,6 +425,55 @@ namespace SerialLabs
                     Array.Reverse(result);
 
                 return result;
+            }
+        }
+        /// <summary>
+        /// http://www.sanity-free.org/134/standard_crc_16_in_csharp.html
+        /// </summary>
+        public class Crc16
+        {
+            const ushort polynomial = 0xA001;
+            ushort[] table = new ushort[256];
+
+            public ushort ComputeChecksum(byte[] bytes)
+            {
+                ushort crc = 0;
+                for (int i = 0; i < bytes.Length; ++i)
+                {
+                    byte index = (byte)(crc ^ bytes[i]);
+                    crc = (ushort)((crc >> 8) ^ table[index]);
+                }
+                return crc;
+            }
+
+            public byte[] ComputeChecksumBytes(byte[] bytes)
+            {
+                ushort crc = ComputeChecksum(bytes);
+                return BitConverter.GetBytes(crc);
+            }
+
+            public Crc16()
+            {
+                ushort value;
+                ushort temp;
+                for (ushort i = 0; i < table.Length; ++i)
+                {
+                    value = 0;
+                    temp = i;
+                    for (byte j = 0; j < 8; ++j)
+                    {
+                        if (((value ^ temp) & 0x0001) != 0)
+                        {
+                            value = (ushort)((value >> 1) ^ polynomial);
+                        }
+                        else
+                        {
+                            value >>= 1;
+                        }
+                        temp >>= 1;
+                    }
+                    table[i] = value;
+                }
             }
         }
     }
