@@ -300,7 +300,7 @@ namespace SerialLabs
             Crc16 crc16 = new Crc16();
             foreach (byte b in crc16.ComputeChecksumBytes(System.Text.Encoding.UTF8.GetBytes(value)))
             {
-                hash += b.ToString("x2");
+                hash = b.ToString("x2")+hash;
             }
 
             return hash;
