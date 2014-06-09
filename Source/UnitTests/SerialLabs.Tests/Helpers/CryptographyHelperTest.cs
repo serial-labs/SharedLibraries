@@ -72,26 +72,23 @@ namespace SerialLabs.Tests
         public void ComputeCRC32HashByteTest()
         {
             string input, expected;
-            string actual = "";
+            byte[] actual = null;
 
             input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
             expected = "eff6144a";
 
-            foreach (byte b in CryptographyHelper.ComputeCRC32HashByte(input))
-            {
-                actual += b.ToString("x2");
-            }
-            Assert.AreEqual<string>(expected, actual);
+            actual = CryptographyHelper.ComputeCRC32HashByte(input);
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(expected, CryptographyHelper.ByteToHex(actual));
         }
         [TestMethod]
         public void ComputeCRC16HashTest()
         {
-            string input, expected;
-            string actual = "";
+            string input, expected, actual = "";
             input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
+            expected = "97a1";
             actual = CryptographyHelper.ComputeCRC16Hash(input);
-            Assert.AreEqual<string>("7dfc", actual);
-            
+            Assert.AreEqual<string>(expected, actual);
         }
     }
 }

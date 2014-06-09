@@ -38,6 +38,7 @@ namespace SerialLabs
             }
             return ByteToHex(data);
         }
+
         /// <summary>
         /// Computes the MD5 hash from a file content.
         /// </summary>
@@ -47,6 +48,7 @@ namespace SerialLabs
         {
             return ComputeMD5HashFromFile(fileName, false);
         }
+
         /// <summary>
         /// Computes the MD5 hash from a file content.
         /// </summary>
@@ -85,6 +87,7 @@ namespace SerialLabs
                 }
             }
         }
+
         /// <summary>
         /// Compute the SHA256 hash of a UTF-8 string
         /// </summary>
@@ -112,6 +115,7 @@ namespace SerialLabs
             }
             return ByteToHex(data);
         }
+
         /// <summary>
         /// Computes the SHA256 hash from a file content.
         /// </summary>
@@ -121,6 +125,7 @@ namespace SerialLabs
         {
             return ComputeSHA256HashFromFile(fileName, false);
         }
+
         /// <summary>
         /// Computes the SHA256 hash from a file content.
         /// </summary>
@@ -163,6 +168,7 @@ namespace SerialLabs
                 # endregion
             }
         }
+
         /// <summary>
         /// Compute the SHA1 hash of a UTF-8 string
         /// </summary>
@@ -189,6 +195,7 @@ namespace SerialLabs
             }
             return ByteToHex(data);
         }
+
         /// <summary>
         /// Computes the SHA1 hash from a file content.
         /// </summary>
@@ -198,6 +205,7 @@ namespace SerialLabs
         {
             return ComputeSHA1HashFromFile(fileName, false);
         }
+
         /// <summary>
         /// Computes the SHA1 hash from a file content.
         /// </summary>
@@ -240,6 +248,7 @@ namespace SerialLabs
                 # endregion
             }
         }
+
         /// <summary>
         /// Returns the Hexadecimal representation of the byte array
         /// </summary>
@@ -256,6 +265,7 @@ namespace SerialLabs
             }
             return hex.ToString();
         }
+
         /// <summary>
         /// This method encodes an UTF-8 string into a Base64 string
         /// </summary>
@@ -266,6 +276,7 @@ namespace SerialLabs
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(value);
             return System.Convert.ToBase64String(bytes);
         }
+
         /// <summary>
         /// This method decodes a Base64 string into an UTF-8 string
         /// </summary>
@@ -278,43 +289,49 @@ namespace SerialLabs
         }
 
         /// <summary>
-        /// This method encodes a string into CRC32
+        /// This method computes the CRC32 hash of the given value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static string ComputeCRC32Hash(string value)
         {
             Crc32 crc32 = new Crc32();
-            String hash = String.Empty;
-
-            foreach (byte b in crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value)))
-            {
-                hash += b.ToString("x2");
-            }
-
-            return hash;
+            return ByteToHex(crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value)));
         }
-        public static string ComputeCRC16Hash(string value)
-        {
-            String hash = String.Empty;
-            Crc16 crc16 = new Crc16();
-            foreach (byte b in crc16.ComputeChecksumBytes(System.Text.Encoding.UTF8.GetBytes(value)))
-            {
-                hash += b.ToString("x2");
-            }
 
-            return hash;
-        }
-        public static Byte[] ComputeCRC32HashByte(string value)
+        /// <summary>
+        /// This method computes the CRC32 hash of the given value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static byte[] ComputeCRC32HashByte(string value)
         {
             Crc32 crc32 = new Crc32();
-            String hash = String.Empty;
-
             return crc32.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value));
         }
 
+        /// <summary>
+        /// This method compute the CRC16 hash of the given value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ComputeCRC16Hash(string value)
+        {
+            Guard.ArgumentNotNullOrWhiteSpace(value, "value");
+            Crc16Ccitt crc16 = new Crc16Ccitt();
+            return ByteToHex(crc16.ComputeHashBytes(System.Text.Encoding.UTF8.GetBytes(value)));
+        }
 
-
+        /// <summary>
+        /// This method computes the CRC16 hash of the given value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static byte[] ComputeCRC16HashByte(string value)
+        {
+            Crc16Ccitt crc16 = new Crc16Ccitt();
+            return crc16.ComputeHashBytes(System.Text.Encoding.UTF8.GetBytes(value));
+        }
 
         /// <summary>
         /// Implements a 32-bit CRC hash algorithm compatible with Zip etc.
@@ -427,54 +444,57 @@ namespace SerialLabs
                 return result;
             }
         }
-        /// <summary>
-        /// http://www.sanity-free.org/134/standard_crc_16_in_csharp.html
-        /// </summary>
-        public class Crc16
-        {
-            const ushort polynomial = 0xA001;
-            ushort[] table = new ushort[256];
 
-            public ushort ComputeChecksum(byte[] bytes)
+        /// <summary>
+        /// Implements a 16-bit CRC hash of type CRC-16-CCITT
+        /// </summary>
+        /// <remarks>
+        /// X.25, V.41, HDLC FCS, XMODEM, Bluetooth, PACTOR, SD, many others; known as CRC-CCITT
+        /// </remarks>
+        internal sealed class Crc16Ccitt
+        {
+            private readonly uint DefaultPolynomial = 0x8408;
+            private ushort[] _table;
+
+            public Crc16Ccitt()
+            {
+                InitializeTable();
+            }
+
+            private void InitializeTable()
+            {
+                _table = new ushort[256];
+                for (ushort i = 0; i < 256; ++i)
+                {
+                    ushort value = 0;
+                    ushort tmp = i;
+                    for (int j = 0; j < 8; ++j)
+                    {
+                        if (((value ^ tmp) & 0x0001) > 0)
+                            value = (ushort)((value >> 1) ^ DefaultPolynomial);
+                        else
+                            value = (ushort)(value >> 1);
+                        tmp = (ushort)(tmp >> 1);
+                    }
+                    _table[i] = value;
+                }
+            }
+
+            public ushort ComputeHash(byte[] buffer)
             {
                 ushort crc = 0;
-                for (int i = 0; i < bytes.Length; ++i)
+                for (int i = 0; i < buffer.Length; ++i)
                 {
-                    byte index = (byte)(crc ^ bytes[i]);
-                    crc = (ushort)((crc >> 8) ^ table[index]);
+                    crc = (ushort)(_table[(crc ^ buffer[i]) & 0xFF] ^ (crc >> 8));
                 }
                 return crc;
             }
 
-            public byte[] ComputeChecksumBytes(byte[] bytes)
+            public byte[] ComputeHashBytes(byte[] buffer)
             {
-                ushort crc = ComputeChecksum(bytes);
-                return BitConverter.GetBytes(crc);
+                return BitConverter.GetBytes(ComputeHash(buffer));
             }
 
-            public Crc16()
-            {
-                ushort value;
-                ushort temp;
-                for (ushort i = 0; i < table.Length; ++i)
-                {
-                    value = 0;
-                    temp = i;
-                    for (byte j = 0; j < 8; ++j)
-                    {
-                        if (((value ^ temp) & 0x0001) != 0)
-                        {
-                            value = (ushort)((value >> 1) ^ polynomial);
-                        }
-                        else
-                        {
-                            value >>= 1;
-                        }
-                        temp >>= 1;
-                    }
-                    table[i] = value;
-                }
-            }
         }
     }
 }
