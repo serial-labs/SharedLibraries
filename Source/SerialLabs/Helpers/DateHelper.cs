@@ -51,11 +51,11 @@ namespace SerialLabs
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static double ToUnixTime(DateTime date)
+        public static long ToUnixTime(DateTime date)
         {
             DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             TimeSpan timespan = date - unixStart;
-            return timespan.TotalSeconds;
+            return (long)Math.Floor(timespan.TotalSeconds);
         }
     }
 }

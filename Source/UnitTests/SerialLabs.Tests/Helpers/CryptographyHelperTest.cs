@@ -86,7 +86,7 @@ namespace SerialLabs.Tests
         [TestMethod]
         public void ComputeCRC16HashTest()
         {
-            string input, expected;
+            string input;
             string actual = "";
             input = "2520056747225332399_63a5c229-2461-4e7c-805d-82394a99bd11";
             actual = CryptographyHelper.ComputeCRC16Hash(input);
