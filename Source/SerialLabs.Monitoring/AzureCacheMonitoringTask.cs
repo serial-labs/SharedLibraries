@@ -19,6 +19,7 @@ namespace SerialLabs.Monitoring
         { }
 
         public AzureCacheMonitoringTask(string label, DataCache cache, string cacheRegion, string cacheKey)
+            : base(label)
         {
             Guard.ArgumentNotNull(cache, "cache");
             Cache = cache;
