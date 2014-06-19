@@ -74,6 +74,26 @@ namespace SerialLabs.Tests
         }
 
         [TestMethod]
+
+        public void IsValidBlobContainerName()
+        {
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid(" 456"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid(".456"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid("ué456"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid("ERT-DDD"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid("4Name"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid("A1name13"));
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid("78")); // Min Length = 3
+
+            string name64Length = CryptographyHelper.ComputeMD5Hash(Guid.NewGuid().ToString()) +
+                CryptographyHelper.ComputeMD5Hash(Guid.NewGuid().ToString());
+            Assert.IsFalse(RegexHelper.IsBlobContainerNameValid(name64Length)); // MAx Length = 63
+
+            Assert.IsTrue(RegexHelper.IsBlobContainerNameValid("ert-ddd"));
+            Assert.IsTrue(RegexHelper.IsBlobContainerNameValid("aname1321"));
+        }
+
+        [TestMethod]
         public void IsGuidTest()
         {
             Assert.IsFalse(RegexHelper.IsGuid("abc"));

@@ -43,6 +43,11 @@ namespace SerialLabs
         public const string TableContainerNamePattern = @"^[A-Za-z][A-Za-z0-9]{2,62}$";
 
         /// <summary>
+        /// Valid pattern for Azure Blob container name
+        /// </summary>
+        public const string BlobContainerNamePattern = @"^(?-i)(?:[a-z0-9]|(?<=[a-z0-9])-(?=[a-z0-9])){3,63}$";
+
+        /// <summary>
         /// Valid pattern for a Guid
         /// </summary>
         public const string GuidPattern = @"^[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}$";
@@ -101,11 +106,10 @@ namespace SerialLabs
         public static bool IsUrl(string value)
         {
             return IsPatternMatch(value, UrlPattern);
-            //return Uri.IsWellFormedUriString(value, UriKind.RelativeOrAbsolute);
         }
 
         /// <summary>
-        /// Returns true if the given value is a valid Azure CloudStorage container name
+        /// Returns true if the given value is a valid Azure Table container name
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -119,7 +123,20 @@ namespace SerialLabs
                 return true;
             }
 
-            return IsPatternMatch(value, TableContainerNamePattern);
+            return IsPatternMatch(value, TableContainerNamePattern, RegexOptions.Compiled);
+        }
+
+        /// <summary>
+        /// Returns true if the given value is a valid Azure Blob container name
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsBlobContainerNameValid(string value)
+        {
+            if (String.IsNullOrWhiteSpace(value))
+                return false;
+
+            return IsPatternMatch(value, BlobContainerNamePattern, RegexOptions.Compiled);
         }
 
         /// <summary>
