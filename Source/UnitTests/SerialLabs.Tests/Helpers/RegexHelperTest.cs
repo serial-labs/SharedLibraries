@@ -26,6 +26,12 @@ namespace SerialLabs.Tests
         public void IsEmailTest()
         {
             Assert.IsTrue(RegexHelper.IsEmail("b172f15bac94d30fde90@serial-labs.com"));
+            Assert.IsTrue(RegexHelper.IsEmail("b172f15bac94d30fde90+365@serial-labs.com"));
+            Assert.IsTrue(RegexHelper.IsEmail("b172f15ba.c94d30fde90+365@serial-labs.com"));
+
+            Assert.IsFalse(RegexHelper.IsEmail("@serial-labs.com"));
+            Assert.IsFalse(RegexHelper.IsEmail("c94d30fde90@serial-labs."));
+            Assert.IsFalse(RegexHelper.IsEmail("c94d30fde90@"));
         }
 
         [TestMethod]

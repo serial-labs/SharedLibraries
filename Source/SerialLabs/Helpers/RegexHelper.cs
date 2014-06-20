@@ -27,10 +27,8 @@ namespace SerialLabs
         /// <summary>
         /// Email Regex pattern
         /// </summary>
-        public const string EmailPattern =
-                @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+        /// <remarks>As per HTML5 specification : http://www.w3.org/TR/html5/forms.html#valid-e-mail-address</remarks>
+        public const string EmailPattern = @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
         /// <summary>
         /// Url Regex pattern
