@@ -100,6 +100,30 @@ namespace SerialLabs
         }
 
         /// <summary>
+        /// Gets a random positive decimal
+        /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static decimal Decimal(decimal max)
+        {
+            if (max < 0M) { throw new ArgumentOutOfRangeException("The max must be positive or equals to zero"); }
+            decimal result = _random.NextDecimal(true);
+            return result > max ? max : result;
+        }
+
+        /// <summary>
+        /// Gets a random decimal between min and max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static decimal Decimal(decimal min, decimal max)
+        {
+            if (max < min) { throw new ArgumentOutOfRangeException("The max must be equals to or greater than min"); }
+            return Decimal(max - min) + min;
+        }
+
+        /// <summary>
         /// Gets a random item from the given list.
         /// </summary>
         public static T Item<T>(IList<T> items)

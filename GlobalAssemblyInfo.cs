@@ -13,6 +13,6 @@ using System.Resources;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyVersion("0.1.6.9")]
-[assembly: AssemblyFileVersion("0.1.6.9")]
-[assembly: AssemblyInformationalVersion("1.6.9-alpha")]
+[assembly: AssemblyVersion("0.1.6.10")]
+[assembly: AssemblyFileVersion("0.1.6.10")]
+[assembly: AssemblyInformationalVersion("1.6.10-alpha")]

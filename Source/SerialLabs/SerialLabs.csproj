@@ -57,6 +57,7 @@
     <Compile Include="BaseObjects\PagedCollectionFilterOptions.cs" />
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="Contracts\ITransient.cs" />
+    <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
