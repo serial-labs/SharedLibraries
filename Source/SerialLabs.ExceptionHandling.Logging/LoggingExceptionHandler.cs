@@ -92,16 +92,6 @@ namespace SerialLabs.ExceptionHandling.Logging
         /// <param name="exceptionData">The exception's data.</param>
         protected virtual void WriteToLog(string logMessage, IDictionary exceptionData)
         {
-            //LogEntry entry = new LogEntry(                
-            //    sourceName,
-            //    logMessage,
-            //    logCategory,
-            //    minimumPriority,
-            //    eventId,
-            //    severity,
-            //    defaultTitle,
-            //    null);
-
             LogEntry entry = new LogEntry(this.applicationName, logMessage, logCategory, minimumPriority, eventId, severity, defaultTitle, null);
 
             foreach (DictionaryEntry dataEntry in exceptionData)

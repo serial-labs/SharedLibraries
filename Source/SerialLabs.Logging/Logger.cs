@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SerialLabs.Logging
 {
@@ -7,16 +8,9 @@ namespace SerialLabs.Logging
     /// </summary>
     public class Logger
     {
-        private ILogWriter logWriter;
-        private bool canLog = false;
-        private string name;
-        /// <summary>
-        /// Logger name
-        /// </summary>
-        public string Name
-        {
-            get { return name; }
-        }
+        protected ILogWriter LogWriter { get; private set; }
+        protected bool CanLog { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -33,10 +27,10 @@ namespace SerialLabs.Logging
         public Logger(ILogWriter logWriter, string name)
         {
             Guard.ArgumentNotNullOrEmpty(name, "name");
-            this.name = name;
-            this.logWriter = logWriter;
-            if (this.logWriter != null)
-                this.canLog = true;
+            this.Name = name;
+            this.LogWriter = logWriter;
+            if (this.LogWriter != null)
+                this.CanLog = true;
         }
         /// <summary>
         /// Logs a information message
@@ -44,7 +38,7 @@ namespace SerialLabs.Logging
         /// <param name="title"></param>
         /// <param name="message"></param>
         /// <param name="eventId"></param>
-        public void TraceInformation(string title, string message, int eventId)
+        public virtual void TraceInformation(string title, string message, int eventId)
         {
             TraceMessage(title, message, eventId, TraceEventType.Information);
         }
@@ -54,7 +48,7 @@ namespace SerialLabs.Logging
         /// <param name="title"></param>
         /// <param name="message"></param>
         /// <param name="eventId"></param>
-        public void TraceWarning(string title, string message, int eventId)
+        public virtual void TraceWarning(string title, string message, int eventId)
         {
             TraceMessage(title, message, eventId, TraceEventType.Warning);
         }
@@ -64,10 +58,24 @@ namespace SerialLabs.Logging
         /// <param name="title"></param>
         /// <param name="message"></param>
         /// <param name="eventId"></param>
-        public void TraceError(string title, string message, int eventId)
+        public virtual void TraceError(string title, string message, int eventId)
         {
             TraceMessage(title, message, eventId, TraceEventType.Error);
         }
+
+        ///// <summary>
+        ///// Logs an exception
+        ///// </summary>
+        ///// <param name="exception"></param>
+        ///// <param name="title"></param>
+        ///// <param name="eventId"></param>
+        //public virtual void TraceException(Exception exception, string title, int eventId)
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    FormatException(exception, sb);
+        //    TraceMessage(title, sb.ToString(), eventId, TraceEventType.Error);
+        //}
+
         /// <summary>
         /// Logs a message
         /// </summary>
@@ -75,10 +83,26 @@ namespace SerialLabs.Logging
         /// <param name="message"></param>
         /// <param name="eventId"></param>
         /// <param name="eventType"></param>
-        public void TraceMessage(string title, string message, int eventId, TraceEventType eventType)
+        public virtual void TraceMessage(string title, string message, int eventId, TraceEventType eventType)
         {
-            if (canLog)
-                this.logWriter.Write(new LogEntry(this.Name, message, "General", 1, eventId, eventType, title, null));
+            if (CanLog)
+                this.LogWriter.Write(new LogEntry(this.Name, message, "General", 1, eventId, eventType, title, null));
+        }
+
+        /// <summary>
+        /// Logs a message
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="category"></param>
+        /// <param name="priority"></param>
+        /// <param name="eventId"></param>
+        /// <param name="eventType"></param>
+        /// <param name="properties"></param>
+        public void TraceMessage(string title, string message, string category, int priority, int eventId, TraceEventType eventType, IDictionary<string, object> properties)
+        {
+            if (!CanLog) { return; }
+            this.LogWriter.Write(new LogEntry(Name, message, category, priority, eventId, eventType, title, properties));
         }
     }
 }

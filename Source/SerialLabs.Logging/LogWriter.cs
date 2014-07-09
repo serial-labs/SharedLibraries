@@ -108,6 +108,7 @@ namespace SerialLabs.Logging
                 DefaultTitle,
                 null);
         }
+
         /// <summary>
         /// Write a new log entry to a specific category.
         /// </summary>
@@ -117,6 +118,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, DefaultPriority, DefaultEventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific category and priority.
         /// </summary>
@@ -127,6 +129,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, priority, DefaultEventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific category, priority and event id.
         /// </summary>
@@ -138,6 +141,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, priority, eventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific category, priority, event id and severity.
         /// </summary>
@@ -150,6 +154,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, priority, eventId, severity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific category, priority, event id, severity
         /// and title.
@@ -170,6 +175,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, priority, eventId, severity, title, null);
         }
+
         /// <summary>
         /// Write a new log entry and a dictionary of extended properties.
         /// </summary>
@@ -186,6 +192,7 @@ namespace SerialLabs.Logging
                 DefaultTitle,
                 properties);
         }
+
         /// <summary>
         /// Write a new log entry to a specific category with a dictionary 
         /// of extended properties.
@@ -204,6 +211,7 @@ namespace SerialLabs.Logging
                 DefaultTitle,
                 properties);
         }
+
         /// <summary>
         /// Write a new log entry to with a specific category, priority and a dictionary 
         /// of extended properties.
@@ -216,6 +224,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, category, priority, DefaultEventId, DefaultSeverity, DefaultTitle, properties);
         }
+
         /// <summary>
         /// Write a new log entry with a specific category, priority, event Id, severity
         /// title and dictionary of extended properties.
@@ -241,6 +250,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, new string[] { category }, priority, eventId, severity, title, properties);
         }
+
         /// <summary>
         /// Write a new log entry to a specific collection of categories.
         /// </summary>
@@ -250,6 +260,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, DefaultPriority, DefaultEventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific collection of categories and priority.
         /// </summary>
@@ -260,6 +271,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, priority, DefaultEventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific collection of categories, priority and event id.
         /// </summary>
@@ -271,6 +283,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, priority, eventId, DefaultSeverity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific collection of categories, priority, event id and severity.
         /// </summary>
@@ -289,6 +302,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, priority, eventId, severity, DefaultTitle, null);
         }
+
         /// <summary>
         /// Write a new log entry with a specific collection of categories, priority, event id, severity
         /// and title.
@@ -309,6 +323,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, priority, eventId, severity, title, null);
         }
+
         /// <summary>
         /// Write a new log entry to a specific collection of categories with a dictionary of extended properties.
         /// </summary>
@@ -319,6 +334,7 @@ namespace SerialLabs.Logging
         {
             this.Write(message, categories, DefaultPriority, DefaultEventId, DefaultSeverity, DefaultTitle, properties);
         }
+
         /// <summary>
         /// Write a new log entry to with a specific collection of categories, priority and a dictionary 
         /// of extended properties.
@@ -378,6 +394,7 @@ namespace SerialLabs.Logging
         {
             return this.traceListeners != null && this.traceListeners.Count > 0;
         }
+
         /// <summary>
         /// Returns true if the given <see cref="LogEntry"/> should be logged.
         /// </summary>
@@ -387,6 +404,7 @@ namespace SerialLabs.Logging
         {
             return true;
         }
+
         /// <summary>
         /// Writes a new log entry as defined in the <see cref="LogEntry"/> parameter.
         /// </summary>

@@ -126,9 +126,6 @@
   <data name="AverageTraceExecutionTimeHelpResource" xml:space="preserve">
     <value>Avg. Trace Execution Time is the average execution time for traced operations.</value>
   </data>
-  <data name="BlockName" xml:space="preserve">
-    <value>Enterprise Library Logging Application Block</value>
-  </data>
   <data name="ComPlusInfo_ActivityId" xml:space="preserve">
     <value>ActivityId</value>
   </data>
@@ -531,5 +528,8 @@ Message:
   </data>
   <data name="UnmanagedSecurity_ProcessAccountName" xml:space="preserve">
     <value>ProcessAccountName</value>
+  </data>
+  <data name="BlockName" xml:space="preserve">
+    <value>Enterprise Library Logging Application Block</value>
   </data>
 </root>

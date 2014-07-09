@@ -17,7 +17,7 @@ namespace SerialLabs.Logging.AzureTable
         /// <summary>
         /// The name of the Azure Table where the log will be saved
         /// </summary>
-        public const string AzureTableName = "ApplicationLogs";
+        public const string DefaultAzureTableName = "ApplicationLogs";
 
         /// <summary>
         /// The cloud storage connection string where to save the log to.
@@ -25,23 +25,40 @@ namespace SerialLabs.Logging.AzureTable
         protected string _cloudStorageConnectionString;
 
         /// <summary>
+        /// The azure table storage name where to store traces
+        /// </summary>
+        protected string _azureTableName;
+
+        /// <summary>
         /// Creates a new instance of the <see cref="FormattedAzureTableTraceListener"/>
         /// </summary>
         /// <param name="cloudStorageConnectionString"></param>
         public FormattedAzureTableTraceListener(string cloudStorageConnectionString)
-            : this(cloudStorageConnectionString, null)
+            : this(cloudStorageConnectionString, DefaultAzureTableName, null)
         { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="FormattedAzureTableTraceListener"/>
         /// </summary>
         /// <param name="cloudStorageConnectionString"></param>
+        /// <param name="azureTableName"></param>
+        public FormattedAzureTableTraceListener(string cloudStorageConnectionString, string azureTableName)
+            : this(cloudStorageConnectionString, azureTableName, null)
+        { }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="FormattedAzureTableTraceListener"/>
+        /// </summary>
+        /// <param name="cloudStorageConnectionString"></param>
+        /// <param name="azureTaleName"></param>
         /// <param name="formatter"></param>
-        public FormattedAzureTableTraceListener(string cloudStorageConnectionString, ILogFormatter formatter)
+        public FormattedAzureTableTraceListener(string cloudStorageConnectionString, string azureTaleName, ILogFormatter formatter)
             : base(formatter)
         {
             Guard.ArgumentNotNullOrWhiteSpace<PlatformException>(cloudStorageConnectionString, "cloudStorageConnectionString");
+            Guard.ArgumentNotNullOrWhiteSpace<PlatformException>(azureTaleName, "azureTableName");
             _cloudStorageConnectionString = cloudStorageConnectionString;
+            _azureTableName = azureTaleName;
         }
 
         /// <summary>
@@ -165,7 +182,7 @@ namespace SerialLabs.Logging.AzureTable
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_cloudStorageConnectionString);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            return tableClient.GetTableReference(AzureTableName);
+            return tableClient.GetTableReference(DefaultAzureTableName);
         }
     }
 }

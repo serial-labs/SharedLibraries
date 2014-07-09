@@ -57,6 +57,7 @@
     <Compile Include="BaseObjects\PagedCollectionFilterOptions.cs" />
     <Compile Include="BitwiseMask.cs" />
     <Compile Include="Contracts\ITransient.cs" />
+    <Compile Include="Exceptions\ValidationFailedException.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -90,7 +91,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RandomNumberGenerator.cs" />
-    <Compile Include="PlatformException.cs" />
+    <Compile Include="Exceptions\PlatformException.cs" />
     <Compile Include="SortOrder.cs" />
   </ItemGroup>
   <ItemGroup>
