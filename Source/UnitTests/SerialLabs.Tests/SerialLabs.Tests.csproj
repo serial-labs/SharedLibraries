@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -69,6 +70,7 @@
     <Compile Include="Helpers\CryptographyHelperTest.cs" />
     <Compile Include="Types\DescendingGuidTest.cs" />
     <Compile Include="FakeItem.cs" />
+    <Compile Include="Types\ValidationResultCollectionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SerialLabs.Fakers\SerialLabs.Fakers.csproj">
