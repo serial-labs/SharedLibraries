@@ -14,7 +14,7 @@ namespace SerialLabs
         /// <summary>
         /// A collection of ValidationResult (broken rules) associated with this exception
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationResults
+        public ValidationResultCollection ValidationResults
         {
             get;
             protected set;
@@ -39,7 +39,7 @@ namespace SerialLabs
         public ValidationFailedException(string message, IEnumerable<ValidationResult> validationResults)
             : base(message)
         {
-            this.ValidationResults = validationResults;
+            this.ValidationResults = new ValidationResultCollection(validationResults);
         }
         /// <summary>
         /// Instantiates a new <see cref="ValidationFailedException"/>

@@ -94,6 +94,7 @@
     <Compile Include="RandomNumberGenerator.cs" />
     <Compile Include="Exceptions\PlatformException.cs" />
     <Compile Include="SortOrder.cs" />
+    <Compile Include="Types\ValidationResultCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
