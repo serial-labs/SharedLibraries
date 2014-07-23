@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 namespace SerialLabs.Data
 {
     /// <summary>
-    /// A contract for a Unit of Work implementation.
+    /// A contract for the Unit of Work implementation
     /// </summary>
     /// <see cref="http://martinfowler.com/eaaCatalog/unitOfWork.html"/>
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWorkAsync : IUnitOfWork
     {
         /// <summary>
-        /// Saves the pending changes
+        /// Saves the pending changes (asynchronously)
         /// </summary>
-        void Save();
+        /// <returns></returns>
+        Task<int> SaveAsync();
     }
 }
