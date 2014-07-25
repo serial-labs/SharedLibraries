@@ -105,6 +105,7 @@
     <Compile Include="Exceptions\PlatformException.cs" />
     <Compile Include="SortOrder.cs" />
     <Compile Include="Types\ValidationResultCollection.cs" />
+    <Compile Include="Validation\GuidStringAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
