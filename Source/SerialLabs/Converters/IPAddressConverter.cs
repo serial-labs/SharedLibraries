@@ -16,12 +16,17 @@ namespace SerialLabs.Converters
         /// <returns></returns>
         public static long ToInt64(string address)
         {
-            byte[] ip = address.Split('.').Select(s => Byte.Parse(s)).ToArray();
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                Array.Reverse(ip);
+                if (address.EndsWith(":1")) address = "127.0.0.1";
+                byte[] ip = address.Split('.').Select(s => Byte.Parse(s)).ToArray();
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(ip);
+                }
+                return BitConverter.ToUInt32(ip, 0);
             }
-            return BitConverter.ToUInt32(ip, 0);
+            catch { return -1; }
         }
 
         // Buggy ...
