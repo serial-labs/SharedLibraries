@@ -1,25 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AC313D39-8BAE-4A70-B373-A03228313871}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)
+
+== '
+
+">Debug</Configuration>
+    <Platform Condition=" '$(Platform)
+
+== '
+
+">AnyCPU</Platform>
+    <ProjectGuid>{100D2328-E8B4-4596-9A89-9624F5A7D4C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SerialLabs.Logging.AzureTable.Tests</RootNamespace>
-    <AssemblyName>SerialLabs.Logging.AzureTable.Tests</AssemblyName>
+    <RootNamespace>SerialLabs.Monitoring.Tests</RootNamespace>
+    <AssemblyName>SerialLabs.Monitoring.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)
+
+== ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)
+
+== ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '
+
+Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Debug|AnyCPU
+
+">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -27,9 +45,12 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Release|AnyCPU
+
+">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,42 +59,43 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Data.Edm, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Data.Edm.5.6.1\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.AzureClientHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.ApplicationServer.Caching.AzureClientHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Data.OData.5.6.1\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.AzureCommon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.ApplicationServer.Caching.AzureCommon.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Data.Services.Client.5.6.1\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\WindowsAzure.Storage.9.3.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    <Reference Include="Microsoft.Web.DistributedCache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.Web.DistributedCache.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.WindowsFabric.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.WindowsFabric.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsFabric.Data.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.WindowsAzure.Caching.2.3.1.0\lib\net40-full\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Spatial, Version=5.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\System.Spatial.5.6.1\lib\net40\System.Spatial.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+    <When Condition="('$(VisualStudioVersion)
+
+== '10.0
+
+or '$(VisualStudioVersion)
+
+== '') and '$(TargetFrameworkVersion)
+
+== 'v3.5'">
       <ItemGroup>
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
@@ -88,31 +110,44 @@
     <Compile Include="..\..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ApplicationLogEntityManagerTest.cs" />
-    <Compile Include="TestHelper.cs" />
-    <Compile Include="FormattedCloudStorageTraceListenerTest.cs" />
+    <Compile Include="AzureCloudStorageMonitoringTaskTest.cs" />
+    <Compile Include="CacheMonitoringTest.cs" />
+    <Compile Include="MonitoringTaskTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\SerialLabs.Logging.AzureTable\SerialLabs.Logging.AzureTable.csproj">
-      <Project>{910ce96c-b0ea-4b78-b01c-5d3958ffef2a}</Project>
-      <Name>SerialLabs.Logging.AzureTable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SerialLabs.Logging\SerialLabs.Logging.csproj">
-      <Project>{2399ac7c-e410-4d21-a741-a13b7a3f3398}</Project>
-      <Name>SerialLabs.Logging</Name>
+    <ProjectReference Include="..\..\SerialLabs.Monitoring\SerialLabs.Monitoring.csproj">
+      <Project>{8827f756-1e45-4255-bf62-30129a134d2e}</Project>
+      <Name>SerialLabs.Monitoring</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SerialLabs\SerialLabs.csproj">
       <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
       <Name>SerialLabs</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Microsoft.WindowsAzure.Caching\PerformanceCounters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+    <When Condition="'$(VisualStudioVersion)
+
+== '10.0
+
+And '$(IsCodedUITest)
+
+== 'True'">
       <ItemGroup>
         <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
           <Private>False</Private>

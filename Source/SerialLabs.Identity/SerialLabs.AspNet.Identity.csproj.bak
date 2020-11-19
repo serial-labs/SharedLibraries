@@ -2,19 +2,33 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A02786C-4FD4-4D91-9B54-CDA3C6E3E9D4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)
+
+== '
+
+">Debug</Configuration>
+    <Platform Condition=" '$(Platform)
+
+== '
+
+">AnyCPU</Platform>
+    <ProjectGuid>{D05E9C50-8277-49D6-A576-8808554AEED1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SerialLabs.Web.Http</RootNamespace>
-    <AssemblyName>SerialLabs.Web.Http</AssemblyName>
+    <RootNamespace>SerialLabs.AspNet.Identity</RootNamespace>
+    <AssemblyName>SerialLabs.AspNet.Identity</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '
+
+Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Debug|AnyCPU
+
+">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +38,11 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Release|AnyCPU
+
+">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,20 +51,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.0.0-beta1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,24 +66,11 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="RestApiController.cs" />
-    <Compile Include="Filters\RequireHttpsAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="SerialLabs.Web.Http.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SerialLabs.Web\SerialLabs.Web.csproj">
-      <Project>{f7602fe1-4723-41c1-a75e-1a5fa1d3901a}</Project>
-      <Name>SerialLabs.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SerialLabs\SerialLabs.csproj">
-      <Project>{0706a320-fbc4-4cff-8a51-280a59cda5fc}</Project>
-      <Name>SerialLabs</Name>
-    </ProjectReference>
+    <None Include="SerialLabs.AspNet.Identity.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

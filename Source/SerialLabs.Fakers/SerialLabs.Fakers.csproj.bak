@@ -2,20 +2,29 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F7602FE1-4723-41C1-A75E-1A5FA1D3901A}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)
+
+== '
+
+">Debug</Configuration>
+    <Platform Condition=" '$(Platform)
+
+== '
+
+">AnyCPU</Platform>
+    <ProjectGuid>{84D1524F-7CE6-4F6D-8DAA-4666F158C676}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SerialLabs.Web</RootNamespace>
-    <AssemblyName>SerialLabs.Web</AssemblyName>
+    <RootNamespace>SerialLabs.Fakers</RootNamespace>
+    <AssemblyName>SerialLabs.Fakers</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\MyBlazon\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Debug|AnyCPU
+
+">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +34,11 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)
+
+== 'Release|AnyCPU
+
+">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,14 +46,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)
+
+== 'Debug-Azure|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug-Azure\</OutputPath>
+    <DefineConstants>CODE_ANALYSIS;DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,12 +72,19 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Color.cs" />
+    <Compile Include="Company.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="DataStore.cs" />
+    <Compile Include="DateSequence.cs" />
+    <Compile Include="DistributedDataSequence.cs" />
+    <Compile Include="Internet.cs" />
+    <Compile Include="Lorem.cs" />
+    <Compile Include="MarkovNameGenerator.cs" />
+    <Compile Include="Name.cs" />
+    <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteDataValueResolver.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="SerialLabs.Web.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SerialLabs\SerialLabs.csproj">
@@ -64,14 +92,10 @@
       <Name>SerialLabs</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SerialLabs.Fakers.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
