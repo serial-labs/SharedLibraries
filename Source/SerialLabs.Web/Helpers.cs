@@ -29,5 +29,32 @@ namespace SerialLabs.Web
             //if (context.Session[key] == null) return "";
             //return context.Session[key].ToString();
         }
+
+        public static bool isUserDev()
+        {
+            return (HttpContext.Current.IsDebuggingEnabled || HttpContext.Current.Session.getStringValueOrEmpty("isUserDev") != "" || hasUserDevIP());
+        }
+
+        private static bool hasUserDevIP()
+        {
+            string userHostAdress = HttpContext.Current.Request.UserHostAddress;
+
+            string[] devAdresses = {
+                "localhost", // Localhost
+                "127.0.0.1", // Localhost
+                "::1", // Localhost
+                "77.130.42.235" // PC Corentin at the office 
+            };
+
+            for(int i = 0; i < devAdresses.Length; i++)
+            {
+                if (devAdresses[i] == userHostAdress)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
