@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "7752c1d5-7758-4e2e-992d-e2504d3aab53": {
+      "ProjectGuid": "7752c1d5-7758-4e2e-992d-e2504d3aab53",
+      "DisplayName": "SerialLabs.Fakers.Tests",
+      "ColorIndex": 0
+    },
+    "84d1524f-7ce6-4f6d-8daa-4666f158c676": {
+      "ProjectGuid": "84d1524f-7ce6-4f6d-8daa-4666f158c676",
+      "DisplayName": "SerialLabs.Fakers",
+      "ColorIndex": 1
+    },
+    "7f6de3b4-499a-4a7b-97c1-6de947681b70": {
+      "ProjectGuid": "7f6de3b4-499a-4a7b-97c1-6de947681b70",
+      "DisplayName": "Seriallabs.Dessin",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

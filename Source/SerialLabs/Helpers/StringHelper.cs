@@ -11,11 +11,12 @@ namespace SerialLabs
     {
         #region Public Methods
         /// <summary>
-        /// Removes accents from a string.
+        /// Removes accents from a string. 
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns>The result string</returns>
-        public static string RemoveDiacritics(string value)
+        /// <param name="text">i.e. décembre</param>
+        /// <returns>i.e. decembre</returns>
+        /// <see cref="http://stackoverflow.com/questions/249087/how-do-i-remove-diacritics-accents-from-a-string-in-net"/>
+        public static string RemoveDiacritics(this string value)
         {
             string stFormD = value.Normalize(NormalizationForm.FormD);
             StringBuilder sb = new StringBuilder();
@@ -29,6 +30,24 @@ namespace SerialLabs
             }
             return (sb.ToString().Normalize(NormalizationForm.FormC));
         }
+
+        /// <summary>
+        /// Removes accents from a string, using encoding 28595 before converting to ASCII.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        /// <see cref="https://en.wikipedia.org/wiki/ISO/IEC_8859-5"/>
+        public static string RemoveDiacriticsToASCII(this string s)
+        {
+            string r = "";
+            try
+            {
+                r = Encoding.ASCII.GetString(Encoding.GetEncoding(28595).GetBytes(s));
+            }
+            catch { }
+            return r;
+        }
+
         /// <summary>
         /// Encode a string in Base64 (UTF8)
         /// </summary>

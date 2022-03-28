@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestApiController.cs" />
     <Compile Include="RouteDataValueResolver.cs" />
+    <Compile Include="Serialization\LowerCamelCaseContractResolver.cs" />
     <Compile Include="SimpleKeyAuthorizationAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
