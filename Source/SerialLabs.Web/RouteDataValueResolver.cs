@@ -13,7 +13,8 @@ namespace SerialLabs.Web
         /// </summary>
         /// <param name="keyName"></param>
         /// <returns></returns>
-        /// <exception cref="InvalidOperationException">When key does not exist</exception>
+        /// <exception cref="InvalidOperationException">When key does not exist
+        /// https://stackoverflow.com/questions/21392864/ca2204-warning-for-mentioning-type-name-in-string-literal</exception>
         public static string Resolve(HttpContextBase context, string keyName)
         {
             Guard.ArgumentNotNull(context, "context");
