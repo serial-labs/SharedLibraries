@@ -3,8 +3,9 @@ namespace SerialLabs
 {
     /// <summary>
     /// Transience interface
-    /// http://en.wikipedia.org/wiki/Transient_(computer_programming)
+    /// <see cref="http://en.wikipedia.org/wiki/Transient_(computer_programming)"/>
     /// </summary>
+    /// 
     public interface ITransient
     {
         /// <summary>

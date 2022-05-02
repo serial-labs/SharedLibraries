@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SerialLabs.Data.Entity\SerialLabs.Data.EntityFramework.csproj">
+    <ProjectReference Include="..\..\SerialLabs.Data.EntityFramework\SerialLabs.Data.EntityFramework.csproj">
       <Project>{3035cd39-8ffe-49fb-b3c9-0638d3617d57}</Project>
       <Name>SerialLabs.Data.EntityFramework</Name>
     </ProjectReference>
