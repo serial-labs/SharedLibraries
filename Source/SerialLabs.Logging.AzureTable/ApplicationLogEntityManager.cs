@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using seriallabs;
 
 namespace SerialLabs.Logging.AzureTable
 {
@@ -39,11 +40,16 @@ namespace SerialLabs.Logging.AzureTable
         /// <returns></returns>
         public static string CreateRowKey(Guid guid, DateTime date, SortOrder sortOrder)
         {
-            long ticks = date.Ticks;
+            //long ticks = date.Ticks;
+            string uid = "";
             if (sortOrder == SortOrder.Descending)
-                ticks = DateTime.MaxValue.Ticks - date.Ticks;
+            {
+                //ticks = DateTime.MaxValue.Ticks - date.Ticks;
+                //ticks = new DateTime(2080,01,01).Ticks - date.Ticks;
+                uid = CoolTools.UniqueIdGenerator.generateUIDdesc();
+            }else{ uid = CoolTools.UniqueIdGenerator.generateUIDdesc();}
 
-            return String.Format(CultureInfo.InvariantCulture, "{0:D19}_{1}", ticks, guid.ToString());
+            return uid;
         }
 
         /// <summary>
@@ -52,13 +58,18 @@ namespace SerialLabs.Logging.AzureTable
         /// <param name="applicationName"></param>
         /// <param name="timeStamp"></param>
         /// <returns></returns>
-        public static string CreatePartitionKey(string applicationName, DateTimeOffset timeStamp)
+        public static string CreatePartitionKey(string applicationName, DateTimeOffset timeStamp, string keyword)
         {
             Guard.ArgumentNotNullOrWhiteSpace<PlatformException>(applicationName, "applicationName");
-
-            return String.Format(CultureInfo.InvariantCulture, "{0}_{1}",
-                applicationName.Trim(),
-                timeStamp.ToString("yyyyMM"));
+            var m = timeStamp.Month;
+            var q = (m+2) / 3 ;
+            string date = $"{timeStamp:yyyy}Q{q}";
+            string appName = applicationName.Replace("MyBlazon", "").Trim();
+            return String.Format(CultureInfo.InvariantCulture, "{0}-{1}-{2}",
+                date,
+                keyword,
+                appName
+                );
         }
 
         /// <summary>
@@ -88,7 +99,7 @@ namespace SerialLabs.Logging.AzureTable
             };
 
             entity.Timestamp = new DateTimeOffset(logEntry.TimeStamp, TimeSpan.Zero);
-            entity.PartitionKey = CreatePartitionKey(entity.ApplicationName, entity.Timestamp);
+            entity.PartitionKey = CreatePartitionKey(entity.ApplicationName, entity.Timestamp, entity.Category);
             entity.RowKey = ApplicationLogEntityManager.CreateRowKey(SortOrder.Descending);
             entity.FormattedMessage = formatter != null ? formatter.Format(logEntry) : logEntry.Message;
 
@@ -106,7 +117,7 @@ namespace SerialLabs.Logging.AzureTable
                 FormattedMessage = formattedMessage,
                 MachineName = Environment.MachineName,
                 Message = rawMessage,
-                PartitionKey = CreatePartitionKey(applicationName, DateTimeOffset.UtcNow),
+                PartitionKey = CreatePartitionKey(applicationName, DateTimeOffset.UtcNow,category+"/"+severity),
                 Priority = priority,
                 ProcessId = processId,
                 ProcessName = processName,

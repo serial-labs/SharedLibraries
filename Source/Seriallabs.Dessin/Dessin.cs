@@ -25,8 +25,10 @@ using System.Threading.Tasks;
 
 namespace Seriallabs.Dessin
 {
-    public class Class1
+    public class Dessin
     {
-        byte[] data = {2,3};    
+        byte[] data = {2,3};
+        
+        
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ColorMatrix.NET</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/rajithaw/ColorMatrix/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/rajithaw/ColorMatrix</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2015 Rajitha Wimalasooriya</copyright>
+    <tags>ColorMatrix RGB Hue Saturation Brightness</tags>
+  </metadata>
+  <files>
+	<file src="bin\$configuration$\ColorMatrix.dll" target="lib\net45\" />
+  </files>
+</package>

@@ -9,6 +9,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
+using System.Web;
 using System.Xml.Serialization;
 
 namespace SerialLabs.Logging
@@ -43,20 +44,22 @@ namespace SerialLabs.Logging
         private StringBuilder errorMessages;
         private IDictionary<string, object> extendedProperties;
 
-        private string appDomainName;
-        private string processId;
-        private string processName;
-        private string threadName;
-        private string win32ThreadId;
+        private string appDomainName=null;
+        private string processId=null;
+        private string sessionId=null;
+        private string processName=null;
+        private string threadName=null;
+        private string win32ThreadId=null;
 
-        internal bool timeStampInitialized = false;
+        /*internal bool timeStampInitialized = false;
         internal bool appDomainNameInitialized = false;
         internal bool machineNameInitialized = false;
         internal bool processIdInitialized = false;
+        internal bool sessionIdInitialized = false;
         internal bool processNameInitialized = false;
         internal bool win32ThreadIdInitialized = false;
         internal bool threadNameInitialized = false;
-        internal bool activityIdInitialized = false;
+        internal bool activityIdInitialized = false;*/
         private bool unmanagedCodePermissionAvailable = false;
         private bool unmanagedCodePermissionAvailableInitialized = false;
 
@@ -192,17 +195,12 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!timeStampInitialized)
-                {
-                    InitializeTimeStamp();
-                }
-
+                if (this.timeStamp>= DateTime.MaxValue) InitializeTimeStamp();
                 return this.timeStamp;
             }
             set
             {
                 this.timeStamp = value;
-                timeStampInitialized = true;
             }
         }
 
@@ -213,17 +211,12 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!machineNameInitialized)
-                {
-                    InitializeMachineName();
-                }
-
+                if (machineName == null) InitializeMachineName();
                 return this.machineName;
             }
             set
             {
                 this.machineName = value;
-                machineNameInitialized = true;
             }
         }
 
@@ -235,17 +228,12 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!appDomainNameInitialized)
-                {
-                    InitializeAppDomainName();
-                }
-
+                if (appDomainName == null) InitializeAppDomainName();
                 return this.appDomainName;
             }
             set
             {
                 this.appDomainName = value;
-                appDomainNameInitialized = true;
             }
         }
 
@@ -256,18 +244,19 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!processIdInitialized)
-                {
-                    InitializeProcessId();
-                }
-
+                if (processId == null) InitializeProcessId();
                 return this.processId;
             }
-            set
-            {
-                processId = value;
-                processIdInitialized = true;
+            set { processId = value; }
+        }
+        public string SessionId
+        {
+            get
+            {  
+                if (sessionId == null) InitializeSessionId();
+                return this.sessionId;
             }
+            set { sessionId = value; }
         }
 
         /// <summary>
@@ -277,18 +266,10 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!processNameInitialized)
-                {
-                    InitializeProcessName();
-                }
-
+                if (processName == null) { InitializeProcessName(); }
                 return this.processName;
             }
-            set
-            {
-                this.processName = value;
-                processNameInitialized = true;
-            }
+            set { this.processName = value; }
         }
 
         /// <summary>
@@ -299,18 +280,10 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!threadNameInitialized)
-                {
-                    InitializeThreadName();
-                }
-
+                if (threadName == null) InitializeThreadName();
                 return this.threadName;
             }
-            set
-            {
-                this.threadName = value;
-                threadNameInitialized = true;
-            }
+            set { this.threadName = value; }
         }
 
         /// <summary>
@@ -320,18 +293,10 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!win32ThreadIdInitialized)
-                {
-                    InitializeWin32ThreadId();
-                }
-
+                if (win32ThreadId == null) InitializeWin32ThreadId();
                 return this.win32ThreadId;
             }
-            set
-            {
-                this.win32ThreadId = value;
-                win32ThreadIdInitialized = true;
-            }
+            set { this.win32ThreadId = value; }
         }
 
         /// <summary>
@@ -393,6 +358,17 @@ namespace SerialLabs.Logging
                     Properties.Resources.LogEntryIntrinsicPropertyNoUnmanagedCodePermissionError);
             }
         }
+        private void InitializeSessionId()
+        {
+            try
+            {
+                this.sessionId = HttpContext.Current.Session.SessionID;
+            }
+            catch (Exception e)
+            {
+                this.sessionId = e.Message;
+            }
+        }
 
         private void InitializeProcessName()
         {
@@ -451,18 +427,10 @@ namespace SerialLabs.Logging
         {
             get
             {
-                if (!activityIdInitialized)
-                {
-                    InitializeActivityId();
-                }
-
+                if (activityId == null) { InitializeActivityId(); }
                 return this.activityId;
             }
-            set
-            {
-                this.activityId = value;
-                activityIdInitialized = true;
-            }
+            set { this.activityId = value; }
         }
 
         /// <summary>

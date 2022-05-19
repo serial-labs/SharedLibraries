@@ -17,7 +17,7 @@ namespace SerialLabs.Logging.AzureTable
         /// <summary>
         /// The name of the Azure Table where the log will be saved
         /// </summary>
-        public const string DefaultAzureTableName = "ApplicationLogs";
+        public const string DefaultAzureTableName = "AppLogsPhoenix";
 
         /// <summary>
         /// The cloud storage connection string where to save the log to.

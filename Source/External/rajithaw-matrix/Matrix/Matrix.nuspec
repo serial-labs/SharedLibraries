@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Matrix.NET</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/rajithaw/Matrix/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/rajithaw/Matrix</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2015 Rajitha Wimalasooriya</copyright>
+    <tags>Matrix Math Inverse Determinant Transpose</tags>
+  </metadata>
+  <files>
+	<file src="bin\$configuration$\Matrix.dll" target="lib\net45\" />
+  </files>
+</package>
