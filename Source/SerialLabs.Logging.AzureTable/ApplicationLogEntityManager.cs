@@ -11,6 +11,13 @@ namespace SerialLabs.Logging.AzureTable
     /// </summary>
     public static class ApplicationLogEntityManager
     {
+        public enum SortOrder
+        {
+            NotSet,
+            Ascending,
+            Descending
+        }
+
         /// <summary>
         /// Returns a formatted row key
         /// </summary>

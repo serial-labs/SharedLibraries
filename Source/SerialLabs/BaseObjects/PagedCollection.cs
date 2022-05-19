@@ -69,4 +69,24 @@ namespace SerialLabs
         }
         #endregion
     }
+
+
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///                                         Class PagedCollectionFilterOptions
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// too lazy to do now
+    /// </summary>
+    public class PagedCollectionFilterOptions
+    {
+        /// <summary>
+        /// Page number
+        /// </summary>
+        public int? Page { get; set; }
+        /// <summary>
+        /// Page length
+        /// </summary>
+        public int? PageLength { get; set; }
+    }
 }
