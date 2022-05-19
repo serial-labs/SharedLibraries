@@ -362,11 +362,13 @@ namespace SerialLabs.Logging
         {
             try
             {
-                this.sessionId = HttpContext.Current.Session.SessionID;
+                this.sessionId = HttpContext.Current.Session.SessionID.Substring(0, 6);
             }
             catch (Exception e)
             {
                 this.sessionId = e.Message;
+                if (e is NullReferenceException) this.sessionId = "*null*";
+                
             }
         }
 
@@ -467,6 +469,7 @@ namespace SerialLabs.Logging
             result.MachineName = this.MachineName;
             result.AppDomainName = this.AppDomainName;
             result.ProcessId = this.ProcessId;
+            result.sessionId = this.sessionId;
             result.ProcessName = this.ProcessName;
             result.ManagedThreadName = this.ManagedThreadName;
             result.ActivityId = this.ActivityId;

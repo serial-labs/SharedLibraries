@@ -98,6 +98,7 @@ namespace SerialLabs.Logging.AzureTable
                 Message = logEntry.Message,
                 Priority = logEntry.Priority,
                 ProcessId = logEntry.ProcessId,
+                SessionId = logEntry.SessionId,
                 ProcessName = logEntry.ProcessName,
                 Severity = logEntry.Severity.ToString(),
                 ThreadName = logEntry.ManagedThreadName,

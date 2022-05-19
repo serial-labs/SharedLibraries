@@ -1718,7 +1718,7 @@ int value, Eratosthenes eratosthenes)
             public static string LongToBase(long value, char[] alphabet)
             
             {
-                long targetBase = BaseChars.Length;
+                long targetBase = alphabet.Length;
                 // Determine exact number of characters to use.
                 char[] buffer = new char[Math.Max(
                            (int)Math.Ceiling(Math.Log(value + 1, targetBase)), 1)];
@@ -1726,7 +1726,7 @@ int value, Eratosthenes eratosthenes)
                 var i = buffer.Length;
                 do
                 {
-                    buffer[--i] = BaseChars[value % targetBase];
+                    buffer[--i] = alphabet[value % targetBase];
                     value = value / targetBase;
                 }
                 while (value > 0);
@@ -1875,13 +1875,13 @@ int value, Eratosthenes eratosthenes)
                 return ret;
             }
 
-            public static string ticksTo2080base60()
+            public static string ticksTo2080base36()
             {
                 return CoolTools.ConvertNumFromBaseToBase.LongToBase(
                     (new DateTime(2080, 01, 01).Ticks - DateTime.Now.Ticks) / 1000000,
                     ConvertNumFromBaseToBase.BaseChars36minus);
             }
-            public static string ticksFrom2022base60()
+            public static string ticksFrom2022base36()
             {
                 return CoolTools.ConvertNumFromBaseToBase.LongToBase(
                     (DateTime.Now.Ticks- new DateTime(2022, 01, 01).Ticks ) / 1000000,
@@ -1891,11 +1891,11 @@ int value, Eratosthenes eratosthenes)
 
             public static string generateUIDdesc()
             {
-                return ticksTo2080base60() + "-" + new UniqueIdGenerator().GetBase32UniqueId(6);
+                return ticksTo2080base36() + "-" + new UniqueIdGenerator().GetBase32UniqueId(6);
             }
             public static string generateUIDasc()
             {
-                return ticksFrom2022base60() + "-" + new UniqueIdGenerator().GetBase32UniqueId(6);
+                return ticksFrom2022base36() + "-" + new UniqueIdGenerator().GetBase32UniqueId(6);
             }
         }
     }/// class CoolTools
