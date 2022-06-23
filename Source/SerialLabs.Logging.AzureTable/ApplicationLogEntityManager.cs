@@ -90,7 +90,7 @@ namespace SerialLabs.Logging.AzureTable
             Guard.ArgumentNotNull<PlatformException>(logEntry, "logEntry");
             ApplicationLogEntity entity = new ApplicationLogEntity
             {
-                AppDomainName = logEntry.AppDomainName,
+                //AppDomainName = logEntry.AppDomainName, //not an interesting value to store
                 ApplicationName = logEntry.ApplicationName,
                 Category = logEntry.Categories.Join(","),
                 EventId = logEntry.EventId,
@@ -118,7 +118,7 @@ namespace SerialLabs.Logging.AzureTable
         {
             return new ApplicationLogEntity
             {
-                AppDomainName = "Unknown AppDomain",
+                //AppDomainName = "Unknown AppDomain",
                 ApplicationName = applicationName,
                 Category = category,
                 EventId = eventId,

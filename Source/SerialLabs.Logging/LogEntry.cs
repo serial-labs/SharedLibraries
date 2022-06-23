@@ -384,6 +384,7 @@ namespace SerialLabs.Logging
                     Properties.Resources.IntrinsicPropertyError,
                     Properties.Resources.LogEntryIntrinsicPropertyNoUnmanagedCodePermissionError);
             }
+            if (this.ProcessName == @"c:\windows\system32\inetsrv\w3wp.exe") this.ProcessName = "..w3wp";
         }
 
         private void InitializeThreadName()

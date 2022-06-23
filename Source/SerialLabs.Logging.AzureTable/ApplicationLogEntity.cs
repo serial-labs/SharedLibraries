@@ -30,8 +30,8 @@ namespace SerialLabs.Logging.AzureTable
         [DataMemberAttribute]
         public string MachineName { get; set; }
         
-        [DataMemberAttribute]
-        public string AppDomainName { get; set; }
+        //[DataMemberAttribute]
+        //public string AppDomainName { get; set; }
         
         [DataMemberAttribute]
         public string ProcessId { get; set; }

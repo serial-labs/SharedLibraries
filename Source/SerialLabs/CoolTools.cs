@@ -270,7 +270,7 @@ namespace seriallabs
             userInput = userInput.Replace(" ", "");//remove spaces inside the string
             // \/ ! the longest words first, to not replace just one letter and after find no match
             string[,] replacementArray = { { "hours", "h", "minutes", "min", "m", "seconds", "sec", "s" },
-                                           { ":", ":", ":", ":", ":", "", "", "" } };
+                { ":", ":", ":", ":", ":", "", "", "" } };
 
             for (int i = 2; i < 8; i++)
                 userInput = userInput.Replace(replacementArray[0, i], replacementArray[1, i]);
@@ -614,7 +614,7 @@ END
                     int d3 = first[i - 1].Equals(second[j - 1]) ? 0 : 1;
                     if (allowForSubstitutions) // then may reduce d3 if substitution detected, else leave unchanged
                         if (d3 == 1) if (i < n && j < m)
-                                if (first[i].Equals(second[j - 1]) && first[i - 1].Equals(second[j])) d3 = 0;
+                            if (first[i].Equals(second[j - 1]) && first[i - 1].Equals(second[j])) d3 = 0;
                     if (allowPlaceHolder)
                         if (typeof(T) == typeof(char))
                             if (d3 == 1) if (first[i - 1].Equals('?') || first[i - 2 < 0 ? 0 : i - 2].Equals('?')) d3 = 0;
@@ -1035,11 +1035,11 @@ END
                 endIdx = bodyEndTagIdx;
 
             bool insideTag = false,
-                    insideAttributeValue = false,
-                    insideHtmlComment = false,
-                    insideScriptBlock = false,
-                    insideNoScriptBlock = false,
-                    insideStyleBlock = false;
+                insideAttributeValue = false,
+                insideHtmlComment = false,
+                insideScriptBlock = false,
+                insideNoScriptBlock = false,
+                insideStyleBlock = false;
             char attributeValueDelimiter = '"';
 
             StringBuilder sb = new StringBuilder(htmlContent.Length);
@@ -1311,7 +1311,7 @@ END
                 return GetEnumerator();
             }
             public static IEnumerable<int> GetPrimeFactors(
-int value, Eratosthenes eratosthenes)
+                int value, Eratosthenes eratosthenes)
             {
                 List<int> factors = new List<int>();
 
@@ -1700,10 +1700,10 @@ int value, Eratosthenes eratosthenes)
         {
 
             public static readonly char[] BaseChars =
-         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
+                "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
             private static readonly Dictionary<char, int> CharValues = BaseChars
-                       .Select((c, i) => new { Char = c, Index = i })
-                       .ToDictionary(c => c.Char, c => c.Index);
+                .Select((c, i) => new { Char = c, Index = i })
+                .ToDictionary(c => c.Char, c => c.Index);
             
             public static readonly char[] BaseChars36 =
                 "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
@@ -1721,7 +1721,7 @@ int value, Eratosthenes eratosthenes)
                 long targetBase = alphabet.Length;
                 // Determine exact number of characters to use.
                 char[] buffer = new char[Math.Max(
-                           (int)Math.Ceiling(Math.Log(value + 1, targetBase)), 1)];
+                    (int)Math.Ceiling(Math.Log(value + 1, targetBase)), 1)];
 
                 var i = buffer.Length;
                 do
@@ -1755,13 +1755,13 @@ int value, Eratosthenes eratosthenes)
             // convert to hexadecimal
             static string hex = IntToString(42,
                 new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                         'A', 'B', 'C', 'D', 'E', 'F'});
+                    'A', 'B', 'C', 'D', 'E', 'F'});
 
             // convert to sexagesimal
             static string xx = IntToString(42,
                 new char[] { '0','1','2','3','4','5','6','7','8','9',
-            'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x'});
+                    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+                    'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x'});
 
 
             public static string IntToString(int value, char[] baseChars)
@@ -1805,7 +1805,7 @@ int value, Eratosthenes eratosthenes)
             }
         }
         
-           /// <summary>
+        /// <summary>
         /// to create shorter GUID
         /// FROM https://jopinblog.wordpress.com/2009/02/04/a-shorter-friendlier-guiduuid-in-net/
         /// </summary>
@@ -1874,18 +1874,42 @@ int value, Eratosthenes eratosthenes)
                 var ret = new string(chars, 26 - numDigits, numDigits);
                 return ret;
             }
-
-            public static string ticksTo2080base36()
+            
+            
+            /// <summary>
+            /// Calculate the numbers of ticks between now and 01/01/2080 and convert the number to base 36
+            /// Add '0' padding to 7 char (optional)  
+            /// </summary>
+            /// <example>2022-05-20T17:00:09 => 8cp7k5f</example>
+            /// <example>2079-12-01T00:00:00 => 000iio0</example>
+            /// <param name="withPaddingTo7Char">add leading 0 to get a 7 char string</param>
+            /// <returns></returns>
+            public static string ticksTo2080base36(bool withPaddingTo7Char=true)
             {
-                return CoolTools.ConvertNumFromBaseToBase.LongToBase(
+                string s= CoolTools.ConvertNumFromBaseToBase.LongToBase(
                     (new DateTime(2080, 01, 01).Ticks - DateTime.Now.Ticks) / 1000000,
                     ConvertNumFromBaseToBase.BaseChars36minus);
+                if (withPaddingTo7Char)
+                    if (s.Length < 7)
+                        s = s.PadLeft(7 - s.Length, '0');
+                return s;
             }
-            public static string ticksFrom2022base36()
+            
+            /// <summary>
+            /// Calculate the numbers of ticks between 01/01/2022 and Now convert the number to base 36
+            /// Add '0' padding to 7 char (optional)  
+            /// </summary>
+            /// <param name="withPaddingTo7Char">add leading 0 to get a 7 char string</param>
+            /// <returns></returns>
+            public static string ticksFrom2022base36(bool withPaddingTo7Char=true)
             {
-                return CoolTools.ConvertNumFromBaseToBase.LongToBase(
+                string s= CoolTools.ConvertNumFromBaseToBase.LongToBase(
                     (DateTime.Now.Ticks- new DateTime(2022, 01, 01).Ticks ) / 1000000,
                     ConvertNumFromBaseToBase.BaseChars36minus);
+                if (withPaddingTo7Char)
+                    if (s.Length < 7)
+                        s = s.PadLeft(7 - s.Length, '0');
+                return s;
             }
 
 
@@ -2641,4 +2665,3 @@ int value, Eratosthenes eratosthenes)
 
     }
 }
-
