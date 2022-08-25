@@ -81,6 +81,7 @@
     <Compile Include="Extensions\IIdentityExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
+    <Compile Include="FunTools.cs" />
     <Compile Include="Helpers\AssemblyHelper.cs" />
     <Compile Include="Types\AscendingSortedGuid.cs" />
     <Compile Include="Types\DescendingSortedGuid.cs" />
