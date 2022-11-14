@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Resources;
+using Seriallabs.Dessin;
 
 namespace TesterDeDessin
 {
@@ -16,6 +17,8 @@ namespace TesterDeDessin
         private int[] imaIndex;
         private Image[] imaAll;
         private int nbImaEmbedded;
+        private FormConsole myConsole;
+        
         public FormMain()
         {
             InitializeComponent();
@@ -35,6 +38,13 @@ namespace TesterDeDessin
                     imaAll[i]; //(Image) ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[i]);
                 pbs[i].SizeMode = getModeFromComboOrZoom();
             }
+        }
+        //https://learn.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-use-interpolation-mode-to-control-image-quality-during-scaling?view=netframeworkdesktop-4.8
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            lstInterpolationModes.DataSource = Enum.GetValues(typeof(InterpolationMode));
+            myConsole = new FormConsole();
+            myConsole.Show();
         }
 
         private PictureBoxSizeMode getModeFromComboOrZoom()
@@ -105,29 +115,10 @@ namespace TesterDeDessin
             var pbi = pbs.Select((pb, i) => new { i, pb }).Where(x => x.pb == sender).Select(x => x.i).First();
             if (pbi==3 && zoom) return;
             string info = $"{pbi} - {imaIndex[pbi]} - {imaAll[imaIndex[pbi]].Width}x{imaAll[imaIndex[pbi]].Height}";
-            int fontSize = 16;
-            using (Font myFont = new Font("Arial Black", 18))
-            {
-                Graphics g = e.Graphics;
-                g.InterpolationMode = InterpolationMode.High;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; 
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                GraphicsPath p = new GraphicsPath();
-                p.AddString(
-                    info,             // text to draw
-                    FontFamily.GenericSansSerif,  // or any other font family
-                    (int)FontStyle.Regular,      // font style (bold, italic, etc.)
-                    g.DpiY * fontSize / 72,       // em size
-                    new Point(0, 0),              // location where to draw text
-                    new StringFormat());          // set options here (e.g. center alignment)
-                g.DrawPath(new Pen(Color.Yellow,4), p);
-                g.FillPath(new SolidBrush(Color.Blue),p);
-                //e.Graphics.DrawString(info, myFont, Brushes.Green, new Point(2, 2));
-
-            }
+            Seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16,true);
         }
 
+        
 
         private void ouvrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -184,7 +175,7 @@ namespace TesterDeDessin
         }
 
       
-        private void button2_Click(object sender, EventArgs e)
+        private void pbs1_vers_picResult_Click(object sender, EventArgs e)
         {
             Traitement_pbs1_vers_picResult();
         }
@@ -336,11 +327,7 @@ namespace TesterDeDessin
 
         }
 
-        //https://learn.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-use-interpolation-mode-to-control-image-quality-during-scaling?view=netframeworkdesktop-4.8
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-            lstInterpolationModes.DataSource = Enum.GetValues(typeof(InterpolationMode));
-        }
+        
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
@@ -368,6 +355,90 @@ namespace TesterDeDessin
             Helpers.TimeRecord.checkin("finished");
             toolStripStatusLabelElapsed.Text = $"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ";
 
+        }
+
+        
+        private void btnUnits_Click(object sender, EventArgs e)
+        {
+            // test à la con proposé par MS 
+            //https://learn.microsoft.com/en-us/dotnet/api/system.drawing.graphicsunit?view=netframework-4.8&f1url=%3FappId%3DDev16IDEF1%26l%3DFR-FR%26k%3Dk(System.Drawing.GraphicsUnit)%3Bk(SolutionItemsProject)%3Bk(TargetFrameworkMoniker-.NETFramework%2CVersion%253Dv4.8)%3Bk(DevLang-csharp)%26rd%3Dtrue
+            Bitmap bitmap1 = Bitmap.FromHicon(SystemIcons.Hand.Handle);
+            //Graphics formGraphics = this.CreateGraphics();
+            Graphics picbox2Graphics = pictureBox2.CreateGraphics(); // this.CreateGraphics();
+            
+            GraphicsUnit units = GraphicsUnit.Document;
+            RectangleF bmpRectangleF = bitmap1.GetBounds(ref units);
+            //ici, units et à nouveau GraphicsUnit.Pixel ! ???
+
+            Rectangle bmpRectangle = Rectangle.Round(bmpRectangleF);
+            picbox2Graphics.DrawRectangle(Pens.Blue, bmpRectangle);
+            picbox2Graphics.Dispose();
+        }
+
+        private void toolStripMenuItemOpenFormTest_Click(object sender, EventArgs e)
+        {
+            new FormTest().ShowDialog();
+        }
+
+        private void btnImaCompo_Click(object sender, EventArgs e)
+        {
+            Seriallabs.Dessin.Helpers.ID = $"aA{DateTime.Now.Minute}_";
+            var fn = $"c:\\temp\\oo\\{Seriallabs.Dessin.Helpers.ID}txx{DateTime.Now.Ticks}";
+            pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
+            Image imaSrc = imaAll[imaIndex[1]];
+            //imaSrc = Image.FromFile(@"C:\Users\olivierH\-dev-\IMG\Eagle2x.png");
+            imaSrc = picBsource.Image;
+            Bitmap bmpSrc = new Bitmap(imaSrc);
+            int w= bmpSrc.Width;
+            Seriallabs.Dessin.Helpers.SaveJpeg(fn + "_o.jpeg", bmpSrc, 80);
+            
+            myConsole.LogLine("CreateBitmapComposée avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
+            using ( var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc, ImageAttributesExt.getTestImageAttributes4Hue))
+            {
+                myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
+                bc.BlendImageOver(ResourceImages1.gray_floral);
+                myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
+                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), ImageAttributesExt.getImageAttr4Opacity(0.25f));
+                
+                if (chkToPicResult.Checked) picResult.Image = bc.getBitmap;
+                pictureBox5.Image = bc.getBitmap;
+                //pictureBox5.Invalidate();
+            }
+
+            fn = $"c:\\temp\\oo\\{Seriallabs.Dessin.Helpers.ID}txx{DateTime.Now.Ticks}";
+            try
+            {
+                Seriallabs.Dessin.Helpers.SaveJpeg(fn + ".jpeg", bmpSrc, 80);
+                //sourceImage.Save($"'c:\temp\tt{DateTime.Now.TimeOfDay}.jpeg", );
+                pictureBox5.Image.Save(fn + ".png", ImageFormat.Png);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            pictureBox5.Image = ResourceImages1.test_ciment;
+        }
+
+        private void btnCheckDrawPix_Click(object sender, EventArgs e)
+        {
+            using (Graphics g = picResult.CreateGraphics())
+            {
+                g.SmoothingMode = SmoothingMode.None;
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.DrawImage(ResourceImages1._8x8x8,new Point(7,7));
+            }
+            myConsole.LogLine("(picResult.CreateGraphics) . DrawImage(ResourceImages1._8x8x8,new Point(7,7));");
+        }
+
+        private void toggleLogWindowsMenu_Click(object sender, EventArgs e)
+        {
+            if (myConsole.Visible) myConsole.Hide();
+            else myConsole.Show();
         }
 
 

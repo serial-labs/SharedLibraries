@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TesterDeDessin
 {
+    /// <summary>
+    /// continuation du code de FormMain dans un autre fichier
+    /// </summary>
     public partial class FormMain : Form
     {
 
@@ -24,7 +27,7 @@ namespace TesterDeDessin
             var oc = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
-            for (int i = 0; i < numericUpDown1.Value; i++)
+            for (int i = 1; i <= numericUpDown1.Value; i++)
             {
                 //DrawToBitmap();
                 Size s = picResult.ClientRectangle.Size;
@@ -32,6 +35,8 @@ namespace TesterDeDessin
                 RectangleF drawingSpace = new RectangleF(0, 0, s.Width, s.Height);
                 Rectangle destR = new Rectangle(0, 0, s.Width, s.Height); //RectangleF._2R();
                 List<ColorMap> colorMapList = new List<ColorMap>();
+
+                if (i == 1) myConsole.LogLine("using (Graphics g = Graphics.FromImage(_armoiries))");
                 using (Graphics g = Graphics.FromImage(_armoiries))
                 {
                     //When the Graphics.SmoothingMode property is specified by using the SmoothingMode enumeration, it does not affect text. To set the text rendering quality, use the Graphics.TextRenderingHint property and the TextRenderingHint enumeration.
@@ -63,6 +68,7 @@ namespace TesterDeDessin
                     ImageAttributes imageAttributes = new ImageAttributes();
                     imageAttributes.SetRemapTable(remapTable);//x, ColorAdjustType.Brush);*/
 
+                    if (i == 1) myConsole.LogLine("   g.DrawImage(pbs[1].Image, destR, sourceRf, GraphicsUnit.Pixel");
                     g.DrawImage(pbs[1].Image, destR, sourceRf, GraphicsUnit.Pixel);
                     lblSource.Text = "source : " + sourceRf._2R().ToString();
                     lblDest.Text = "dest : " + destR.ToString();
@@ -73,6 +79,7 @@ namespace TesterDeDessin
                     SolidBrush textBrush = (SolidBrush)SystemBrushes.ControlDark;
                     SolidBrush textBrush2 = new SolidBrush(alphaForeColor);
 
+                    if (i == 1) myConsole.LogLine("   traçages des textes");
                     //g.FillRectangle(new SolidBrush(opaqueBackColor), 0, label2.Top + label2.Height, this.ClientRectangle.Width, this.ClientRectangle.Height);
                     Font ft = new Font("Arial", 24);
 
@@ -94,6 +101,7 @@ namespace TesterDeDessin
                     g.CompositingMode = CompositingMode.SourceCopy;
 
 
+                    if (i == 1) myConsole.LogLine("   traçages des rectangles de test");
                     ///traçages des rectangles de test
                     /// ATTENTION AUX largeurs https://stackoverflow.com/questions/3147569/pixel-behaviour-of-fillrectangle-and-drawrectangle
                     /// DrawRectangle(pen,0,0,1,1) on the other hand draws a small 2 by 2 pixel rectangle.
@@ -115,6 +123,15 @@ namespace TesterDeDessin
 
                     g.DrawRectangle(new Pen(Color.FromArgb(255, 0, 128, 255)), 3, 3,
                         3, 3);// un rectangle de même largeur que 
+
+
+                    // copie d'une bitmap 8x8 à l'angle du petit '3x3' (qui fait en fait 4x4)
+                    g.SmoothingMode = SmoothingMode.None;
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.DrawImage(ResourceImages1._8x8x8, new Point(7, 7));
+                    g.DrawImage(ResourceImages1._8x8x8, new Rectangle(15, 15,8,8));
+                    if (i == 1) myConsole.LogLine("   g.DrawImage(ResourceImages1._8x8x8, new Point(7, 7));");
+                    if (i == 1) myConsole.LogLine("   g.DrawImage(ResourceImages1._8x8x8, new Rectangle(15, 15,8,8));");
                 }
 
                 picResult.Image = _armoiries;
@@ -161,7 +178,7 @@ namespace TesterDeDessin
                     g.CompositingMode = CompositingMode.SourceCopy;
                     g.TextRenderingHint = TextRenderingHint.SingleBitPerPixel;
                     g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    g.PixelOffsetMode = PixelOffsetMode.None;
+                    g.PixelOffsetMode = PixelOffsetMode.None; //https://stackoverflow.com/questions/28441479/what-is-pixeloffsetmode
                     /*g.InterpolationMode = InterpolationMode.Bilinear;
                     g.CompositingQuality = CompositingQuality.HighSpeed;
                     g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
@@ -197,5 +214,7 @@ namespace TesterDeDessin
                 toolStripStatusLabel2.Text = ex.Message;
             }
         }
+
+       
     }
 }

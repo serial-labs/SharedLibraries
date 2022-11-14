@@ -37,6 +37,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ouvrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemOpenFormTest = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleLogWindowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +50,7 @@
             this.lblColor1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnCheckDrawPix = new System.Windows.Forms.Button();
             this.lblSource = new System.Windows.Forms.Label();
             this.lblDest = new System.Windows.Forms.Label();
             this.lstInterpolationModes = new System.Windows.Forms.ListBox();
@@ -55,9 +58,12 @@
             this.chkSmoothingModeHighQuality = new System.Windows.Forms.CheckBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_pbs1_vers_picResult = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.btnImaCompo = new System.Windows.Forms.Button();
+            this.btnUnits = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -65,6 +71,7 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.chkToPicResult = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -75,6 +82,8 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -144,7 +153,9 @@
             // fichierToolStripMenuItem
             // 
             this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ouvrirToolStripMenuItem});
+            this.ouvrirToolStripMenuItem,
+            this.toolStripMenuItemOpenFormTest,
+            this.toggleLogWindowsMenu});
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.fichierToolStripMenuItem.Text = "Fichier";
@@ -152,9 +163,23 @@
             // ouvrirToolStripMenuItem
             // 
             this.ouvrirToolStripMenuItem.Name = "ouvrirToolStripMenuItem";
-            this.ouvrirToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.ouvrirToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.ouvrirToolStripMenuItem.Text = "Ouvrir";
             this.ouvrirToolStripMenuItem.Click += new System.EventHandler(this.ouvrirToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemOpenFormTest
+            // 
+            this.toolStripMenuItemOpenFormTest.Name = "toolStripMenuItemOpenFormTest";
+            this.toolStripMenuItemOpenFormTest.Size = new System.Drawing.Size(184, 22);
+            this.toolStripMenuItemOpenFormTest.Text = "Open FormTest";
+            this.toolStripMenuItemOpenFormTest.Click += new System.EventHandler(this.toolStripMenuItemOpenFormTest_Click);
+            // 
+            // toggleLogWindowsMenu
+            // 
+            this.toggleLogWindowsMenu.Name = "toggleLogWindowsMenu";
+            this.toggleLogWindowsMenu.Size = new System.Drawing.Size(184, 22);
+            this.toggleLogWindowsMenu.Text = "Toggle Log Windows";
+            this.toggleLogWindowsMenu.Click += new System.EventHandler(this.toggleLogWindowsMenu_Click);
             // 
             // pictureBoxToolStripMenuItem
             // 
@@ -289,6 +314,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnCheckDrawPix);
             this.tabPage1.Controls.Add(this.lblSource);
             this.tabPage1.Controls.Add(this.lblDest);
             this.tabPage1.Controls.Add(this.lstInterpolationModes);
@@ -296,7 +322,7 @@
             this.tabPage1.Controls.Add(this.chkSmoothingModeHighQuality);
             this.tabPage1.Controls.Add(this.numericUpDown1);
             this.tabPage1.Controls.Add(this.pictureBox4);
-            this.tabPage1.Controls.Add(this.button2);
+            this.tabPage1.Controls.Add(this.btn_pbs1_vers_picResult);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
@@ -305,6 +331,18 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnCheckDrawPix
+            // 
+            this.btnCheckDrawPix.BackgroundImage = global::TesterDeDessin.ResourceImages1._8x8x8;
+            this.btnCheckDrawPix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCheckDrawPix.Location = new System.Drawing.Point(300, 55);
+            this.btnCheckDrawPix.Name = "btnCheckDrawPix";
+            this.btnCheckDrawPix.Size = new System.Drawing.Size(77, 51);
+            this.btnCheckDrawPix.TabIndex = 10;
+            this.btnCheckDrawPix.Text = "Check Draw Pix";
+            this.btnCheckDrawPix.UseVisualStyleBackColor = true;
+            this.btnCheckDrawPix.Click += new System.EventHandler(this.btnCheckDrawPix_Click);
             // 
             // lblSource
             // 
@@ -360,7 +398,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(416, 159);
+            this.numericUpDown1.Location = new System.Drawing.Point(386, 159);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -385,15 +423,15 @@
             this.pictureBox4.TabStop = false;
             this.pictureBox4.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox4_Paint);
             // 
-            // button2
+            // btn_pbs1_vers_picResult
             // 
-            this.button2.Location = new System.Drawing.Point(469, 153);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(86, 31);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btn_pbs1_vers_picResult.Location = new System.Drawing.Point(439, 153);
+            this.btn_pbs1_vers_picResult.Name = "btn_pbs1_vers_picResult";
+            this.btn_pbs1_vers_picResult.Size = new System.Drawing.Size(116, 31);
+            this.btn_pbs1_vers_picResult.TabIndex = 1;
+            this.btn_pbs1_vers_picResult.Text = "pbs1=>picResult";
+            this.btn_pbs1_vers_picResult.UseVisualStyleBackColor = true;
+            this.btn_pbs1_vers_picResult.Click += new System.EventHandler(this.pbs1_vers_picResult_Click);
             // 
             // button1
             // 
@@ -407,6 +445,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.chkToPicResult);
+            this.tabPage2.Controls.Add(this.pictureBox5);
+            this.tabPage2.Controls.Add(this.btnImaCompo);
+            this.tabPage2.Controls.Add(this.btnUnits);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -414,6 +456,38 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pictureBox5.Location = new System.Drawing.Point(270, 3);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(288, 181);
+            this.pictureBox5.TabIndex = 2;
+            this.pictureBox5.TabStop = false;
+            this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
+            // 
+            // btnImaCompo
+            // 
+            this.btnImaCompo.Location = new System.Drawing.Point(15, 64);
+            this.btnImaCompo.Name = "btnImaCompo";
+            this.btnImaCompo.Size = new System.Drawing.Size(117, 36);
+            this.btnImaCompo.TabIndex = 1;
+            this.btnImaCompo.Text = "Image Composée";
+            this.btnImaCompo.UseVisualStyleBackColor = true;
+            this.btnImaCompo.Click += new System.EventHandler(this.btnImaCompo_Click);
+            // 
+            // btnUnits
+            // 
+            this.btnUnits.Location = new System.Drawing.Point(14, 18);
+            this.btnUnits.Name = "btnUnits";
+            this.btnUnits.Size = new System.Drawing.Size(118, 32);
+            this.btnUnits.TabIndex = 0;
+            this.btnUnits.Text = "test units";
+            this.btnUnits.UseVisualStyleBackColor = true;
+            this.btnUnits.Click += new System.EventHandler(this.btnUnits_Click);
             // 
             // pictureBox3
             // 
@@ -487,6 +561,7 @@
             // 
             this.picResult.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.picResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picResult.Cursor = System.Windows.Forms.Cursors.Cross;
             this.picResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picResult.Location = new System.Drawing.Point(5, 5);
             this.picResult.Name = "picResult";
@@ -496,6 +571,16 @@
             this.picResult.TabStop = false;
             this.picResult.Click += new System.EventHandler(this.picResult_Click);
             this.picResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picResult_MouseMove);
+            // 
+            // chkToPicResult
+            // 
+            this.chkToPicResult.AutoSize = true;
+            this.chkToPicResult.Location = new System.Drawing.Point(19, 111);
+            this.chkToPicResult.Name = "chkToPicResult";
+            this.chkToPicResult.Size = new System.Drawing.Size(97, 19);
+            this.chkToPicResult.TabIndex = 3;
+            this.chkToPicResult.Text = "add picResult";
+            this.chkToPicResult.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -523,6 +608,9 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -555,7 +643,7 @@
         private ToolStripMenuItem centerToolStripMenuItem;
         private TabControl tabControl1;
         private TabPage tabPage1;
-        private Button button2;
+        private Button btn_pbs1_vers_picResult;
         private Button button1;
         private TabPage tabPage2;
         private ToolStripStatusLabel toolStripStatusLabel2;
@@ -573,5 +661,12 @@
         private Label lblSource;
         private Label lblDest;
         private TrackBar trackBar1;
+        private Button btnUnits;
+        private ToolStripMenuItem toolStripMenuItemOpenFormTest;
+        private PictureBox pictureBox5;
+        private Button btnImaCompo;
+        private Button btnCheckDrawPix;
+        private ToolStripMenuItem toggleLogWindowsMenu;
+        private CheckBox chkToPicResult;
     }
 }

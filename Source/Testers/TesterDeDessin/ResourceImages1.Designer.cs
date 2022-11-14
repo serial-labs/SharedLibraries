@@ -63,6 +63,26 @@ namespace TesterDeDessin {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _8x8x4 {
+            get {
+                object obj = ResourceManager.GetObject("_8x8x4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8x8x8 {
+            get {
+                object obj = ResourceManager.GetObject("_8x8x8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EarOfWheat_adjusted {
             get {
                 object obj = ResourceManager.GetObject("EarOfWheat_adjusted", resourceCulture);

@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,16 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnchoredImage.cs" />
+    <Compile Include="helpers\ColorMatrixExt.cs" />
     <Compile Include="Dessin.cs" />
-    <Compile Include="Matrix.cs" />
+    <Compile Include="BitmapComposee.cs" />
+    <Compile Include="helpers\ImaParam.cs" />
+    <Compile Include="helpers\Helpers.cs" />
+    <Compile Include="helpers\ICRHelper.cs" />
+    <Compile Include="helpers\LockBitmap.cs" />
+    <Compile Include="helpers\Matrix.cs" />
+    <Compile Include="helpers\OpEx.cs" />
+    <Compile Include="helpers\UsefulMatrices.cs" />
+    <Compile Include="ImageAttributesExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RtwMatrix.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\External\rajithaw-colormatrix\ColorMatrix\ColorMatrix.csproj">
-      <Project>{9dcd17de-6557-4a27-8b4c-5330cf5a4a9e}</Project>
-      <Name>ColorMatrix</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

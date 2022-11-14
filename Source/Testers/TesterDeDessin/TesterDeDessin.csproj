@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Seriallabs.Dessin\Seriallabs.Dessin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="ResourceImages1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

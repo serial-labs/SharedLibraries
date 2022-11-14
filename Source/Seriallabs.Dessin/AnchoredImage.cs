@@ -51,7 +51,7 @@ namespace Seriallabs.Dessin
         }
         public static Image Rotate(float angle)
         {
-            try
+            /*try
             {
                 bitmap1 = (Bitmap)Bitmap.FromFile(@"C:\Documents and Settings\" +
                                                   @"All Users\Documents\My Music\music.bmp");
@@ -62,7 +62,8 @@ namespace Seriallabs.Dessin
             {
                 MessageBox.Show("There was an error." +
                                 "Check the path to the bitmap.");
-            }
+            }*/
+            return null;
         }
 
     }
