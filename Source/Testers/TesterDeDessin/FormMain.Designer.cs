@@ -61,9 +61,15 @@
             this.btn_pbs1_vers_picResult = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chkToPicResult = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.btnImaCompo = new System.Windows.Forms.Button();
             this.btnUnits = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.picRedBlend = new System.Windows.Forms.PictureBox();
+            this.picBlueBlend = new System.Windows.Forms.PictureBox();
+            this.picBlend = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -71,7 +77,7 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.chkToPicResult = new System.Windows.Forms.CheckBox();
+            this.lstArithmetics = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -84,6 +90,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBlueBlend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBlend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -306,6 +316,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 517);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -329,7 +340,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(561, 187);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "1. =>picResult";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // btnCheckDrawPix
@@ -370,6 +381,7 @@
             this.lstInterpolationModes.Name = "lstInterpolationModes";
             this.lstInterpolationModes.Size = new System.Drawing.Size(120, 154);
             this.lstInterpolationModes.TabIndex = 7;
+            this.lstInterpolationModes.SelectedIndexChanged += new System.EventHandler(this.lstInterpolationModes_SelectedIndexChanged);
             // 
             // chkInterpolationModeHighQualityBicubic
             // 
@@ -454,8 +466,18 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(561, 187);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "imageComposée1";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // chkToPicResult
+            // 
+            this.chkToPicResult.AutoSize = true;
+            this.chkToPicResult.Location = new System.Drawing.Point(19, 111);
+            this.chkToPicResult.Name = "chkToPicResult";
+            this.chkToPicResult.Size = new System.Drawing.Size(97, 19);
+            this.chkToPicResult.TabIndex = 3;
+            this.chkToPicResult.Text = "add picResult";
+            this.chkToPicResult.UseVisualStyleBackColor = true;
             // 
             // pictureBox5
             // 
@@ -488,6 +510,68 @@
             this.btnUnits.Text = "test units";
             this.btnUnits.UseVisualStyleBackColor = true;
             this.btnUnits.Click += new System.EventHandler(this.btnUnits_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.MistyRose;
+            this.tabPage3.Controls.Add(this.button2);
+            this.tabPage3.Controls.Add(this.picRedBlend);
+            this.tabPage3.Controls.Add(this.picBlueBlend);
+            this.tabPage3.Controls.Add(this.picBlend);
+            this.tabPage3.Controls.Add(this.lstArithmetics);
+            this.tabPage3.Location = new System.Drawing.Point(4, 24);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(561, 187);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "blending";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(148, 6);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(92, 33);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "blend";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // picRedBlend
+            // 
+            this.picRedBlend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.picRedBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picRedBlend.Location = new System.Drawing.Point(8, 106);
+            this.picRedBlend.Name = "picRedBlend";
+            this.picRedBlend.Size = new System.Drawing.Size(134, 75);
+            this.picRedBlend.TabIndex = 2;
+            this.picRedBlend.TabStop = false;
+            this.picRedBlend.Click += new System.EventHandler(this.picRedBlend_Click);
+            // 
+            // picBlueBlend
+            // 
+            this.picBlueBlend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.picBlueBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picBlueBlend.Location = new System.Drawing.Point(8, 6);
+            this.picBlueBlend.Name = "picBlueBlend";
+            this.picBlueBlend.Size = new System.Drawing.Size(134, 88);
+            this.picBlueBlend.TabIndex = 1;
+            this.picBlueBlend.TabStop = false;
+            this.picBlueBlend.Click += new System.EventHandler(this.picBlueBlend_Click);
+            // 
+            // picBlend
+            // 
+            this.picBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picBlend.Dock = System.Windows.Forms.DockStyle.Right;
+            this.picBlend.Location = new System.Drawing.Point(246, 3);
+            this.picBlend.Name = "picBlend";
+            this.picBlend.Size = new System.Drawing.Size(312, 181);
+            this.picBlend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBlend.TabIndex = 0;
+            this.picBlend.TabStop = false;
+            this.picBlend.Click += new System.EventHandler(this.picBlend_Click);
             // 
             // pictureBox3
             // 
@@ -572,15 +656,13 @@
             this.picResult.Click += new System.EventHandler(this.picResult_Click);
             this.picResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picResult_MouseMove);
             // 
-            // chkToPicResult
+            // lstArithmetics
             // 
-            this.chkToPicResult.AutoSize = true;
-            this.chkToPicResult.Location = new System.Drawing.Point(19, 111);
-            this.chkToPicResult.Name = "chkToPicResult";
-            this.chkToPicResult.Size = new System.Drawing.Size(97, 19);
-            this.chkToPicResult.TabIndex = 3;
-            this.chkToPicResult.Text = "add picResult";
-            this.chkToPicResult.UseVisualStyleBackColor = true;
+            this.lstArithmetics.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lstArithmetics.Location = new System.Drawing.Point(148, 57);
+            this.lstArithmetics.Name = "lstArithmetics";
+            this.lstArithmetics.Size = new System.Drawing.Size(106, 124);
+            this.lstArithmetics.TabIndex = 4;
             // 
             // FormMain
             // 
@@ -611,6 +693,10 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBlueBlend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBlend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -668,5 +754,11 @@
         private Button btnCheckDrawPix;
         private ToolStripMenuItem toggleLogWindowsMenu;
         private CheckBox chkToPicResult;
+        private TabPage tabPage3;
+        private Button button2;
+        private PictureBox picRedBlend;
+        private PictureBox picBlueBlend;
+        private PictureBox picBlend;
+        private ListBox lstArithmetics;
     }
 }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using System.Xml;
+using Seriallabs.Dessin.helpers;
 
 namespace Seriallabs.Dessin
 {
@@ -110,34 +111,40 @@ namespace Seriallabs.Dessin
                 destRf,
                 imattr
             );
-            if (clipTransparentThreshold > 0) nBC.CreateOpaqueRegion(clipTransparentThreshold);
+            if (clipTransparentThreshold > 0)
+            {
+                var or= nBC.CreateOpaqueRegion(clipTransparentThreshold);
+                nBC.gCtx.SetClip(or, CombineMode.Replace);
+            }
             return nBC;
         }
 
+        public BitmapComposée BlendImageOverWithArithmetic(Image ima, OpEx.ColorCalculationType arithmeticOp)
+        {
+            var iB = OpEx.BlendWithArithmetic(_backgroundBmp, (Bitmap)ima,new Point(), arithmeticOp);
+            return BlendImageOver(iB);
+        }
 
 
         public BitmapComposée BlendImageOver(Image ima, float opacity)
         {
-            var imattrOpa = ImageAttributesExt.getImageAttr4Opacity(opacity);
-            if (OpaqueRegion!=null) gCtx.SetClip(OpaqueRegion, CombineMode.Replace);
-            gCtx.DrawImageFull(ima, getImageBounds, imattrOpa);
-            return this;
+            return BlendImageOver(ima, ImageAttributesExt.getImageAttr4Opacity(opacity));
         }
 
         public BitmapComposée BlendImageOver(Image ima,ImageAttributes imattr = null)
         {
-            if (OpaqueRegion != null) gCtx.SetClip(OpaqueRegion, CombineMode.Replace);
             gCtx.DrawImageFull(ima,getImageBounds,imattr);
             return this;
         }
 
         public BitmapComposée BlendImageAt(Image ima, Point pos2k, ImageAttributes imattr = null)
         {
-            if (OpaqueRegion != null) gCtx.SetClip(OpaqueRegion, CombineMode.Replace);
             RectangleF destRf = new RectangleF(pos2k, ima.Size);
-            gCtx.DrawImageFull(ima, getImageBounds, imattr);
+            gCtx.DrawImageFull(ima, destRf, imattr);
             return this;
         }
+
+
 
         public BitmapComposée AddImage(Image ima)
         {

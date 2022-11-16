@@ -249,6 +249,9 @@ namespace Seriallabs.Dessin
 
         }
 
+
+
+
         public static void DrawImageFull(this Graphics g, System.Drawing.Image sourceImage, RectangleF destR=default,
             System.Drawing.Imaging.ImageAttributes imageAttributes=null)
         {

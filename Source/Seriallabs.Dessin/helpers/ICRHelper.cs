@@ -56,7 +56,7 @@ namespace Seriallabs.Dessin
             }
 
             /// <summary>
-            /// Gets the dimensions of an image.
+            /// Gets the dimensions of an image stored as raw data.
             /// </summary>
             /// <param name="path">The path of the image to get the dimensions of.</param>
             /// <returns>The dimensions of the specified image.</returns>

@@ -18,8 +18,34 @@ When rendering images, PixelOffsetMode specifies where the respective center poi
 see [Understanding Half-Pixel and Half-Texel Offsets](https://www.gamedev.net/blogs/entry/1848486-understanding-half-pixel-and-half-texel-offsets/)  
 [Half-Pixel Offset in DirectX 11](https://www.asawicki.info/news_1516_half-pixel_offset_in_directx_11)
 
+# Image Lock Mode 
+[SO: What does it actually mean by "Bitmap locking"?](https://stackoverflow.com/questions/37534312/what-does-it-actually-mean-by-bitmap-locking)
+*It locks the bitmap image (which was not directly accessable except indirectly via the Bitmap class to a memory area so that the you can have direct access to the memory of the image - that is read/write to the image memory directly using a pointer to it.*
+
+## Remarks
+Use the LockBits method to lock an existing bitmap in system memory so that it can be changed programmatically. You can change the color of an image with the SetPixel method, although the LockBits method offers better performance for large-scale changes.
+When calling this method, you should use a member of the [System.Drawing.Imaging.PixelFormat](https://learn.microsoft.com/en-us/dotnet/api/system.drawing.imaging.pixelformat?view=dotnet-plat-ext-7.0) enumeration that contains a specific bits-per-pixel (BPP) value. Using System.Drawing.Imaging.PixelFormat values, such as Indexed and Gdi, will throw an System.ArgumentException. Also, passing the incorrect pixel format for a bitmap will throw an System.ArgumentException.
+This version of the LockBits method is intended to be used with a flags value of ImageLockMode.UserInputBuffer.
+
+
+[MS : ImageLockMode Enum](https://learn.microsoft.com/en-us/dotnet/api/system.drawing.imaging.imagelockmode?view=dotnet-plat-ext-7.0#system-drawing-imaging-imagelockmode-userinputbuffer)  
+
+
+1 **ReadOnly**      Specifies that a portion of the image is locked for reading.
+
+3 **ReadWrite**         Specifies that a portion of the image is locked for reading or writing.
+
+4 **UserInputBuffer**      Specifies that the buffer used for reading or writing pixel data is allocated by the user. If this flag is set, the flags parameter of the LockBits method serves as an input parameter (and possibly as an output parameter). If this flag is cleared, then the flags parameter serves only as an output parameter.
+
+2 **WriteOnly**     Specifies that a portion of the image is locked for writing.
+
+### see also
+[Copy a rectangluar portion of Bitmap using LockBits](https://stackoverflow.com/questions/29766955/copy-a-rectangluar-portion-of-bitmap-using-lockbits)  
+[Locked pointer when locking a rectangle in a C# Bitmap](https://stackoverflow.com/questions/1076666/locked-pointer-when-locking-a-rectangle-in-a-c-sharp-bitmap)
+When you lock bits using a rectangle with an offset, BitmapData.Scan0 doesn't return the bitmap origin, but rather the specified rectangle origin.
 
 # save an image to file
+
 https://learn.microsoft.com/fr-fr/dotnet/api/system.drawing.image.save?view=dotnet-plat-ext-7.0#system-drawing-image-save(system-string)  
 Si aucun encodeur n’existe pour le format de fichier de l’image, l’encodeur PNG (Portable Network Graphics) est utilisé. Lorsque vous utilisez la Save méthode pour enregistrer une image graphique en tant que fichier WMF (Metafile Format) Windows ou Format de métafichier amélioré (EMF), le fichier résultant est enregistré en tant que fichier PNG (Portable Network Graphics). Ce comportement se produit car le composant GDI+ du .NET Framework n’a pas d’encodeur que vous pouvez utiliser pour enregistrer des fichiers sous forme de fichiers .wmf ou .emf.
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 /*
  * Part of the Following Code was developed by Dewald Esterhuizen
@@ -16,8 +18,15 @@ using System.Drawing.Drawing2D;
 
 namespace Seriallabs.Dessin.helpers
 {
-    internal static class OpEx
+    public static class OpEx
     {
+
+
+        #region ENUMs
+        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// /// FILTERING
+        /// 
+
         public enum BlurType
         {
             Mean3x3,
@@ -54,7 +63,9 @@ namespace Seriallabs.Dessin.helpers
             Max,
             Amplitude
         }
+        #endregion
 
+        #region Filtering
         public static Bitmap ImageBlurFilter(this Bitmap sourceBitmap,
             BlurType blurType)
         {
@@ -352,7 +363,7 @@ namespace Seriallabs.Dessin.helpers
 
             return resultBitmap;
         }
-
+        
         ///////////////////////////////////////////////////
         /// other filters
         ///
@@ -388,7 +399,7 @@ namespace Seriallabs.Dessin.helpers
                 }
             }
 
-            return resultBuffer.GetImage(sourceBitmap.Width, sourceBitmap.Height).MedianFilter(3);
+            return resultBuffer.GetImageFromRawBytes(sourceBitmap.Width, sourceBitmap.Height).MedianFilter(3);
         }
 
 
@@ -503,7 +514,7 @@ namespace Seriallabs.Dessin.helpers
             }
 
 
-            return resultBuffer.GetImage(sourceBitmap.Width, sourceBitmap.Height);
+            return resultBuffer.GetImageFromRawBytes(sourceBitmap.Width, sourceBitmap.Height);
         }
 
         public static List<string> GetBooleanEdgeMasks()
@@ -531,7 +542,7 @@ namespace Seriallabs.Dessin.helpers
 
             return edgeMasks;
         }
-
+        #endregion
 
         /// <summary>
         /// Calculate color between two colors
@@ -579,7 +590,7 @@ namespace Seriallabs.Dessin.helpers
         /// BLENDING
         /// ////////////////////////////////////////////////////////////////////////////////////////
         ///
-        public static Bitmap ArithmeticBlend(Bitmap sourceBitmap, Bitmap blendBitmap,
+        public static Bitmap ArithmeticBlendBasic(Bitmap sourceBitmap, Bitmap blendBitmap,
             ColorCalculationType calculationType)
         {
             var sourceData = sourceBitmap.LockBits(new Rectangle(0, 0,
@@ -628,11 +639,189 @@ namespace Seriallabs.Dessin.helpers
             return resultBitmap;
         }
 
+        public static Bitmap BlendWithArithmetic(Bitmap bitmap_1, Bitmap bitmap_2,Point targetOn1,
+            ColorCalculationType calculationType)
+        {
+            Rectangle cropBmp2 = new Rectangle(Point.Empty, bitmap_2.Size);
+            Point targetOn3 = targetOn1;//new Point();
+            if (targetOn1.X < 0) { cropBmp2.X = -targetOn1.X; cropBmp2.Width += targetOn1.X; targetOn3.X = 0; }
+            if (targetOn1.Y < 0) { cropBmp2.Y = -targetOn1.Y; cropBmp2.Height+= targetOn1.Y; targetOn3.Y = 0; }
+            //Rectangle cropBmp2R = cropBmp2;
+
+            if (targetOn1.X + bitmap_2.Width > bitmap_1.Width) { cropBmp2.Width = bitmap_1.Width- targetOn1.X; }
+            if (targetOn1.Y + bitmap_2.Height > bitmap_1.Height) { cropBmp2.Height = bitmap_1.Height- targetOn1.Y; }
+
+            if (cropBmp2.Width > bitmap_2.Width) { cropBmp2.Width = bitmap_2.Width; }
+            if (cropBmp2.Height > bitmap_2.Height) { cropBmp2.Height = bitmap_2.Height; }
+
+            //cropBmp2R.Intersect(new Rectangle(new Point(),bitmap_2.Size) );
+
+            //if (targetOn1.X + bitmap_2.Width >bitmap_1.
+
+            Bitmap bitmap_3 = new Bitmap(bitmap_1.Width, bitmap_1.Height);
+            //bitmap_3.MakeTransparent(Color.White);
+            using (var g = Graphics.FromImage(bitmap_3))
+            {
+                g.Clear(Color.Transparent);
+                g.DrawImage(bitmap_2,targetOn3.X,targetOn3.Y , cropBmp2,GraphicsUnit.Pixel);
+            }
+
+            // 1) Lock whole source
+            // 2) create buffer
+            // 3) marshal.copy bytes
+            // 4) unlock source
+            var sourceData = bitmap_1.LockBits(
+                new Rectangle(0, 0, bitmap_1.Width, bitmap_1.Height),
+                ImageLockMode.ReadOnly, 
+                PixelFormat.Format32bppArgb);
+
+            var pixelBuffer = new byte[sourceData.Stride * sourceData.Height];
+            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            bitmap_1.UnlockBits(sourceData);
+
+            // 1) Lock whole second bitmap
+            // 2) create buffer
+            // 3) marshal.copy bytes
+            // 4) unlock second bitmap
+            var blendData = bitmap_3.LockBits(
+                new Rectangle(0, 0, bitmap_3.Width, bitmap_3.Height),
+                ImageLockMode.ReadOnly, 
+                PixelFormat.Format32bppArgb);
+
+            var blendBuffer = new byte[blendData.Stride * blendData.Height];
+            Marshal.Copy(blendData.Scan0, blendBuffer, 0, blendBuffer.Length);
+            bitmap_3.UnlockBits(blendData);
+
+            // DO THE HEAVY WORK
+            var m = Math.Min(pixelBuffer.Length, blendBuffer.Length);
+            switch (calculationType)
+            {
+                case ColorCalculationType.Add:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k+3] == 0) continue;
+                        pixelBuffer[k] = ClipByte (pixelBuffer[k] + blendBuffer[k]);
+                        pixelBuffer[k + 1] = ClipByte(pixelBuffer[k + 1]+ blendBuffer[k + 1]);
+                        pixelBuffer[k + 2] = ClipByte(pixelBuffer[k + 2]+ blendBuffer[k + 2]);
+                    }
+                    break;
+                case ColorCalculationType.Average:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte((pixelBuffer[k] + blendBuffer[k])/2);
+                        pixelBuffer[k + 1] = ClipByte((pixelBuffer[k + 1] + blendBuffer[k + 1])/2);
+                        pixelBuffer[k + 2] = ClipByte((pixelBuffer[k + 2] + blendBuffer[k + 2])/2);
+                    }
+                    break;
+                case ColorCalculationType.SubtractLeft:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte(pixelBuffer[k] - blendBuffer[k]);
+                        pixelBuffer[k + 1] = ClipByte(pixelBuffer[k + 1] - blendBuffer[k + 1]);
+                        pixelBuffer[k + 2] = ClipByte(pixelBuffer[k + 2] - blendBuffer[k + 2]);
+                    }
+                    break;
+                case ColorCalculationType.SubtractRight:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte(-pixelBuffer[k] + blendBuffer[k]);
+                        pixelBuffer[k + 1] = ClipByte(-pixelBuffer[k + 1] + blendBuffer[k + 1]);
+                        pixelBuffer[k + 2] = ClipByte(-pixelBuffer[k + 2] + blendBuffer[k + 2]);
+                    }
+                    break;
+                case ColorCalculationType.Difference:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte(Math.Abs(pixelBuffer[k] - blendBuffer[k]));
+                        pixelBuffer[k + 1] = ClipByte(Math.Abs(pixelBuffer[k + 1] - blendBuffer[k + 1]));
+                        pixelBuffer[k + 2] = ClipByte(Math.Abs(pixelBuffer[k + 2] - blendBuffer[k + 2]));
+                    }
+                    break;
+                case ColorCalculationType.Multiply:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte(pixelBuffer[k] * blendBuffer[k]/255.0);
+                        pixelBuffer[k + 1] = ClipByte(pixelBuffer[k + 1] * blendBuffer[k + 1]/255.0);
+                        pixelBuffer[k + 2] = ClipByte(pixelBuffer[k + 2] * blendBuffer[k + 2]/255.0);
+                    }
+                    break;
+                case ColorCalculationType.Min:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = pixelBuffer[k] < blendBuffer[k]? pixelBuffer[k] : blendBuffer[k] ;
+                        pixelBuffer[k+1] = pixelBuffer[k + 1] < blendBuffer[k + 1] ? pixelBuffer[k + 1] : blendBuffer[k + 1];
+                        pixelBuffer[k + 2] = pixelBuffer[k + 2] < blendBuffer[k + 2] ? pixelBuffer[k + 2] : blendBuffer[k + 2];
+                    }
+                    break;
+                case ColorCalculationType.Max:
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = pixelBuffer[k] > blendBuffer[k] ? pixelBuffer[k] : blendBuffer[k];
+                        pixelBuffer[k + 1] = pixelBuffer[k + 1] > blendBuffer[k + 1] ? pixelBuffer[k + 1] : blendBuffer[k + 1];
+                        pixelBuffer[k + 2] = pixelBuffer[k + 2] > blendBuffer[k + 2] ? pixelBuffer[k + 2] : blendBuffer[k + 2];
+                    }
+                    break;
+                case ColorCalculationType.Amplitude:
+                    var sqrt2inv = 1 / Math.Sqrt(2.0);
+                    for (var k = 0; k + 4 < m; k += 4)
+                    {
+                        if (blendBuffer[k + 3] == 0) continue;
+                        pixelBuffer[k] = ClipByte(Math.Sqrt(pixelBuffer[k]* pixelBuffer[k] + blendBuffer[k]* blendBuffer[k]) * sqrt2inv);
+                        pixelBuffer[k + 1] = ClipByte(Math.Sqrt(pixelBuffer[k + 1] * pixelBuffer[k+1] + blendBuffer[k + 1]* blendBuffer[k+1]) * sqrt2inv);
+                        pixelBuffer[k + 2] = ClipByte(Math.Sqrt(pixelBuffer[k + 2]* pixelBuffer[k+2] + blendBuffer[k + 2]* blendBuffer[k+2]) * sqrt2inv);
+                    }
+                    break;
+            }
+       
+            // 1. Create new bitmap to hold result
+            var resultBitmap = new Bitmap(bitmap_1.Width, bitmap_1.Height);
+            // 2. Lock it
+            var resultData = resultBitmap.LockBits(
+                new Rectangle(0, 0, resultBitmap.Width, resultBitmap.Height),
+                ImageLockMode.WriteOnly, 
+                PixelFormat.Format32bppArgb);
+            // 3. Marshal.Copy bytes from pixelBuffer to it
+            Marshal.Copy(pixelBuffer, 0, resultData.Scan0, pixelBuffer.Length);
+            // 4. Free, unlock it
+            resultBitmap.UnlockBits(resultData);
+            // 5. return it.
+            return resultBitmap;
+        }
+
+        /*public static void DrawImageFullOverArithmetic(this Graphics g, System.Drawing.Bitmap sourceImage
+            )
+        {
+            //var blendBitmap = g.
+            var sourceData = sourceImage.LockBits(new Rectangle(0, 0,
+                    sourceImage.Width, sourceImage.Height),
+                ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            var pixelBuffer = new byte[sourceData.Stride * sourceData.Height];
+            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            sourceImage.UnlockBits(sourceData);
+
+            var blendData = blendBitmap.LockBits(new Rectangle(0, 0,
+                    blendBitmap.Width, blendBitmap.Height),
+                ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            var blendBuffer = new byte[blendData.Stride * blendData.Height];
+            Marshal.Copy(blendData.Scan0, blendBuffer, 0, blendBuffer.Length);
+            blendBitmap.UnlockBits(blendData);
+
+        }
+        */
 
         //////////////////////////////////////////////
         /// LOCAL HELPERS
         ///
-        public static Bitmap GetImage(this byte[] resultBuffer, int width, int height)
+        public static Bitmap GetImageFromRawBytes(this byte[] resultBuffer, int width, int height)
         {
             var resultBitmap = new Bitmap(width, height);
 
@@ -647,10 +836,10 @@ namespace Seriallabs.Dessin.helpers
             return resultBitmap;
         }
 
-        private static byte ClipByte(double colour)
+        private static byte ClipByte(double singleRGBvalue)
         {
-            return (byte) (colour > 255 ? 255 :
-                colour < 0 ? 0 : colour);
+            return (byte) (singleRGBvalue > 255 ? 255 :
+                singleRGBvalue < 0 ? 0 : singleRGBvalue);
         }
 
         private static byte[] GetByteArray(this Bitmap sourceBitmap)
@@ -671,5 +860,68 @@ namespace Seriallabs.Dessin.helpers
 
             return sourceBuffer;
         }
-    }
+
+
+
+        ///////////////////////////////////////////
+        /// exemples
+        ///
+
+
+        /// <summary>
+        /// LockBits Example with comments
+        ///
+        /// Locks a Bitmap into system memory.
+        /// The following code example demonstrates how to use the PixelFormat, Height, Width, and Scan0 properties;
+        /// the LockBits and UnlockBits methods; and the ImageLockMode enumeration.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <see cref="https://learn.microsoft.com/en-us/dotnet/api/system.drawing.bitmap.lockbits?view=dotnet-plat-ext-7.0"/>
+        /// <remarks>Use the LockBits method to lock an existing bitmap in system memory so that it can be changed programmatically.
+        /// You can change the color of an image with the SetPixel method, although the LockBits method offers better performance for large-scale changes.
+        /// 
+        /// The BitmapData specifies the attributes of the Bitmap, such as size, pixel format,
+        /// the starting address of the pixel data in memory, and length of each scan line(stride).
+        ///
+        /// When calling this method, you should use a member of the System.Drawing.Imaging.PixelFormat enumeration
+        /// that contains a specific bits-per-pixel (BPP) value.
+        /// Using System.Drawing.Imaging.PixelFormat values such as Indexed and Gdi will throw an System.ArgumentException.
+        /// Also, passing the incorrect pixel format for a bitmap will throw an System.ArgumentException.
+        /// </remarks>
+        private static void LockUnlockBitsExample(EventArgs e)
+        {
+
+            // Create a new bitmap.
+            Bitmap bmp = new Bitmap("c:\\fakePhoto.jpg");
+
+            // Lock the bitmap's bits.  
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                    bmp.PixelFormat);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+            int bytesCount = Math.Abs(bmpData.Stride) * bmp.Height;
+            byte[] rgbValues = new byte[bytesCount];
+
+            // Copy the RGB values into the array.
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytesCount);
+
+            // Set every third value to 255. A 24bpp bitmap will look red.  
+            for (int counter = 2; counter<rgbValues.Length; counter += 3)
+                rgbValues[counter] = 255;
+
+            // Copy the RGB values back to the bitmap
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytesCount);
+
+            // Unlock the bits.
+            bmp.UnlockBits(bmpData);
+
+            // Draw the modified image.
+            //e.Graphics.DrawImage(bmp, 0, 150);
+        }
+}
 }
