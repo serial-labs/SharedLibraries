@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -89,13 +90,22 @@ namespace Seriallabs.Dessin
             return imattr;
         }
 
+        public static ImageAttributes getImageAttributesForColorize(Color colour)
+        {
+            ColorMatrixExt clrMtx = new ColorMatrixExt(colour);
+            ImageAttributes imattr = new ImageAttributes();
+            imattr.SetColorMatrix(clrMtx);
+
+            return imattr;
+        }
+
         #region Operators
 
-        /// <summary>
-        /// Implicit cast operator from anImageAttibutesExt to the .NET ImageAttributes
-        /// </summary>
-        /// <param name="clrmtx">An ImageAttributesExt instance</param>
-        /// <returns>A .NET ImageAttributes instance</returns>
+            /// <summary>
+            /// Implicit cast operator from anImageAttibutesExt to the .NET ImageAttributes
+            /// </summary>
+            /// <param name="clrmtx">An ImageAttributesExt instance</param>
+            /// <returns>A .NET ImageAttributes instance</returns>
         public static implicit operator ImageAttributes(ImageAttributesExt imattr)
         {
             var dotNetImattr = new ImageAttributes();

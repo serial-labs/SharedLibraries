@@ -437,11 +437,12 @@ namespace TesterDeDessin
             //Seriallabs.Dessin.Helpers.SaveJpeg(fn + "_o.jpeg", bmpSrc, 80);
 
             myConsole.LogLine("CreateBitmapComposée avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
-            using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,
-                       ImageAttributesExt.getTestImageAttributes4Hue))
+            //using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,ImageAttributesExt.getTestImageAttributes4Hue))
+            using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc))
             {
                 myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
-                bc.BlendImageOver(ResourceImages1.gray_floral);
+                bc.BlendImageOver(ResourceImages1.gray_floral,
+                    ImageAttributesExt.getImageAttributesForColorize(Color.OrangeRed));
 
                 myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
