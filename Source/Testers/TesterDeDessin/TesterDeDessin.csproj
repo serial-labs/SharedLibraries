@@ -18,12 +18,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ResourceImages1.resx</DependentUpon>
     </Compile>
+    <Compile Update="ResourceTextures.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceTextures.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="ResourceImages1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourceImages1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ResourceTextures.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceTextures.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

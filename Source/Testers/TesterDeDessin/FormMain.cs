@@ -17,7 +17,9 @@ namespace TesterDeDessin
         private PictureBox[] pbs;
         private int[] imaIndex;
         private Image[] imaAll;
+        private Image[] imaTextures;
         private int nbImaEmbedded;
+        private int nbImaTexturesEmbedded;
         private FormConsole myConsole;
 
         public FormMain()
@@ -28,6 +30,13 @@ namespace TesterDeDessin
             for (int i = 0; i < nbImaEmbedded; i++)
             {
                 imaAll[i] = (Image) ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[i]);
+            }
+
+            nbImaTexturesEmbedded = GetEmbeddedImagesNames(1).Count;
+            imaTextures = new Image[nbImaTexturesEmbedded];
+            for (int i = 0; i < nbImaTexturesEmbedded; i++)
+            {
+                imaTextures[i] = (Image)ResourceTextures.ResourceManager.GetObject(GetEmbeddedImagesNames(1)[i]);
             }
 
             pbs = new PictureBox[] {picBsource, pictureBox1, pictureBox2, pictureBox3, picResult};
@@ -76,11 +85,14 @@ namespace TesterDeDessin
         /// </summary>
         /// <returns></returns>
         /// <see cref="https://stackoverflow.com/questions/34826111/how-to-get-all-images-in-the-resources-as-list"/>
-        static List<string> GetEmbeddedImagesNames()
+        static List<string> GetEmbeddedImagesNames(int typeOfImages=0)
         {
+            Type tr = typeof(TesterDeDessin.ResourceImages1);
+            if (typeOfImages == 1) tr = typeof(TesterDeDessin.ResourceTextures);
+
             /* Reference to your resources class -- may be named differently in your case */
             ResourceManager MyResourceClassForTextures =
-                new ResourceManager(typeof(TesterDeDessin.ResourceImages1));
+                new ResourceManager(tr);
 
             ResourceSet resourceSet =
                 MyResourceClassForTextures.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
@@ -102,9 +114,19 @@ namespace TesterDeDessin
         private void picBsource_Click_1(object sender, EventArgs e)
         {
             var pbi = pbs.Select((pb, i) => new {i, pb}).Where(x => x.pb == sender).Select(x => x.i).First();
-            if (++imaIndex[pbi] >= nbImaEmbedded) imaIndex[pbi] = 0;
+            
+            Image[] listima = imaAll;
+            int nbIma = nbImaEmbedded;
+
+            if (pbi == 1)
+            {
+                listima = imaTextures;
+                nbIma = nbImaTexturesEmbedded;
+            }
+
+            if (++imaIndex[pbi] >= nbIma) imaIndex[pbi] = 0;
             //pbs[pbi].Image = (Bitmap)ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[imaIndex[pbi]]);
-            pbs[pbi].Image = imaAll[imaIndex[pbi]]; //pbs[(4+pbi - 1) % 4].Image;
+            pbs[pbi].Image = listima[imaIndex[pbi]]; //pbs[(4+pbi - 1) % 4].Image;
             pbs[pbi].Invalidate();
 
         }
@@ -117,10 +139,21 @@ namespace TesterDeDessin
         /// <see cref="https://stackoverflow.com/questions/4200843/outline-text-with-system-drawing"/>
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-
-            var pbi = pbs.Select((pb, i) => new {i, pb}).Where(x => x.pb == sender).Select(x => x.i).First();
+            var pbi = pbs.Select((pb, i) => new { i, pb }).Where(x => x.pb == sender).Select(x => x.i).First();
             if (pbi == 3 && zoom) return;
-            string info = $"{pbi} - {imaIndex[pbi]} - {imaAll[imaIndex[pbi]].Width}x{imaAll[imaIndex[pbi]].Height}";
+
+            Image[] listima = imaAll;
+            int nbIma = nbImaEmbedded;
+
+            if (pbi == 1)
+            {
+                listima = imaTextures;
+                nbIma = nbImaTexturesEmbedded;
+            }
+            
+            
+            string info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
+            if (pbi == 1) info += " "+GetEmbeddedImagesNames(1)[imaIndex[pbi]];
             Seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16, true);
         }
 
@@ -349,7 +382,7 @@ namespace TesterDeDessin
                 toolStripStatusLabelElapsed.Text = "Load pic in picResult first!";
                 return;
             }
-
+            myConsole.LogLine($"start chrono {numericUpDown1.Value}x: Bitmap bmp = new Bitmap(picResult.Image); GetPixel(0, 0);");
             var oc = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
@@ -364,6 +397,7 @@ namespace TesterDeDessin
             Helpers.TimeRecord.checkin("finished");
             toolStripStatusLabelElapsed.Text =
                 $"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ";
+            myConsole.LogLine($"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ");
 
         }
 
@@ -392,15 +426,15 @@ namespace TesterDeDessin
 
         private void btnImaCompo_Click(object sender, EventArgs e)
         {
-            Seriallabs.Dessin.Helpers.ID = $"aA{DateTime.Now.Minute}_";
-            var fn = $"c:\\temp\\oo\\{Seriallabs.Dessin.Helpers.ID}txx{DateTime.Now.Ticks}";
+            Seriallabs.Dessin.Helpers.ID = $"A{DateTime.Now.Minute}_";
+            
             pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
-            Image imaSrc = imaAll[imaIndex[1]];
+            //Image imaSrc = imaAll[imaIndex[1]];
             //imaSrc = Image.FromFile(@"C:\Users\olivierH\-dev-\IMG\Eagle2x.png");
-            imaSrc = picBsource.Image;
+            Image imaSrc = picBsource.Image;
             Bitmap bmpSrc = new Bitmap(imaSrc);
             int w = bmpSrc.Width;
-            Seriallabs.Dessin.Helpers.SaveJpeg(fn + "_o.jpeg", bmpSrc, 80);
+            //Seriallabs.Dessin.Helpers.SaveJpeg(fn + "_o.jpeg", bmpSrc, 80);
 
             myConsole.LogLine("CreateBitmapComposée avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
             using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,
@@ -408,28 +442,25 @@ namespace TesterDeDessin
             {
                 myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
                 bc.BlendImageOver(ResourceImages1.gray_floral);
+
                 myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
                 bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),
                     ImageAttributesExt.getImageAttr4Opacity(0.25f));
 
+                //picResult.Image =
+                if (trackBarTexture.Value>0) bc.AddTexture(pbs[1].Image,(int)nupTextureTiles.Value,trackBarTexture.Value/100f);
+                //return;
+                ;
                 if (chkToPicResult.Checked) picResult.Image = bc.getBitmap;
                 pictureBox5.Image = bc.getBitmap;
                 //pictureBox5.Invalidate();
             }
 
-            fn = $"c:\\temp\\oo\\{Seriallabs.Dessin.Helpers.ID}txx{DateTime.Now.Ticks}";
-            try
-            {
-                Seriallabs.Dessin.Helpers.SaveJpeg(fn + ".jpeg", bmpSrc, 80);
-                //sourceImage.Save($"'c:\temp\tt{DateTime.Now.TimeOfDay}.jpeg", );
-                pictureBox5.Image.Save(fn + ".png", ImageFormat.Png);
-            }
-            catch (Exception ex)
-            {
-            }
-        }
+            Seriallabs.Dessin.Helpers.WriteTempPictureForTesting(pictureBox5.Image, "-pictureBox5");
+            
+          }
 
         private void pictureBox5_Click(object sender, EventArgs e)
         {
@@ -526,6 +557,7 @@ namespace TesterDeDessin
             toolStripStatusLabel2.Text = "blendbox:"+b.Size.ToString();
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
             //Bitmap b1 = (Bitmap) picBlueBlend.Image;
@@ -533,9 +565,27 @@ namespace TesterDeDessin
             Bitmap b2 = (Bitmap)picRedBlend.Image;
             OpEx.ColorCalculationType op = OpEx.ColorCalculationType.Average;
             op =Enum.Parse<OpEx.ColorCalculationType>(lstArithmetics.SelectedValue.ToString());
-            picBlend.Image = OpEx.BlendWithArithmetic(b1, b2, 
-                new Point(b1.Width- b2.Width*7/10, b1.Height - b2.Height * 7/10), 
-                op);
+
+            myConsole.LogLine($"start chrono {numericUpDown1.Value}x: BlendWithArithmetic ( {lstArithmetics.SelectedValue.ToString()}) ");
+            var oc = this.Cursor;
+            this.Cursor = Cursors.WaitCursor;
+            Helpers.TimeRecord = new Helpers.TimeRecording();
+
+            Image ima=null;
+            for (int i = 0; i < numericUpDown1.Value; i++)
+            {
+                ima = OpEx.BlendWithArithmetic(b1, b2,
+                    new Point(b1.Width - b2.Width * 7 / 10, b1.Height - b2.Height * 7 / 10),
+                    op);
+            }
+
+            this.Cursor = oc;
+            Helpers.TimeRecord.checkin("finished");
+            toolStripStatusLabelElapsed.Text =
+                $"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ";
+            myConsole.LogLine($"{numericUpDown1.Value} BlendWithArithmetic: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ");
+
+            picBlend.Image = ima;
             //picBlend.Image = OpEx.BlendWithArithmetic(b1, b2, new Point(250,180), op);
             //picBlend.Image = OpEx.BlendWithArithmetic(b1, b2, new Point(5, 8), op);
         }

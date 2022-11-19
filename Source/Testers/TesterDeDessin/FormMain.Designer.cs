@@ -46,6 +46,7 @@
             this.stretchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.lblColor2 = new System.Windows.Forms.Label();
             this.lblColor1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -61,6 +62,9 @@
             this.btn_pbs1_vers_picResult = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.nupTextureTiles = new System.Windows.Forms.NumericUpDown();
+            this.trackBarTexture = new System.Windows.Forms.TrackBar();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.chkToPicResult = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.btnImaCompo = new System.Windows.Forms.Button();
@@ -70,25 +74,27 @@
             this.picRedBlend = new System.Windows.Forms.PictureBox();
             this.picBlueBlend = new System.Windows.Forms.PictureBox();
             this.picBlend = new System.Windows.Forms.PictureBox();
+            this.lstArithmetics = new System.Windows.Forms.ListBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.picBsource = new System.Windows.Forms.PictureBox();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.lstArithmetics = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nupTextureTiles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarTexture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).BeginInit();
@@ -98,7 +104,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBsource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,9 +115,9 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4,
             this.toolStripStatusLabelElapsed});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 756);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 835);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1189, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(1211, 25);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -156,7 +161,7 @@
             this.pictureBoxToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1189, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1211, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -260,6 +265,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.AutoScrollMargin = new System.Drawing.Size(3, 3);
+            this.splitContainer1.Panel1.Controls.Add(this.trackBar1);
             this.splitContainer1.Panel1.Controls.Add(this.lblColor2);
             this.splitContainer1.Panel1.Controls.Add(this.lblColor1);
             this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
@@ -267,7 +273,6 @@
             this.splitContainer1.Panel1.Controls.Add(this.pictureBox2);
             this.splitContainer1.Panel1.Controls.Add(this.pictureBox1);
             this.splitContainer1.Panel1.Controls.Add(this.picBsource);
-            this.splitContainer1.Panel1.Controls.Add(this.trackBar1);
             this.splitContainer1.Panel1.ForeColor = System.Drawing.Color.IndianRed;
             this.splitContainer1.Panel1.Margin = new System.Windows.Forms.Padding(5);
             this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(5);
@@ -278,10 +283,23 @@
             this.splitContainer1.Panel2.Controls.Add(this.picResult);
             this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(5);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(5);
-            this.splitContainer1.Size = new System.Drawing.Size(1189, 732);
-            this.splitContainer1.SplitterDistance = 598;
+            this.splitContainer1.Size = new System.Drawing.Size(1211, 811);
+            this.splitContainer1.SplitterDistance = 609;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackBar1.Location = new System.Drawing.Point(383, 528);
+            this.trackBar1.Maximum = 25;
+            this.trackBar1.Minimum = 3;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(205, 45);
+            this.trackBar1.TabIndex = 7;
+            this.trackBar1.Value = 20;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // lblColor2
             // 
@@ -290,7 +308,7 @@
             this.lblColor2.BackColor = System.Drawing.SystemColors.ControlDark;
             this.lblColor2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblColor2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lblColor2.Location = new System.Drawing.Point(327, 486);
+            this.lblColor2.Location = new System.Drawing.Point(323, 531);
             this.lblColor2.Name = "lblColor2";
             this.lblColor2.Size = new System.Drawing.Size(40, 17);
             this.lblColor2.TabIndex = 6;
@@ -303,7 +321,7 @@
             this.lblColor1.AutoSize = true;
             this.lblColor1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.lblColor1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblColor1.Location = new System.Drawing.Point(267, 486);
+            this.lblColor1.Location = new System.Drawing.Point(263, 531);
             this.lblColor1.Name = "lblColor1";
             this.lblColor1.Size = new System.Drawing.Size(40, 17);
             this.lblColor1.TabIndex = 5;
@@ -317,10 +335,10 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(12, 517);
+            this.tabControl1.Location = new System.Drawing.Point(12, 551);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(569, 215);
+            this.tabControl1.Size = new System.Drawing.Size(580, 260);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -338,7 +356,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(561, 187);
+            this.tabPage1.Size = new System.Drawing.Size(572, 232);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "1. =>picResult";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -457,6 +475,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.nupTextureTiles);
+            this.tabPage2.Controls.Add(this.trackBarTexture);
+            this.tabPage2.Controls.Add(this.checkBox1);
             this.tabPage2.Controls.Add(this.chkToPicResult);
             this.tabPage2.Controls.Add(this.pictureBox5);
             this.tabPage2.Controls.Add(this.btnImaCompo);
@@ -464,10 +485,39 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(561, 187);
+            this.tabPage2.Size = new System.Drawing.Size(572, 232);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "imageComposée1";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // nupTextureTiles
+            // 
+            this.nupTextureTiles.Location = new System.Drawing.Point(21, 140);
+            this.nupTextureTiles.Name = "nupTextureTiles";
+            this.nupTextureTiles.Size = new System.Drawing.Size(30, 23);
+            this.nupTextureTiles.TabIndex = 11;
+            // 
+            // trackBarTexture
+            // 
+            this.trackBarTexture.Location = new System.Drawing.Point(20, 172);
+            this.trackBarTexture.Maximum = 100;
+            this.trackBarTexture.Name = "trackBarTexture";
+            this.trackBarTexture.Size = new System.Drawing.Size(112, 45);
+            this.trackBarTexture.SmallChange = 5;
+            this.trackBarTexture.TabIndex = 10;
+            this.trackBarTexture.TickFrequency = 10;
+            this.trackBarTexture.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBarTexture.Value = 60;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(147, 18);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(44, 19);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.Text = "xxx";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // chkToPicResult
             // 
@@ -484,9 +534,9 @@
             this.pictureBox5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pictureBox5.Location = new System.Drawing.Point(270, 3);
+            this.pictureBox5.Location = new System.Drawing.Point(281, 3);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(288, 181);
+            this.pictureBox5.Size = new System.Drawing.Size(288, 226);
             this.pictureBox5.TabIndex = 2;
             this.pictureBox5.TabStop = false;
             this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
@@ -522,12 +572,13 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(561, 187);
+            this.tabPage3.Size = new System.Drawing.Size(572, 232);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "blending";
             // 
             // button2
             // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(148, 6);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(92, 33);
@@ -541,9 +592,9 @@
             this.picRedBlend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picRedBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picRedBlend.Location = new System.Drawing.Point(8, 106);
+            this.picRedBlend.Location = new System.Drawing.Point(8, 151);
             this.picRedBlend.Name = "picRedBlend";
-            this.picRedBlend.Size = new System.Drawing.Size(134, 75);
+            this.picRedBlend.Size = new System.Drawing.Size(145, 75);
             this.picRedBlend.TabIndex = 2;
             this.picRedBlend.TabStop = false;
             this.picRedBlend.Click += new System.EventHandler(this.picRedBlend_Click);
@@ -556,7 +607,7 @@
             this.picBlueBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picBlueBlend.Location = new System.Drawing.Point(8, 6);
             this.picBlueBlend.Name = "picBlueBlend";
-            this.picBlueBlend.Size = new System.Drawing.Size(134, 88);
+            this.picBlueBlend.Size = new System.Drawing.Size(145, 133);
             this.picBlueBlend.TabIndex = 1;
             this.picBlueBlend.TabStop = false;
             this.picBlueBlend.Click += new System.EventHandler(this.picBlueBlend_Click);
@@ -565,13 +616,22 @@
             // 
             this.picBlend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picBlend.Dock = System.Windows.Forms.DockStyle.Right;
-            this.picBlend.Location = new System.Drawing.Point(246, 3);
+            this.picBlend.Location = new System.Drawing.Point(257, 3);
             this.picBlend.Name = "picBlend";
-            this.picBlend.Size = new System.Drawing.Size(312, 181);
+            this.picBlend.Size = new System.Drawing.Size(312, 226);
             this.picBlend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBlend.TabIndex = 0;
             this.picBlend.TabStop = false;
             this.picBlend.Click += new System.EventHandler(this.picBlend_Click);
+            // 
+            // lstArithmetics
+            // 
+            this.lstArithmetics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstArithmetics.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lstArithmetics.Location = new System.Drawing.Point(148, 57);
+            this.lstArithmetics.Name = "lstArithmetics";
+            this.lstArithmetics.Size = new System.Drawing.Size(106, 121);
+            this.lstArithmetics.TabIndex = 4;
             // 
             // pictureBox3
             // 
@@ -579,9 +639,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox3.Location = new System.Drawing.Point(262, 283);
+            this.pictureBox3.Location = new System.Drawing.Point(262, 290);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(319, 194);
+            this.pictureBox3.Size = new System.Drawing.Size(330, 232);
             this.pictureBox3.TabIndex = 3;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Click += new System.EventHandler(this.picBsource_Click_1);
@@ -595,7 +655,7 @@
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox2.Location = new System.Drawing.Point(12, 228);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(211, 249);
+            this.pictureBox2.Size = new System.Drawing.Size(211, 294);
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.picBsource_Click_1);
@@ -610,7 +670,7 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(262, 14);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(319, 249);
+            this.pictureBox1.Size = new System.Drawing.Size(330, 270);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.picBsource_Click_1);
@@ -628,19 +688,6 @@
             this.picBsource.Click += new System.EventHandler(this.picBsource_Click_1);
             this.picBsource.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
-            // trackBar1
-            // 
-            this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackBar1.Location = new System.Drawing.Point(387, 483);
-            this.trackBar1.Maximum = 25;
-            this.trackBar1.Minimum = 3;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(194, 45);
-            this.trackBar1.TabIndex = 7;
-            this.trackBar1.Value = 5;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
             // picResult
             // 
             this.picResult.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -649,26 +696,18 @@
             this.picResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picResult.Location = new System.Drawing.Point(5, 5);
             this.picResult.Name = "picResult";
-            this.picResult.Size = new System.Drawing.Size(573, 722);
+            this.picResult.Size = new System.Drawing.Size(584, 801);
             this.picResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picResult.TabIndex = 0;
             this.picResult.TabStop = false;
             this.picResult.Click += new System.EventHandler(this.picResult_Click);
             this.picResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picResult_MouseMove);
             // 
-            // lstArithmetics
-            // 
-            this.lstArithmetics.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lstArithmetics.Location = new System.Drawing.Point(148, 57);
-            this.lstArithmetics.Name = "lstArithmetics";
-            this.lstArithmetics.Size = new System.Drawing.Size(106, 124);
-            this.lstArithmetics.TabIndex = 4;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1189, 781);
+            this.ClientSize = new System.Drawing.Size(1211, 860);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -685,6 +724,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -692,6 +732,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nupTextureTiles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarTexture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).EndInit();
@@ -701,7 +743,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBsource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -760,5 +801,8 @@
         private PictureBox picBlueBlend;
         private PictureBox picBlend;
         private ListBox lstArithmetics;
+        private TrackBar trackBarTexture;
+        private CheckBox checkBox1;
+        private NumericUpDown nupTextureTiles;
     }
 }

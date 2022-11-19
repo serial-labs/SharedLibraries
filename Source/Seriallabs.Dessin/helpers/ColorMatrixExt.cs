@@ -12,6 +12,7 @@ Based on the QColorMatrix and the Matrix (in this project).
 */
 
 using System;
+using System.Drawing;
 using DotNet = System.Drawing.Imaging;
 
 namespace Seriallabs.Dessin
@@ -79,6 +80,36 @@ namespace Seriallabs.Dessin
                 }
             }
         }
+
+        /// <summary>
+        /// Constructs an 5x5 color matrix from a diagonal vector 
+        /// </summary>
+        /// <param name="diagonal">The diagonal</param>
+        private ColorMatrixExt(float[] diagonal) : base(5, 5)
+        {
+            Clear();
+            int min = Math.Min(5, diagonal.Length);
+            for (int i = 0; i < min; i++)
+            {
+                this[i, i] = diagonal[i];
+            }
+
+            for (int i = min; i < 5; i++)
+                this[i, i] = 1;
+        }
+
+        /// <summary>
+        /// Constructs an 5x5 color matrix from a diagonal vector 
+        /// </summary>
+        /// <param name="diagonal">The diagonal</param>
+        private ColorMatrixExt(Color colour) : base(5, 5)
+        {
+            Clear();
+            float[] diagonal = new[] {colour.R / 255f, colour.G / 255f, colour.B / 255f, colour.A / 255f,1};
+            for (int i = 0; i < 5; i++)
+                this[i, i] = diagonal[i];
+        }
+
 
         #endregion
 

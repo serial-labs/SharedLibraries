@@ -1,5 +1,23 @@
 ﻿# Elements de Documentation Graphique
-[What is PixelOffsetMode?](https://stackoverflow.com/questions/28441479/what-is-pixeloffsetmode)
+
+## Problème des textures.
+Plusieurs types de fichiers textures.
+Par ex. 
+1) Gris/BLancs avec trous (zones totallement transparente)
+2) colorées avec peu (ou pas) de transparence
+a) petite tuile
+b) grande image  
+brushed-alum.png 1+a :
+![brushed-alum.png](Resources/brushed-alum.png)   
+
+image-from-rawpixel.jpg 2+b :
+![image-from-rawpixel.jpg](Resources/image-from-rawpixel-id-3286156-original%20%28Grand%29%20%28Moyen%29.jpg)
+
+## EmfPlusRecordType Enum
+https://learn.microsoft.com/en-US/dotnet/api/system.drawing.imaging.emfplusrecordtype
+
+##  logical pixel and its physical coordinates
+#### PixelOffsetMode [What is PixelOffsetMode?](https://stackoverflow.com/questions/28441479/what-is-pixeloffsetmode)
 
 During painting you're using double values to present your logical graphic objects, for example lines, circles, etc.  
 
@@ -18,9 +36,15 @@ When rendering images, PixelOffsetMode specifies where the respective center poi
 see [Understanding Half-Pixel and Half-Texel Offsets](https://www.gamedev.net/blogs/entry/1848486-understanding-half-pixel-and-half-texel-offsets/)  
 [Half-Pixel Offset in DirectX 11](https://www.asawicki.info/news_1516_half-pixel_offset_in_directx_11)
 
+
+
 # Image Lock Mode 
 [SO: What does it actually mean by "Bitmap locking"?](https://stackoverflow.com/questions/37534312/what-does-it-actually-mean-by-bitmap-locking)
 *It locks the bitmap image (which was not directly accessable except indirectly via the Bitmap class to a memory area so that the you can have direct access to the memory of the image - that is read/write to the image memory directly using a pointer to it.*
+
+
+# COOL STUFF
+https://stackoverflow.com/questions/9749936/draw-image-on-top-of-another-image-with-blending-mode-color
 
 ## Remarks
 Use the LockBits method to lock an existing bitmap in system memory so that it can be changed programmatically. You can change the color of an image with the SetPixel method, although the LockBits method offers better performance for large-scale changes.

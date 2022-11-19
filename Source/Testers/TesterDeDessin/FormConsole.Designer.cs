@@ -71,9 +71,13 @@ namespace TesterDeDessin
         private RichTextBox richTextBox1;
         private StatusStrip statusStrip1;
 
+        private int count=0;
         public void Log(string s)
         {
-            richTextBox1.AppendText(s);
+            count++;
+            richTextBox1.AppendText(count.ToString("0000: ")+s);
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
         }
 
         public void LogLine(string s)

@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +15,17 @@ namespace Seriallabs.Dessin
     public static partial class Helpers
     {
         public static string ID = "";
+        private static string _tempFolder = @"c:\\temp\\";
+        public static void WriteTempPictureForTesting(Image ima, string beforeext, bool asJpeg = false)
+        {
+            var fn = $"{_tempFolder}{Helpers.ID}tt{DateTime.Now.Ticks}";
+            if (asJpeg)
+                Helpers.SaveJpeg(fn + beforeext + ".jpeg", ima, 70);
+            else
+                ima.Save(fn + beforeext + ".png",ImageFormat.Png);
+        }
+
+
         public static void RenderTxt(Graphics g, string text, int fontsize = 12, bool initg = false)
         {
 
@@ -250,7 +262,11 @@ namespace Seriallabs.Dessin
         }
 
 
-
+        public static void DrawImageFull(this Graphics g, System.Drawing.Image sourceImage, System.Drawing.Imaging.ImageAttributes imageAttributes = null)
+        {
+            //pas sûr de la valeur de "g.VisibleClipBounds"
+            g.DrawImageFull(sourceImage,g.VisibleClipBounds,  imageAttributes);
+        }
 
         public static void DrawImageFull(this Graphics g, System.Drawing.Image sourceImage, RectangleF destR=default,
             System.Drawing.Imaging.ImageAttributes imageAttributes=null)
@@ -259,7 +275,7 @@ namespace Seriallabs.Dessin
             RectangleF sourceRf = sourceImage.GetBounds(ref gu);
             
           /*  //var x = System.IO.Directory.GetFiles(@"c:\temp", "*.*");
-            var fn = $"c:\\temp\\oo\\{Helpers.ID}tt{DateTime.Now.Ticks}";
+            var fn = $"{_tempFolder}{Helpers.ID}tt{DateTime.Now.Ticks}";
             try
             {
                 Helpers.SaveJpeg(fn+"_dif.jpeg",sourceImage,80); 
