@@ -44,9 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnchoredImage.cs" />
+    <Compile Include="ColorReplace.cs" />
     <Compile Include="helpers\ColorMatrixExt.cs" />
     <Compile Include="Dessin.cs" />
     <Compile Include="BitmapComposee.cs" />
+    <Compile Include="helpers\HSL.cs" />
     <Compile Include="helpers\ImaParam.cs" />
     <Compile Include="helpers\Helpers.cs" />
     <Compile Include="helpers\ICRHelper.cs" />
@@ -54,6 +56,9 @@
     <Compile Include="helpers\Matrix.cs" />
     <Compile Include="helpers\OpEx.cs" />
     <Compile Include="helpers\UsefulMatrices.cs" />
+    <Compile Include="heraldry\ColorReplacement.cs" />
+    <Compile Include="heraldry\Definitions.cs" />
+    <Compile Include="heraldry\ETinctures.cs" />
     <Compile Include="ImageAttributesExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

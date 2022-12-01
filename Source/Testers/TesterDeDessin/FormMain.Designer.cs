@@ -75,10 +75,15 @@
             this.picBlueBlend = new System.Windows.Forms.PictureBox();
             this.picBlend = new System.Windows.Forms.PictureBox();
             this.lstArithmetics = new System.Windows.Forms.ListBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnTestHSL = new System.Windows.Forms.Button();
+            this.btnColorMatrix = new System.Windows.Forms.Button();
+            this.btnColorRemap = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.picBsource = new System.Windows.Forms.PictureBox();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.statusStrip1.SuspendLayout();
@@ -100,6 +105,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBlueBlend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBlend)).BeginInit();
+            this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -280,6 +286,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.txtLog);
             this.splitContainer1.Panel2.Controls.Add(this.picResult);
             this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(5);
             this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(5);
@@ -335,6 +342,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(12, 551);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -633,6 +641,48 @@
             this.lstArithmetics.Size = new System.Drawing.Size(106, 121);
             this.lstArithmetics.TabIndex = 4;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.btnTestHSL);
+            this.tabPage4.Controls.Add(this.btnColorMatrix);
+            this.tabPage4.Controls.Add(this.btnColorRemap);
+            this.tabPage4.Location = new System.Drawing.Point(4, 24);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(572, 232);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Coloring";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnTestHSL
+            // 
+            this.btnTestHSL.Location = new System.Drawing.Point(16, 104);
+            this.btnTestHSL.Name = "btnTestHSL";
+            this.btnTestHSL.Size = new System.Drawing.Size(94, 28);
+            this.btnTestHSL.TabIndex = 2;
+            this.btnTestHSL.Text = "test HSL";
+            this.btnTestHSL.UseVisualStyleBackColor = true;
+            this.btnTestHSL.Click += new System.EventHandler(this.btnTestHSL_Click);
+            // 
+            // btnColorMatrix
+            // 
+            this.btnColorMatrix.Location = new System.Drawing.Point(16, 61);
+            this.btnColorMatrix.Name = "btnColorMatrix";
+            this.btnColorMatrix.Size = new System.Drawing.Size(94, 28);
+            this.btnColorMatrix.TabIndex = 1;
+            this.btnColorMatrix.Text = "ColorMatrix";
+            this.btnColorMatrix.UseVisualStyleBackColor = true;
+            // 
+            // btnColorRemap
+            // 
+            this.btnColorRemap.Location = new System.Drawing.Point(16, 18);
+            this.btnColorRemap.Name = "btnColorRemap";
+            this.btnColorRemap.Size = new System.Drawing.Size(94, 28);
+            this.btnColorRemap.TabIndex = 0;
+            this.btnColorRemap.Text = "ColorRemap";
+            this.btnColorRemap.UseVisualStyleBackColor = true;
+            this.btnColorRemap.Click += new System.EventHandler(this.btnColorRemap_Click);
+            // 
             // pictureBox3
             // 
             this.pictureBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -688,6 +738,19 @@
             this.picBsource.Click += new System.EventHandler(this.picBsource_Click_1);
             this.picBsource.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
+            // txtLog
+            // 
+            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog.Location = new System.Drawing.Point(8, 716);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(574, 87);
+            this.txtLog.TabIndex = 1;
+            this.txtLog.Visible = false;
+            // 
             // picResult
             // 
             this.picResult.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -722,6 +785,7 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -739,6 +803,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picRedBlend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBlueBlend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBlend)).EndInit();
+            this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -804,5 +869,10 @@
         private TrackBar trackBarTexture;
         private CheckBox checkBox1;
         private NumericUpDown nupTextureTiles;
+        private TabPage tabPage4;
+        private Button btnColorMatrix;
+        private Button btnColorRemap;
+        private Button btnTestHSL;
+        private TextBox txtLog;
     }
 }

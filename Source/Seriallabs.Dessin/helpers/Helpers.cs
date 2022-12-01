@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,6 +17,31 @@ namespace Seriallabs.Dessin
     {
         public static string ID = "";
         private static string _tempFolder = @"c:\\temp\\";
+
+        public static Color ColorFromHexa(string hexaColor)
+        {
+            string colorcode = hexaColor;// "#FFFFFF00";
+            colorcode = colorcode.TrimStart('#');
+
+            Color col; // from System.Drawing or System.Windows.Media
+            if (colorcode.Length == 6)
+                col = Color.FromArgb(255, // hardcoded opaque
+                    int.Parse(colorcode.Substring(0, 2), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(2, 2), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(4, 2), NumberStyles.HexNumber));
+            else if (colorcode.Length == 8) // assuming length of 8
+                col = Color.FromArgb(
+                    int.Parse(colorcode.Substring(0, 2), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(2, 2), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(4, 2), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(6, 2), NumberStyles.HexNumber));
+            else // assuming length of 3
+                col = Color.FromArgb(255, // hardcoded opaque
+                    int.Parse(colorcode.Substring(0, 1) + colorcode.Substring(0, 1), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(1, 1) + colorcode.Substring(1, 1), NumberStyles.HexNumber),
+                    int.Parse(colorcode.Substring(2, 1) + colorcode.Substring(2, 1), NumberStyles.HexNumber));
+            return col;
+        }
         public static void WriteTempPictureForTesting(Image ima, string beforeext, bool asJpeg = false)
         {
             var fn = $"{_tempFolder}{Helpers.ID}tt{DateTime.Now.Ticks}";
@@ -382,5 +408,42 @@ namespace Seriallabs.Dessin
 
             return result;
         }
+
+       
+
+        /////////////////////////////////////
+        /// More about ImageAttributes
+        /// 
+        /// rappel  List<ColorPair> => List<ColorMap> => ( remapTable = List<ColorMap>().ToArray() ) => ImageAttr.SetRemapTable
+        /// 
+        ///
+      /*
+        public ImageAttributes ComputeImageAttributesFromSubtemplates(Composer.Composition C)
+        {
+            var ColorMapping = new List<ColorPair>();
+            UpdateColorMappingFromComposition(C, ColorMapping);
+            AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.Tongue], colorSpread, Tinctures.Undefined,
+                ColorMapping, Palette.Tongue);
+            AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.Beak], colorSpread, Tinctures.Undefined,
+                ColorMapping, Palette.Hoof);
+            //x addAllColors(Defs.LesCouleursdeSerialLabs[E_SLcolors.chargeBigTail], colorSpread, Tinctures.undefined, ColorMapping, Palette.Mane);
+            AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.Claws], colorSpread, Tinctures.Undefined,
+                ColorMapping, Palette.Claws);
+            AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.Third], colorSpread, Tinctures.Undefined,
+                ColorMapping, Palette.Mane);
+
+
+            if (lastMainTincture_forCurrentCharge != Tinctures.Undefined)
+            {
+                //FallBack : in case some tinctures where not defined
+                AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.ChargeSecond], colorSpread,
+                    lastMainTincture_forCurrentCharge, ColorMapping);
+                AddAllColors(Definitions.LesCouleursdeSerialLabs[SLColors.ChargeBigTail], colorSpread,
+                    lastMainTincture_forCurrentCharge, ColorMapping);
+            }
+
+            return GetImageAttributesfromColorMapping(ColorMapping.ToArray());
+        }
+      */
     }
 }

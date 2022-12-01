@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Seriallabs.Dessin.heraldry;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Seriallabs.Dessin.heraldry.ColorReplacement;
 
 namespace Seriallabs.Dessin
 {
@@ -99,13 +101,19 @@ namespace Seriallabs.Dessin
             return imattr;
         }
 
+        public static ImageAttributes GetImageAttributesfromColorMapping(ColorPair[] ColorMapping,
+            Definitions.Palette palette)
+        {
+            return ColorReplacement.GetImageAttributesfromColorMapping(ColorMapping, palette);
+        }
+
         #region Operators
 
-            /// <summary>
-            /// Implicit cast operator from anImageAttibutesExt to the .NET ImageAttributes
-            /// </summary>
-            /// <param name="clrmtx">An ImageAttributesExt instance</param>
-            /// <returns>A .NET ImageAttributes instance</returns>
+        /// <summary>
+        /// Implicit cast operator from anImageAttibutesExt to the .NET ImageAttributes
+        /// </summary>
+        /// <param name="clrmtx">An ImageAttributesExt instance</param>
+        /// <returns>A .NET ImageAttributes instance</returns>
         public static implicit operator ImageAttributes(ImageAttributesExt imattr)
         {
             var dotNetImattr = new ImageAttributes();

@@ -133,6 +133,26 @@ namespace TesterDeDessin {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Pegase_Ac {
+            get {
+                object obj = ResourceManager.GetObject("Pegase_Ac", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pegase4_Ac {
+            get {
+                object obj = ResourceManager.GetObject("Pegase4_Ac", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Schweiz_Schloss_Chillon_Gesamtansicht {
             get {
                 object obj = ResourceManager.GetObject("Schweiz_Schloss_Chillon_Gesamtansicht", resourceCulture);

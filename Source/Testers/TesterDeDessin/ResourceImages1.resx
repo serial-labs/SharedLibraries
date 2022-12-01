@@ -133,6 +133,12 @@
   <data name="Oak_adjusted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Oak.adjusted.emf;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Pegase4_Ac" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Pegase4_Ac.emf;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pegase_Ac" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Pegase_Ac.emf;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Schweiz_Schloss_Chillon_Gesamtansicht" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Schweiz_Schloss_Chillon_Gesamtansicht.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

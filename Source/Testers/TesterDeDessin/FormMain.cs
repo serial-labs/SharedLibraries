@@ -5,8 +5,12 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.Resources;
+using Microsoft.VisualBasic.Logging;
 using Seriallabs.Dessin;
 using Seriallabs.Dessin.helpers;
+using heraldry= Seriallabs.Dessin.heraldry;
+using Seriallabs.Dessin.heraldry;
+
 
 namespace TesterDeDessin
 {
@@ -447,8 +451,9 @@ namespace TesterDeDessin
                 myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
-                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),
-                    ImageAttributesExt.getImageAttr4Opacity(0.25f));
+
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttr4Opacity(0.25f)); //OK
+                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240,128,0,64))); //OK
 
                 //picResult.Image =
                 if (trackBarTexture.Value>0) bc.AddTexture(pbs[1].Image,(int)nupTextureTiles.Value,trackBarTexture.Value/100f);
@@ -613,6 +618,103 @@ namespace TesterDeDessin
         private void lstInterpolationModes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void addColorVar(List<heraldry.ColorReplacement.ColorPair> colorMapping,Color from1,Color from2, Color target1)
+        {
+            var Lclair = HSL.convRGB2HSL((ColorRGB)from1).l;
+            var Lfonce = HSL.convRGB2HSL((ColorRGB)from2).l;
+            var ratio = Lclair / Lfonce;
+
+            var C1HSL = HSL.convRGB2HSL((ColorRGB)target1);
+            Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, C1HSL.l / ratio);
+            colorMapping.AddAllColors(
+                from2,
+                heraldry.ETinctures.Undefined,
+                target2);
+        }
+
+        private void btnColorRemap_Click(object sender, EventArgs e)
+        {
+            var colorMapping = new List<heraldry.ColorReplacement.ColorPair>();
+            Color GreyWhite = heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.GreyWhite];
+            Color GreyWhite1 = heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.GreyWhite1];
+            Color GreyWhite2 = heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.GreyWhite2];
+            Color GreyWhite3 = heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.GreyWhite3];
+            Color GreyBlack = heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.GreyBlack];
+
+            var C1 = lblColor1.BackColor;//Definitions.PaletteLight.Tongue;
+            colorMapping.AddAllColors(
+                GreyWhite, 
+                heraldry.ETinctures.Undefined,
+                C1);
+
+
+            addColorVar(colorMapping, GreyWhite, GreyWhite1, C1);
+            addColorVar(colorMapping, GreyWhite, GreyWhite2, C1);
+            addColorVar(colorMapping, GreyWhite, GreyWhite3, C1);
+            addColorVar(colorMapping, GreyWhite, GreyBlack, C1);
+
+            Image imaSrc = (Image)ResourceImages1.ResourceManager.GetObject("Pegase4_Ac");//picBsource.Image;
+            Bitmap bmpSrc = new Bitmap(imaSrc);
+            int w = bmpSrc.Width;
+            //Seriallabs.Dessin.Helpers.SaveJpeg(fn + "_o.jpeg", bmpSrc, 80);
+            ImageAttributes imattr = colorMapping.buildImageAttributes();
+            myConsole.LogLine("btnColorRemap_Click avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
+            //using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,ImageAttributesExt.getTestImageAttributes4Hue))
+            using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,bmpSrc.Width,bmpSrc.Height,imattr))
+            {
+                myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
+               /* bc.BlendImageOver(ResourceImages1.gray_floral,
+                    ImageAttributesExt.getImageAttributesForColorize(Color.OrangeRed));
+
+                myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
+
+                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttr4Opacity(0.25f)); //OK
+                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240, 128, 0, 64))); //OK
+
+                //picResult.Image =
+                if (trackBarTexture.Value > 0) bc.AddTexture(pbs[1].Image, (int)nupTextureTiles.Value, trackBarTexture.Value / 100f);
+                //return;
+                ;
+                if (chkToPicResult.Checked) picResult.Image = bc.getBitmap;*/
+                picResult.Image = bc.getBitmap;
+                //pictureBox5.Invalidate();
+            }
+
+            /*
+            Definitions.PaletteLight.Tongue
+            ColorMappingHelper.AddAllColors(heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.Beak], Tinctures.Undefined,
+                ColorMapping, palette.Hoof);
+            //x addAllColors(Defs.LesCouleursdeSerialLabs[E_SLcolors.chargeBigTail], colorSpread, Tinctures.undefined, ColorMapping, Palette.Mane);
+            ColorMappingHelper.AddAllColors(heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.Claws], Tinctures.Undefined,
+                ColorMapping, palette.Claws);
+            ColorMappingHelper.AddAllColors(heraldry.Definitions.LesCouleursdeSerialLabs[heraldry.SLColors.Third], Tinctures.Undefined,
+                ColorMapping, palette.Mane);
+            */
+        }
+
+        private void btnTestHSL_Click(object sender, EventArgs e)
+        {
+            Color fromColor = lblColor1.BackColor;
+            Log($"from Color : {fromColor.ToString()}");
+            
+            var r = HSL.convRGB2HSL((ColorRGB) fromColor);
+            Log($"Brightness{r.l}");
+            Log($"HSL : {r.ToString()}");
+            Color c = HSL.convHSL2RGB(r);
+            Log($"return Color : {c.ToString()}");
+
+            lblColor2.BackColor = HSL.convHSL2RGB(r.h, r.s, r.l * 1.25f);
+
+        }
+
+        public void Log(string s)
+        {
+            myConsole.LogLine(s);
+            txtLog.AppendText(s + Environment.NewLine);
         }
     }
 }
