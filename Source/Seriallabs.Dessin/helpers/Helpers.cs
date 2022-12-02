@@ -17,6 +17,15 @@ namespace Seriallabs.Dessin
     {
         public static string ID = "";
         private static string _tempFolder = @"c:\\temp\\";
+        //const double d_epsilon = 1.11022302462516E-16;
+        const double d_epsilon = 1.11022302462517E-16;
+
+        public static byte DoubleToByte(double d)
+        {
+            if (d > (255.0 - d_epsilon)) return 255;
+            if (d < d_epsilon) return 0;
+            return Convert.ToByte(d);
+        }
 
         public static Color ColorFromHexa(string hexaColor)
         {

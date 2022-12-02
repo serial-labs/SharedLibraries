@@ -710,6 +710,38 @@ namespace TesterDeDessin
 
             lblColor2.BackColor = HSL.convHSL2RGB(r.h, r.s, r.l * 1.25f);
 
+            Log("gekk mano");
+            Log($"return Color white HSL: {HSL.convRGB2HSL(Color.FromArgb(255,255,255))}");
+            Log($"return Color black HSL: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 0))}");
+            Log($"return Color red1: {HSL.convRGB2HSL(Color.FromArgb(255, 1, 0))}");
+            Log($"return Color green: {HSL.convRGB2HSL(Color.FromArgb(0, 255, 0))}");
+            Log($"return Color blue: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 255))}");
+            Log($"return Color halfblue: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 128))}");
+            Log($"return Color blue64: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 64))}");
+            Log($"return Color : {HSL.convHSL2RGB(0,0,0).ToString()}");
+            Log($"return Color : {HSL.convHSL2RGB(1, 1, 1)}");
+            Log($"return Color : {HSL.convHSL2RGB(1.1, 1, 1)}");
+            Log($"return Color : {HSL.convHSL2RGB(1, 1.1, 1)}");
+            Log($"return Color : {HSL.convHSL2RGB(1, 1, 1.1)}");
+            Log($"return Color 1000000: {HSL.convHSL2RGB(1000000, 1000000, 10000001.1)}");
+            Log("shlwapi");
+            Log($"DllImport(shlwapi) white H: {HSL.ColorToHLS(Color.FromArgb(255, 255, 255)).H}");
+            Log($"DllImport(shlwapi) white S: {HSL.ColorToHLS(Color.FromArgb(255, 255, 255)).S}");
+            Log($"DllImport(shlwapi) white L: {HSL.ColorToHLS(Color.FromArgb(255, 255, 255)).L}");
+            Log($"DllImport(shlwapi) white HSL: {HSL.ColorToHLS(Color.FromArgb(255, 255, 255))}");
+            Log($"DllImport(shlwapi) black HSL: {HSL.ColorToHLS(Color.FromArgb(0, 0, 0))}");
+            Log($"DllImport(shlwapi) red1: {HSL.ColorToHLS(Color.FromArgb(255, 1, 0))}");
+            Log($"DllImport(shlwapi) green: {HSL.ColorToHLS(Color.FromArgb(0, 255, 0))}");
+            Log($"DllImport(shlwapi) blue: {HSL.ColorToHLS(Color.FromArgb(0, 0, 255))}");
+            Log($"DllImport(shlwapi) halfblue: {HSL.ColorToHLS(Color.FromArgb(0, 0, 128))}");
+            Log($"DllImport(shlwapi) blue64: {HSL.ColorToHLS(Color.FromArgb(0, 0, 64))}");
+            Log($"DllImport(shlwapi) 0: {HSL.HLSToColor(0, 0, 0).ToString()}");
+            Log($"DllImport(shlwapi) 240: {HSL.HLSToColor(240, 240, 240)}");
+            Log($"DllImport(shlwapi) 240-0-0: {HSL.HLSToColor(240, 0, 0)}");
+            Log($"DllImport(shlwapi) 241-0-0: {HSL.HLSToColor(241, 0, 0)}");
+            Log($"DllImport(shlwapi) : {HSL.HLSToColor(0, 241, 0)}");
+            Log($"DllImport(shlwapi) : {HSL.HLSToColor(0, 0, 241)}");
+
         }
 
         public void Log(string s)

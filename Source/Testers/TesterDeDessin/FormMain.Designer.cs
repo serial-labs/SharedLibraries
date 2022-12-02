@@ -76,6 +76,7 @@
             this.picBlend = new System.Windows.Forms.PictureBox();
             this.lstArithmetics = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.btnTestHSL = new System.Windows.Forms.Button();
             this.btnColorMatrix = new System.Windows.Forms.Button();
             this.btnColorRemap = new System.Windows.Forms.Button();
@@ -86,7 +87,6 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -107,12 +107,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBlueBlend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBlend)).BeginInit();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBsource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -657,6 +657,19 @@
             this.tabPage4.Text = "Coloring";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // trackBar2
+            // 
+            this.trackBar2.Location = new System.Drawing.Point(129, 18);
+            this.trackBar2.Maximum = 50;
+            this.trackBar2.Minimum = 1;
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(390, 45);
+            this.trackBar2.TabIndex = 3;
+            this.trackBar2.TickFrequency = 10;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar2.Value = 1;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            // 
             // btnTestHSL
             // 
             this.btnTestHSL.Location = new System.Drawing.Point(16, 104);
@@ -750,7 +763,7 @@
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(570, 87);
+            this.txtLog.Size = new System.Drawing.Size(566, 87);
             this.txtLog.TabIndex = 1;
             this.txtLog.Visible = false;
             // 
@@ -768,18 +781,6 @@
             this.picResult.TabStop = false;
             this.picResult.Click += new System.EventHandler(this.picResult_Click);
             this.picResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picResult_MouseMove);
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.Location = new System.Drawing.Point(129, 18);
-            this.trackBar2.Maximum = 50;
-            this.trackBar2.Minimum = -50;
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(390, 45);
-            this.trackBar2.TabIndex = 3;
-            this.trackBar2.TickFrequency = 10;
-            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
             // FormMain
             // 
@@ -820,12 +821,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBlend)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBsource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picResult)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

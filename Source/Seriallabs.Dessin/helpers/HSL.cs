@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 /// 
 namespace Seriallabs.Dessin.helpers
 {
+   
+
     /*
      * In VB .NET you can get the H, S, and B or L values from then color structure:
    'B, Brightness, a.k.a L Lightness, Luminance
@@ -107,17 +109,22 @@ namespace Seriallabs.Dessin.helpers
 
         public static Color convHSL2RGB((double h, double sl, double l) hslTuple)
         {
-            return convHSL2RGB(hslTuple.h, hslTuple.sl, hslTuple.l).color;
+            return convHSL2RGB(hslTuple.h, hslTuple.sl, hslTuple.l);
         }
 
         public static Color convHSL2RGB((int  h, int sl, int l) hslTuple)
         {
-            return convHSL2RGB(hslTuple.h, hslTuple.sl, hslTuple.l).color;
+            return convHSL2RGB(hslTuple.h, hslTuple.sl, hslTuple.l);
+        }
+
+        public static Color convHSL2RGB(double h, double sl, double l)
+        {
+            return (Color) convHSL2RGBx(h, sl, l);
         }
 
         // Given H,S,L in range of 0-1
         // Returns a Color (RGB struct) in range of 0-255
-        public static ColorRGB convHSL2RGB(double h, double sl, double l)
+        public static ColorRGB convHSL2RGBx(double h, double sl, double l)
         {
             double v;
             double r, g, b;
@@ -177,9 +184,10 @@ namespace Seriallabs.Dessin.helpers
             }
 
             ColorRGB rgb;
-            rgb.R = Convert.ToByte(r * 255.0f);
-            rgb.G = Convert.ToByte(g * 255.0f);
-            rgb.B = Convert.ToByte(b * 255.0f);
+            
+            rgb.R = Helpers.DoubleToByte(r * 255.0);
+            rgb.G = Helpers.DoubleToByte(g * 255.0);
+            rgb.B = Helpers.DoubleToByte(b * 255.0);
             return rgb;
         }
 
@@ -189,6 +197,11 @@ namespace Seriallabs.Dessin.helpers
         public static void convRGB2HSL(ColorRGB rgb, out double h, out double s, out double l)
         {
             (h, s, l) = convRGB2HSL(rgb);
+        }
+
+        public static (double h, double s, double l) convRGB2HSL(Color rgb)
+        {
+            return convRGB2HSL((ColorRGB) rgb);
         }
 
         public static (double h, double s, double l) convRGB2HSL(ColorRGB rgb)
