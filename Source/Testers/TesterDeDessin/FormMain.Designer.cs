@@ -87,6 +87,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.picResult = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.chkSquareRatio = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -645,6 +646,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.chkSquareRatio);
             this.tabPage4.Controls.Add(this.trackBar2);
             this.tabPage4.Controls.Add(this.btnTestHSL);
             this.tabPage4.Controls.Add(this.btnColorMatrix);
@@ -667,7 +669,7 @@
             this.trackBar2.TabIndex = 3;
             this.trackBar2.TickFrequency = 10;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar2.Value = 1;
+            this.trackBar2.Value = 10;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
             // btnTestHSL
@@ -763,7 +765,7 @@
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(566, 87);
+            this.txtLog.Size = new System.Drawing.Size(558, 87);
             this.txtLog.TabIndex = 1;
             this.txtLog.Visible = false;
             // 
@@ -781,6 +783,16 @@
             this.picResult.TabStop = false;
             this.picResult.Click += new System.EventHandler(this.picResult_Click);
             this.picResult.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picResult_MouseMove);
+            // 
+            // chkSquareRatio
+            // 
+            this.chkSquareRatio.AutoSize = true;
+            this.chkSquareRatio.Location = new System.Drawing.Point(131, 79);
+            this.chkSquareRatio.Name = "chkSquareRatio";
+            this.chkSquareRatio.Size = new System.Drawing.Size(91, 19);
+            this.chkSquareRatio.TabIndex = 4;
+            this.chkSquareRatio.Text = "square Ratio";
+            this.chkSquareRatio.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -893,5 +905,6 @@
         private Button btnTestHSL;
         private TextBox txtLog;
         private TrackBar trackBar2;
+        private CheckBox chkSquareRatio;
     }
 }

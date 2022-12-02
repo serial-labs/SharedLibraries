@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Seriallabs.Dessin\Seriallabs.Dessin.csproj" />
+    <ProjectReference Include="..\..\..\..\SharedLibrairiesCore\SerialLabs.Dessin\SerialLabs.Dessin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

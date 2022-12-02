@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
+
 
 /*
  * Part of the Following Code was developed by Dewald Esterhuizen

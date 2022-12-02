@@ -628,7 +628,11 @@ namespace TesterDeDessin
             float expand = trackBar2.Value / 10f;
             ratio = ratio * expand;
             var C1HSL = HSL.convRGB2HSL((ColorRGB)target1);
-            Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, C1HSL.l / ratio);
+            var newL = C1HSL.l;
+            if (chkSquareRatio.Checked) newL = newL * newL;
+            newL = newL / ratio;
+            Log($"New Luminance Ratio : {newL}");
+            Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, C1HSL.l);
             colorMapping.AddAllColors(
                 from2,
                 heraldry.ETinctures.Undefined,
