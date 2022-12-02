@@ -128,19 +128,22 @@ namespace Seriallabs.Dessin.heraldry
         {
             Color c = colorToBeReplaced;
             int y = colorSpread;
-            for (var R = c.R - (y < c.R ? y : c.R); R < c.R + y + 1 && R < 256; R++)
-                for (var G = c.G - (y < c.G ? y : c.G); G < c.G + y + 1 && G < 256; G++)
-                    for (var B = c.B - (y < c.B ? y : c.B); B < c.B + y + 1 && B < 256; B++)
-                        if (tincture == ETinctures.Undefined)
+            if (tincture == ETinctures.Undefined)
+                for (var R = c.R - (y < c.R ? y : c.R); R < c.R + y + 1 && R < 256; R++)
+                    for (var G = c.G - (y < c.G ? y : c.G); G < c.G + y + 1 && G < 256; G++)
+                        for (var B = c.B - (y < c.B ? y : c.B); B < c.B + y + 1 && B < 256; B++)
                             currentColorMapping.Add(
                                 new ColorPair(Color.FromArgb(R, G, B), fixedNewColor,
                                     c.R - R, c.G - G, c.B - B)
                             );
-                        else
+            else
+                for (var R = c.R - (y < c.R ? y : c.R); R < c.R + y + 1 && R < 256; R++)
+                    for (var G = c.G - (y < c.G ? y : c.G); G < c.G + y + 1 && G < 256; G++)
+                        for (var B = c.B - (y < c.B ? y : c.B); B < c.B + y + 1 && B < 256; B++)
                             currentColorMapping.Add(
                                 new ColorPair(Color.FromArgb(R, G, B),
-                                    tincture, c.R - R, c.G - G, c.B - B)
-                            );
+                                        tincture, c.R - R, c.G - G, c.B - B)
+                    );
         }
 
         /// <summary>

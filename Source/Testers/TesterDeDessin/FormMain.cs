@@ -625,7 +625,8 @@ namespace TesterDeDessin
             var Lclair = HSL.convRGB2HSL((ColorRGB)from1).l;
             var Lfonce = HSL.convRGB2HSL((ColorRGB)from2).l;
             var ratio = Lclair / Lfonce;
-
+            float expand = trackBar2.Value / 10f;
+            ratio = ratio * expand;
             var C1HSL = HSL.convRGB2HSL((ColorRGB)target1);
             Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, C1HSL.l / ratio);
             colorMapping.AddAllColors(
@@ -715,6 +716,11 @@ namespace TesterDeDessin
         {
             myConsole.LogLine(s);
             txtLog.AppendText(s + Environment.NewLine);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            if (trackBar2.Value == 0) trackBar2.Value = 10;
         }
     }
 }
