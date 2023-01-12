@@ -13,6 +13,79 @@ namespace TesterDeDessin
 {
     public partial class FormTest : Form
     {
+
+        private class A
+        {
+            public virtual int p { get; set; } = 1;
+            public override string ToString()
+            {
+                return $"p:{p}";
+            }
+        }
+
+        private class B :A
+        {
+            public int pb { get; set; } = 2;
+            public new string ToString()
+            {
+                return  $"pb:{pb}";
+            }
+        }
+        private class C : A
+        {
+            public int pc { get; set; } = 3;
+            public override string ToString()
+            {
+                return $"pc:{pc}";
+            }
+        }
+        private class D : A
+        {
+            public int pd { get; set; } = 4;
+
+        }
+        private class E : A
+        {
+            public int pe { get; set; } = 5;
+            public override int p { get; set; }=6;
+
+        }
+
+        private string AA(A a)
+        {
+            string s = a.ToString();
+            return "AA:" + s;
+        }
+        private string BA(B b)
+        {
+            string s = b.ToString();
+            return "BA:" + s;
+        }
+        private string CA(C c)
+        {
+            string s = c.ToString();
+            return "CA:" + s;
+        }
+        private string AE(E e)
+        {
+            string s = e.ToString();
+            return "AE:"+s;
+        }
+        private string AF(F f)
+        {
+            string s = f.ToString();
+            return "AF:" + s;
+        }
+
+        private class F : A
+        {
+            public int pb { get; set; } =7;
+            public string ToString() //pas de mot clef override ni new!
+            {
+                return $"pf:{pb}";
+            }
+        }
+
         public FormTest()
         {
             InitializeComponent();
@@ -20,7 +93,23 @@ namespace TesterDeDessin
 
         private void button1_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("test console");
+            System.Diagnostics.Debug.WriteLine(AA(new A()) +" : base A passée comme A attendu");
             
+            System.Diagnostics.Debug.WriteLine(AA(new B()) + " : dérivée B (new ToString) passée comme A attendu");
+            System.Diagnostics.Debug.WriteLine(BA(new B()) + " : dérivée B (new ToString) passée comme B attendu");
+
+            System.Diagnostics.Debug.WriteLine(AA(new C()) + " : dérivée C (override ToString) passée comme A attendu");
+            System.Diagnostics.Debug.WriteLine(CA(new C()) + " : dérivée C (override ToString) passée comme C attendu");
+
+            System.Diagnostics.Debug.WriteLine(AA(new D()) + " : dérivée D (no ToString) passée comme A attendu");
+            System.Diagnostics.Debug.WriteLine(AA(new E()) + " : dérivée E (no ToString, override p=6) passée comme A attendu");
+
+            System.Diagnostics.Debug.WriteLine(AA(new F()) + " : dérivée F (ToString sans mot clef) passée comme A attendu");
+            System.Diagnostics.Debug.WriteLine(AF(new F()) + " : dérivée F (ToString sans mot clef) passée comme F attendu");
+
+
+
         }
 
         private void FormTest_Load(object sender, EventArgs e)

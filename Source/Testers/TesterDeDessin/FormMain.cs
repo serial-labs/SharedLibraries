@@ -118,21 +118,91 @@ namespace TesterDeDessin
         private void picBsource_Click_1(object sender, EventArgs e)
         {
             var pbi = pbs.Select((pb, i) => new {i, pb}).Where(x => x.pb == sender).Select(x => x.i).First();
-            
-            Image[] listima = imaAll;
-            int nbIma = nbImaEmbedded;
-
-            if (pbi == 1)
+            if (pbi != 2)
             {
-                listima = imaTextures;
-                nbIma = nbImaTexturesEmbedded;
+
+                Image[] listima = imaAll;
+                int nbIma = nbImaEmbedded;
+
+                if (pbi == 1)
+                {
+                    listima = imaTextures;
+                    nbIma = nbImaTexturesEmbedded;
+                }
+
+                if (++imaIndex[pbi] >= nbIma) imaIndex[pbi] = 0;
+                //pbs[pbi].Image = (Bitmap)ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[imaIndex[pbi]]);
+                pbs[pbi].Image = listima[imaIndex[pbi]]; //pbs[(4+pbi - 1) % 4].Image;
+            } else
+            {
+                var celineEMFpath = @"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion";
+                var fs = Directory.GetFiles(celineEMFpath,"*.emf");
+                if (++imaIndex[pbi] >= fs.Count()) imaIndex[pbi] = 0;
+                var fileToLoad = fs[imaIndex[pbi]];
+
+                fileToLoad = @"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_RAMP_Torso_marieOli_sansQ.emf";// simple2.emf";
+                               //H:\Mon Drive\MyBlazon\Céline\EMF - 2022 - 12\Lion\
+                            var picima = Image.FromFile(fileToLoad);
+
+                //var ima = Image.FromFile(@"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_T1_H.emf");
+                //var ima = Image.FromFile(@"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_RAMP_Torso_marieOli2.emf");
+                var ima = Image.FromFile(@"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\Lion_T1_H.emf");// simple.emf");
+
+
+                Metafile metafile;
+                using (Graphics offScreenGraphics = Graphics.FromHwndInternal(IntPtr.Zero))
+                {
+                    IntPtr hDC = offScreenGraphics.GetHdc();
+                    metafile = new Metafile(hDC, new Rectangle(0,0,3000,5000),MetafileFrameUnit.Pixel, EmfType.EmfPlusDual);
+                    
+                    offScreenGraphics.ReleaseHdc();
+                }
+
+                using (Graphics graphics = Graphics.FromImage(metafile))
+                {
+                    graphics.FillRectangle(Brushes.LightYellow, 0, 0, 1000, 1000);
+                    graphics.DrawLine(Pens.Red, 50, 50, 2000, 5000);
+                    
+                    var gu = graphics.PageUnit;
+                    var sourceRf = picima.GetBounds(ref gu);
+                    graphics.DrawImageUnscaled(picima, (int) sourceRf.X, (int) sourceRf.Y);
+
+                    sourceRf = ima.GetBounds(ref gu);
+                    graphics.DrawImageUnscaled(ima, (int)sourceRf.X, (int)sourceRf.Y);
+
+                    // graphics.DrawImageFull(picima);
+                    //graphics.DrawImageFull(ima);
+                }
+
+
+                pbs[2].Image = metafile;
+                picResult.Image = metafile;
+                picResult.SizeMode = PictureBoxSizeMode.Zoom;
+                //https://stackoverflow.com/questions/13175138/in-memory-metafile-is-not-drawn
+                
+                /*pbs[2].Image = ima;
+                using (var g = pbs[2].CreateGraphics())
+                {
+                    var gu = g.PageUnit;
+
+                    // ATTENTION, les shields sont enregistrés dans les EMF avec une marge totale égale à la taille du dessin
+                    // il dessin visible commence à (0,0) donc les coord du coin sup gauche de l'Image sont négatives
+                    // le sourceR pointera sur le dessin visible et commencera donc à (0,0) avec pour taille la moitié de celle de l'Ima 
+                    var destRf = pbs[2].Image.GetBounds(ref gu);
+                    var sourceRf = ima.GetBounds(ref gu);
+
+                    //g.DrawImage(ima,destRf);
+                    g.DrawImageFull(picima);
+                    Log(fileToLoad);
+                    Log($"source:{sourceRf.ToString()}");
+                    Log($"dest:  {destRf.ToString()}");
+
+                }*/
+                
+
             }
-
-            if (++imaIndex[pbi] >= nbIma) imaIndex[pbi] = 0;
-            //pbs[pbi].Image = (Bitmap)ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[imaIndex[pbi]]);
-            pbs[pbi].Image = listima[imaIndex[pbi]]; //pbs[(4+pbi - 1) % 4].Image;
-            pbs[pbi].Invalidate();
-
+            //pbs[pbi].Invalidate();
+            
         }
 
         /// <summary>
@@ -143,7 +213,9 @@ namespace TesterDeDessin
         /// <see cref="https://stackoverflow.com/questions/4200843/outline-text-with-system-drawing"/>
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
+
             var pbi = pbs.Select((pb, i) => new { i, pb }).Where(x => x.pb == sender).Select(x => x.i).First();
+            if (pbi == 2) return;
             if (pbi == 3 && zoom) return;
 
             Image[] listima = imaAll;
@@ -154,9 +226,10 @@ namespace TesterDeDessin
                 listima = imaTextures;
                 nbIma = nbImaTexturesEmbedded;
             }
+
+            string info = "{pbi}";
+            if (imaIndex[pbi]< listima.Length) info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
             
-            
-            string info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
             if (pbi == 1) info += " "+GetEmbeddedImagesNames(1)[imaIndex[pbi]];
             Seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16, true);
         }
@@ -459,8 +532,8 @@ namespace TesterDeDessin
                 if (trackBarTexture.Value>0) bc.AddTexture(pbs[1].Image,(int)nupTextureTiles.Value,trackBarTexture.Value/100f);
                 //return;
                 ;
-                if (chkToPicResult.Checked) picResult.Image = bc.getBitmap;
-                pictureBox5.Image = bc.getBitmap;
+                if (chkToPicResult.Checked) picResult.Image = bc.CurrentBitmap;
+                pictureBox5.Image = bc.CurrentBitmap;
                 //pictureBox5.Invalidate();
             }
 
@@ -631,8 +704,8 @@ namespace TesterDeDessin
             var newL = C1HSL.l;
             if (chkSquareRatio.Checked) newL = newL * newL;
             newL = newL / ratio;
-            Log($"New Luminance Ratio : {newL}");
-            Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, C1HSL.l);
+            Log($"New Luminance Ratio : {ratio}");
+            Color target2 = HSL.convHSL2RGB(C1HSL.h, C1HSL.s, newL);
             colorMapping.AddAllColors(
                 from2,
                 heraldry.ETinctures.Undefined,
@@ -684,8 +757,8 @@ namespace TesterDeDessin
                 if (trackBarTexture.Value > 0) bc.AddTexture(pbs[1].Image, (int)nupTextureTiles.Value, trackBarTexture.Value / 100f);
                 //return;
                 ;
-                if (chkToPicResult.Checked) picResult.Image = bc.getBitmap;*/
-                picResult.Image = bc.getBitmap;
+                if (chkToPicResult.Checked) picResult.Image = bc.CurrentBitmap;*/
+                picResult.Image = bc.CurrentBitmap;
                 //pictureBox5.Invalidate();
             }
 
