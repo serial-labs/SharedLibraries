@@ -1,15 +1,12 @@
+using seriallabs.Dessin;
+using seriallabs.Dessin.helpers;
+using seriallabs.Dessin.heraldry;
 using System.Collections;
-using System.Collections.Immutable;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Globalization;
 using System.Resources;
-using Microsoft.VisualBasic.Logging;
-using Seriallabs.Dessin;
-using Seriallabs.Dessin.helpers;
-using heraldry= Seriallabs.Dessin.heraldry;
-using Seriallabs.Dessin.heraldry;
+using heraldry = seriallabs.Dessin.heraldry;
 
 
 namespace TesterDeDessin
@@ -231,7 +228,7 @@ namespace TesterDeDessin
             if (imaIndex[pbi]< listima.Length) info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
             
             if (pbi == 1) info += " "+GetEmbeddedImagesNames(1)[imaIndex[pbi]];
-            Seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16, true);
+            seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16, true);
         }
 
 
@@ -503,7 +500,7 @@ namespace TesterDeDessin
 
         private void btnImaCompo_Click(object sender, EventArgs e)
         {
-            Seriallabs.Dessin.Helpers.ID = $"A{DateTime.Now.Minute}_";
+            seriallabs.Dessin.Helpers.ID = $"A{DateTime.Now.Minute}_";
             
             pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
             //Image imaSrc = imaAll[imaIndex[1]];
@@ -515,7 +512,7 @@ namespace TesterDeDessin
 
             myConsole.LogLine("CreateBitmapComposée avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
             //using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,ImageAttributesExt.getTestImageAttributes4Hue))
-            using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc))
+            using (var bc = seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc))
             {
                 myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
                 bc.BlendImageOver(ResourceImages1.gray_floral,
@@ -537,7 +534,7 @@ namespace TesterDeDessin
                 //pictureBox5.Invalidate();
             }
 
-            Seriallabs.Dessin.Helpers.WriteTempPictureForTesting(pictureBox5.Image, "-pictureBox5");
+            seriallabs.Dessin.Helpers.WriteTempPictureForTesting(pictureBox5.Image, "-pictureBox5");
             
           }
 
@@ -740,7 +737,7 @@ namespace TesterDeDessin
             ImageAttributes imattr = colorMapping.buildImageAttributes();
             myConsole.LogLine("btnColorRemap_Click avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
             //using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,ImageAttributesExt.getTestImageAttributes4Hue))
-            using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,bmpSrc.Width,bmpSrc.Height,imattr))
+            using (var bc = seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,bmpSrc.Width,bmpSrc.Height,imattr))
             {
                 myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
                /* bc.BlendImageOver(ResourceImages1.gray_floral,

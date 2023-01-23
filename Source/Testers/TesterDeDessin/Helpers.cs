@@ -72,6 +72,7 @@ namespace TesterDeDessin
 
             public static Point getRealCoordOr0(PictureBox pb, int mouseX,int mouseY)
             {
+                if (pb.Image == null) return default;
                 Int32 realW = pb.Image.Width;
                 Int32 realH = pb.Image.Height;
                 
