@@ -18,10 +18,13 @@ namespace TesterDeDessin
         private PictureBox[] pbs;
         private int[] imaIndex;
         private Image[] imaAll;
+        private Image[] imaShields;
         private Image[] imaTextures;
         private int nbImaEmbedded;
+        private int nbImaShieldEmbedded;
         private int nbImaTexturesEmbedded;
         private FormConsole myConsole;
+        private FileInfo[] TextureFolderFileList;
 
         public FormMain()
         {
@@ -30,18 +33,20 @@ namespace TesterDeDessin
             imaAll = new Image[nbImaEmbedded];
             for (int i = 0; i < nbImaEmbedded; i++)
             {
-                imaAll[i] = (Image) ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[i]);
+                imaAll[i] = (Image)ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[i]);
             }
 
-            nbImaTexturesEmbedded = GetEmbeddedImagesNames(1).Count;
-            imaTextures = new Image[nbImaTexturesEmbedded];
-            for (int i = 0; i < nbImaTexturesEmbedded; i++)
+            nbImaShieldEmbedded = GetEmbeddedImagesNames(typeof(TesterDeDessin.ResourceShields)).Count;
+            imaShields = new Image[nbImaShieldEmbedded];
+            for (int i = 0; i < nbImaShieldEmbedded; i++)
             {
-                imaTextures[i] = (Image)ResourceTextures.ResourceManager.GetObject(GetEmbeddedImagesNames(1)[i]);
+                imaShields[i] = (Image)ResourceShields.ResourceManager.GetObject(GetEmbeddedImagesNames(typeof(ResourceShields))[i]);
             }
 
-            pbs = new PictureBox[] {picBsource, pictureBox1, pictureBox2, pictureBox3, picResult};
-            imaIndex = new int[] {0, 1, 2, 3};
+            initTextureList();
+
+            pbs = new PictureBox[] { picBsource, pictureBox1, pictureBox2, pictureBox3, picResult };
+            imaIndex = new int[] { 0, 1, 2, 3 };
             for (int i = 0; i < pbs.Length; i++)
             {
                 if (pbs[i] == picResult) continue;
@@ -49,13 +54,23 @@ namespace TesterDeDessin
                     imaAll[i]; //(Image) ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[i]);
                 pbs[i].SizeMode = getModeFromComboOrZoom();
             }
+            pbs[0].Image = imaShields[0];
+        }
+        private void initTextureList()
+        {
+            nbImaTexturesEmbedded = GetEmbeddedImagesNames(typeof(TesterDeDessin.ResourceTextures)).Count;
+            imaTextures = new Image[nbImaTexturesEmbedded];
+            for (int i = 0; i < nbImaTexturesEmbedded; i++)
+            {
+                imaTextures[i] = (Image)ResourceTextures.ResourceManager.GetObject(GetEmbeddedImagesNames(typeof(TesterDeDessin.ResourceTextures))[i]);
+            }
         }
 
         //https://learn.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-use-interpolation-mode-to-control-image-quality-during-scaling?view=netframeworkdesktop-4.8
         private void FormMain_Load(object sender, EventArgs e)
         {
             lstInterpolationModes.DataSource = Enum.GetValues(typeof(InterpolationMode));
-            lstArithmetics.DataSource = Enum.GetValues(typeof(OpEx.ColorCalculationType));
+            lstArithmetics.DataSource = Enum.GetValues(typeof(OpEx.BlendArithmeticOp));
             lstArithmetics.SelectedIndex = 0;
             myConsole = new FormConsole();
             myConsole.Show();
@@ -86,10 +101,10 @@ namespace TesterDeDessin
         /// </summary>
         /// <returns></returns>
         /// <see cref="https://stackoverflow.com/questions/34826111/how-to-get-all-images-in-the-resources-as-list"/>
-        static List<string> GetEmbeddedImagesNames(int typeOfImages=0)
+        static List<string> GetEmbeddedImagesNames(Type? tr = null)
         {
-            Type tr = typeof(TesterDeDessin.ResourceImages1);
-            if (typeOfImages == 1) tr = typeof(TesterDeDessin.ResourceTextures);
+            if (tr == null) tr = typeof(TesterDeDessin.ResourceImages1);
+            //if (typeOfImages == 1) tr = typeof(TesterDeDessin.ResourceTextures);
 
             /* Reference to your resources class -- may be named differently in your case */
             ResourceManager MyResourceClassForTextures =
@@ -114,7 +129,7 @@ namespace TesterDeDessin
 
         private void picBsource_Click_1(object sender, EventArgs e)
         {
-            var pbi = pbs.Select((pb, i) => new {i, pb}).Where(x => x.pb == sender).Select(x => x.i).First();
+            var pbi = pbs.Select((pb, i) => new { i, pb }).Where(x => x.pb == sender).Select(x => x.i).First();
             if (pbi != 2)
             {
 
@@ -126,20 +141,35 @@ namespace TesterDeDessin
                     listima = imaTextures;
                     nbIma = nbImaTexturesEmbedded;
                 }
+                if (pbi == 0)
+                {
+                    listima = imaShields;
+                    nbIma = nbImaShieldEmbedded;
+                }
 
-                if (++imaIndex[pbi] >= nbIma) imaIndex[pbi] = 0;
+                if ((e as MouseEventArgs).Button == MouseButtons.Right)
+                {
+                    if (++imaIndex[pbi] >= nbIma) imaIndex[pbi] = 0;
+                }
+                else
+                {
+                    if (--imaIndex[pbi] < 0) imaIndex[pbi] = nbIma - 1;
+                }
+
                 //pbs[pbi].Image = (Bitmap)ResourceImages1.ResourceManager.GetObject(GetEmbeddedImagesNames()[imaIndex[pbi]]);
                 pbs[pbi].Image = listima[imaIndex[pbi]]; //pbs[(4+pbi - 1) % 4].Image;
-            } else
+                if (pbi <= 1) btnBlend_Click(null, null);
+            }
+            else
             {
                 var celineEMFpath = @"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion";
-                var fs = Directory.GetFiles(celineEMFpath,"*.emf");
+                var fs = Directory.GetFiles(celineEMFpath, "*.emf");
                 if (++imaIndex[pbi] >= fs.Count()) imaIndex[pbi] = 0;
                 var fileToLoad = fs[imaIndex[pbi]];
 
                 fileToLoad = @"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_RAMP_Torso_marieOli_sansQ.emf";// simple2.emf";
-                               //H:\Mon Drive\MyBlazon\Céline\EMF - 2022 - 12\Lion\
-                            var picima = Image.FromFile(fileToLoad);
+                                                                                                                 //H:\Mon Drive\MyBlazon\Céline\EMF - 2022 - 12\Lion\
+                var picima = Image.FromFile(fileToLoad);
 
                 //var ima = Image.FromFile(@"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_T1_H.emf");
                 //var ima = Image.FromFile(@"H:\Mon Drive\MyBlazon\Céline\EMF-2022-12\Lion\LION_RAMP_Torso_marieOli2.emf");
@@ -150,8 +180,8 @@ namespace TesterDeDessin
                 using (Graphics offScreenGraphics = Graphics.FromHwndInternal(IntPtr.Zero))
                 {
                     IntPtr hDC = offScreenGraphics.GetHdc();
-                    metafile = new Metafile(hDC, new Rectangle(0,0,3000,5000),MetafileFrameUnit.Pixel, EmfType.EmfPlusDual);
-                    
+                    metafile = new Metafile(hDC, new Rectangle(0, 0, 3000, 5000), MetafileFrameUnit.Pixel, EmfType.EmfPlusDual);
+
                     offScreenGraphics.ReleaseHdc();
                 }
 
@@ -159,10 +189,10 @@ namespace TesterDeDessin
                 {
                     graphics.FillRectangle(Brushes.LightYellow, 0, 0, 1000, 1000);
                     graphics.DrawLine(Pens.Red, 50, 50, 2000, 5000);
-                    
+
                     var gu = graphics.PageUnit;
                     var sourceRf = picima.GetBounds(ref gu);
-                    graphics.DrawImageUnscaled(picima, (int) sourceRf.X, (int) sourceRf.Y);
+                    graphics.DrawImageUnscaled(picima, (int)sourceRf.X, (int)sourceRf.Y);
 
                     sourceRf = ima.GetBounds(ref gu);
                     graphics.DrawImageUnscaled(ima, (int)sourceRf.X, (int)sourceRf.Y);
@@ -176,7 +206,7 @@ namespace TesterDeDessin
                 picResult.Image = metafile;
                 picResult.SizeMode = PictureBoxSizeMode.Zoom;
                 //https://stackoverflow.com/questions/13175138/in-memory-metafile-is-not-drawn
-                
+
                 /*pbs[2].Image = ima;
                 using (var g = pbs[2].CreateGraphics())
                 {
@@ -195,11 +225,11 @@ namespace TesterDeDessin
                     Log($"dest:  {destRf.ToString()}");
 
                 }*/
-                
+
 
             }
             //pbs[pbi].Invalidate();
-            
+
         }
 
         /// <summary>
@@ -218,6 +248,11 @@ namespace TesterDeDessin
             Image[] listima = imaAll;
             int nbIma = nbImaEmbedded;
 
+            if (pbi == 0)
+            {
+                listima = imaShields;
+                nbIma = nbImaShieldEmbedded;
+            }
             if (pbi == 1)
             {
                 listima = imaTextures;
@@ -225,9 +260,15 @@ namespace TesterDeDessin
             }
 
             string info = "{pbi}";
-            if (imaIndex[pbi]< listima.Length) info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
-            
-            if (pbi == 1) info += " "+GetEmbeddedImagesNames(1)[imaIndex[pbi]];
+            if (imaIndex[pbi] < listima.Length) info = $"{pbi} - {imaIndex[pbi]} - {listima[imaIndex[pbi]].Width}x{listima[imaIndex[pbi]].Height}";
+
+            if (pbi == 1)
+            {
+                if (TextureFolderFileList != null && imaIndex[pbi] < TextureFolderFileList.Count())
+                    info += " " + TextureFolderFileList[imaIndex[pbi]].Name;
+                else
+                    info += " " + GetEmbeddedImagesNames(typeof(TesterDeDessin.ResourceTextures))[imaIndex[pbi]];
+            }
             seriallabs.Dessin.Helpers.RenderTxt(e.Graphics, info, 16, true);
         }
 
@@ -242,7 +283,7 @@ namespace TesterDeDessin
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 StreamReader streamReader = new StreamReader(ofd.FileName);
-                Bitmap sourceBitmap = (Bitmap) Bitmap.FromStream(streamReader.BaseStream);
+                Bitmap sourceBitmap = (Bitmap)Bitmap.FromStream(streamReader.BaseStream);
                 streamReader.Close();
 
                 picBsource.BackgroundImage = sourceBitmap;
@@ -501,7 +542,7 @@ namespace TesterDeDessin
         private void btnImaCompo_Click(object sender, EventArgs e)
         {
             seriallabs.Dessin.Helpers.ID = $"A{DateTime.Now.Minute}_";
-            
+
             pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
             //Image imaSrc = imaAll[imaIndex[1]];
             //imaSrc = Image.FromFile(@"C:\Users\olivierH\-dev-\IMG\Eagle2x.png");
@@ -523,10 +564,10 @@ namespace TesterDeDessin
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
 
                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttr4Opacity(0.25f)); //OK
-                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240,128,0,64))); //OK
+                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240, 128, 0, 64))); //OK
 
                 //picResult.Image =
-                if (trackBarTexture.Value>0) bc.AddTexture(pbs[1].Image,(int)nupTextureTiles.Value,trackBarTexture.Value/100f);
+                if (trackBarTexture.Value > 0) bc.AddTexture(pbs[1].Image, (int)nupTextureTiles.Value, trackBarTexture.Value / 100f);
                 //return;
                 ;
                 if (chkToPicResult.Checked) picResult.Image = bc.CurrentBitmap;
@@ -535,8 +576,8 @@ namespace TesterDeDessin
             }
 
             seriallabs.Dessin.Helpers.WriteTempPictureForTesting(pictureBox5.Image, "-pictureBox5");
-            
-          }
+
+        }
 
         private void pictureBox5_Click(object sender, EventArgs e)
         {
@@ -563,7 +604,7 @@ namespace TesterDeDessin
 
         private void picBlueBlend_Click(object sender, EventArgs e)
         {
-            var pB = (PictureBox) sender;
+            var pB = (PictureBox)sender;
             //Bitmap b = new Bitmap(pB.ClientRectangle.Width, pB.ClientRectangle.Height);
             Bitmap b = new Bitmap(280, 200);
             float fax = (float)b.Width / 350;
@@ -576,8 +617,8 @@ namespace TesterDeDessin
                 // Create pens.
                 Pen redPen = new Pen(Color.Red, 15);
                 Pen greenPen = new Pen(Color.Green, 5);
-                SolidBrush sBrush1 = new SolidBrush(Color.FromArgb(255,128,128,0));
-                g.DrawRectangle(greenPen,0,0,b.Width,b.Height);
+                SolidBrush sBrush1 = new SolidBrush(Color.FromArgb(255, 128, 128, 0));
+                g.DrawRectangle(greenPen, 0, 0, b.Width, b.Height);
                 // Create points that define curve.
                 /*Point point1 = new Point((int)50*fax, (int)50 * fay);
                 Point point2 = new Point((int)100 * fax, (int)25 * fay);
@@ -593,7 +634,7 @@ namespace TesterDeDessin
                 var point5 = new PointF(300 * fax, 100 * fay);
                 var point6 = new PointF(350 * fax, 200 * fay);
                 var point7 = new PointF(250 * fax, 250 * fay);
-                PointF[] curvePoints = {point1, point2, point3, point4, point5, point6, point7};
+                PointF[] curvePoints = { point1, point2, point3, point4, point5, point6, point7 };
 
                 // Draw lines between original points to screen.
                 g.DrawLines(redPen, curvePoints);
@@ -617,53 +658,80 @@ namespace TesterDeDessin
         {
             Bitmap b = new Bitmap(120, 150);
 
-            var pB = (PictureBox) sender;
+            var pB = (PictureBox)sender;
             var r = new RectangleF(Point.Empty, b.Size);//pB.ClientRectangle;
             var rr = pB.Size;
             //Bitmap b = new Bitmap(r.Width,  r.Height);
 
             using (var g = Graphics.FromImage(b))
             {
-                g.DrawRectangle(new Pen(Color.Brown,3), 0, 0, b.Width, b.Height);
-                SolidBrush sBrush1 = new SolidBrush(Color.FromArgb(255,0,128,128));
-                g.FillRectangle(sBrush1,r.Width/4,r.Height/4,r.Width*2/4,r.Height*2/4);
+                g.DrawRectangle(new Pen(Color.Brown, 3), 0, 0, b.Width, b.Height);
+                SolidBrush sBrush1 = new SolidBrush(Color.FromArgb(255, 0, 128, 128));
+                g.FillRectangle(sBrush1, r.Width / 4, r.Height / 4, r.Width * 2 / 4, r.Height * 2 / 4);
             }
 
             pB.Image = b;
-            toolStripStatusLabel2.Text = "blendbox:"+b.Size.ToString();
+            toolStripStatusLabel2.Text = "blendbox:" + b.Size.ToString();
         }
 
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnBlend_Click(object sender, EventArgs e)
         {
             //Bitmap b1 = (Bitmap) picBlueBlend.Image;
             Bitmap b1 = (Bitmap)picBsource.Image;
             Bitmap b2 = (Bitmap)picRedBlend.Image;
-            OpEx.ColorCalculationType op = OpEx.ColorCalculationType.Average;
-            op =Enum.Parse<OpEx.ColorCalculationType>(lstArithmetics.SelectedValue.ToString());
+            if (b2 == null) { picRedBlend_Click(picRedBlend, null); b2 = (Bitmap)picRedBlend.Image; }
+
+
+            OpEx.BlendArithmeticOp op = OpEx.BlendArithmeticOp.Average;
+            op = Enum.Parse<OpEx.BlendArithmeticOp>(lstArithmetics.SelectedValue.ToString());
 
             myConsole.LogLine($"start chrono {numericUpDown1.Value}x: BlendWithArithmetic ( {lstArithmetics.SelectedValue.ToString()}) ");
             var oc = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
             Helpers.TimeRecord = new Helpers.TimeRecording();
 
-            Image ima=null;
-            for (int i = 0; i < numericUpDown1.Value; i++)
-            {
-                ima = OpEx.BlendWithArithmetic(b1, b2,
-                    new Point(b1.Width - b2.Width * 7 / 10, b1.Height - b2.Height * 7 / 10),
-                    op);
-            }
+            Image ima = null;
+            //for (int i = 0; i < numericUpDown1.Value; i++)
+            //{
+            //    ima = OpEx.BlendWithArithmetic(b1, b2,
+            //        new Point(b1.Width - b2.Width * 7 / 10, b1.Height - b2.Height * 7 / 10),
+            //        op);
+            //}
 
             this.Cursor = oc;
-            Helpers.TimeRecord.checkin("finished");
-            toolStripStatusLabelElapsed.Text =
-                $"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ";
-            myConsole.LogLine($"{numericUpDown1.Value} BlendWithArithmetic: {Helpers.TimeRecord.Last().elapsinceBeginning}ms ");
+            Helpers.TimeRecord.checkin("mini test");
+
+            myConsole.LogLine($"{numericUpDown1.Value} BlendWithArithmetic: {Helpers.TimeRecord.Last().stepduration}ms ");
 
             picBlend.Image = ima;
             //picBlend.Image = OpEx.BlendWithArithmetic(b1, b2, new Point(250,180), op);
             //picBlend.Image = OpEx.BlendWithArithmetic(b1, b2, new Point(5, 8), op);
+
+            myConsole.LogLine("second step");
+            b2 = (Bitmap)pictureBox1.Image; //texture is now image in pictureBox1
+            //Bitmap btexture = new Bitmap(picBsource.Image, PixelFormat.Format32bppArgb); //create bitmap to hold texture at full size of 
+            Bitmap btexture = new Bitmap(picBsource.Image.Width, picBsource.Image.Height, PixelFormat.Format32bppArgb); //create bitmap to hold texture at full size of 
+            using (var ig = Graphics.FromImage(btexture))
+            {
+                ig.Clear(Color.Transparent);
+                //if (chkConsiderOpacity.Checked && trackBarTextureOpacity.Value < 100)
+                //    ig.DrawImageFull(b2, ImageAttributesExt.getImageAttr4Opacity(trackBarTextureOpacity.Value));
+                //else
+                ig.DrawImageFull(b2);
+            }
+            for (int j = 0; j < numericUpDown1.Value; j++)
+            {
+                if (chkConsiderOpacity.Checked)
+                    picResult.Image = OpEx.BlendWithArithmeticExt(b1, btexture, Point.Empty, op, trackBarTextureOpacity.Value);
+                else
+                    picResult.Image = OpEx.BlendWithArithmetic(b1, btexture, Point.Empty, op);
+            }
+            Helpers.TimeRecord.checkin("finished");
+            toolStripStatusLabelElapsed.Text =
+                $"{numericUpDown1.Value}new Bitmap: {Helpers.TimeRecord.Last().stepduration}ms ";
+            myConsole.LogLine($"{numericUpDown1.Value} BlendWithArithmetic: {Helpers.TimeRecord.Last().stepduration}ms ");
+
         }
 
         private void picBlend_Click(object sender, EventArgs e)
@@ -690,7 +758,7 @@ namespace TesterDeDessin
 
         }
 
-        private void addColorVar(List<heraldry.ColorReplacement.ColorPair> colorMapping,Color from1,Color from2, Color target1)
+        private void addColorVar(List<heraldry.ColorReplacement.ColorPair> colorMapping, Color from1, Color from2, Color target1)
         {
             var Lclair = HSL.convRGB2HSL((ColorRGB)from1).l;
             var Lfonce = HSL.convRGB2HSL((ColorRGB)from2).l;
@@ -720,7 +788,7 @@ namespace TesterDeDessin
 
             var C1 = lblColor1.BackColor;//Definitions.PaletteLight.Tongue;
             colorMapping.AddAllColors(
-                GreyWhite, 
+                GreyWhite,
                 heraldry.ETinctures.Undefined,
                 C1);
 
@@ -737,24 +805,24 @@ namespace TesterDeDessin
             ImageAttributes imattr = colorMapping.buildImageAttributes();
             myConsole.LogLine("btnColorRemap_Click avec imaSrc <- picBsource.Image puis bmpSrc = new Bitmap(imaSrc);");
             //using (var bc = Seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,ImageAttributesExt.getTestImageAttributes4Hue))
-            using (var bc = seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc,bmpSrc.Width,bmpSrc.Height,imattr))
+            using (var bc = seriallabs.Dessin.BitmapComposée.CreateBitmapComposée(bmpSrc, bmpSrc.Width, bmpSrc.Height, imattr))
             {
                 myConsole.LogLine("   bc.BlendImageOver(ResourceImages1.gray_floral);");
-               /* bc.BlendImageOver(ResourceImages1.gray_floral,
-                    ImageAttributesExt.getImageAttributesForColorize(Color.OrangeRed));
+                /* bc.BlendImageOver(ResourceImages1.gray_floral,
+                     ImageAttributesExt.getImageAttributesForColorize(Color.OrangeRed));
 
-                myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
-                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
-                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
+                 myConsole.LogLine("   bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50));");
+                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted,new Point(50,50), (ImageAttributes) ImageAttributesExt.getTestImageAttributes4Hue);
+                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), (ImageAttributes)new ImageAttributesExt().SetOpacity(0.25f));
 
-                //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttr4Opacity(0.25f)); //OK
-                bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240, 128, 0, 64))); //OK
+                 //bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50),ImageAttributesExt.getImageAttr4Opacity(0.25f)); //OK
+                 bc.BlendImageAt(ResourceImages1.EarOfWheat_adjusted, new Point(50, 50), ImageAttributesExt.getImageAttributesForColorize(Color.FromArgb(240, 128, 0, 64))); //OK
 
-                //picResult.Image =
-                if (trackBarTexture.Value > 0) bc.AddTexture(pbs[1].Image, (int)nupTextureTiles.Value, trackBarTexture.Value / 100f);
-                //return;
-                ;
-                if (chkToPicResult.Checked) picResult.Image = bc.CurrentBitmap;*/
+                 //picResult.Image =
+                 if (trackBarTexture.Value > 0) bc.AddTexture(pbs[1].Image, (int)nupTextureTiles.Value, trackBarTexture.Value / 100f);
+                 //return;
+                 ;
+                 if (chkToPicResult.Checked) picResult.Image = bc.CurrentBitmap;*/
                 picResult.Image = bc.CurrentBitmap;
                 //pictureBox5.Invalidate();
             }
@@ -775,8 +843,8 @@ namespace TesterDeDessin
         {
             Color fromColor = lblColor1.BackColor;
             Log($"from Color : {fromColor.ToString()}");
-            
-            var r = HSL.convRGB2HSL((ColorRGB) fromColor);
+
+            var r = HSL.convRGB2HSL((ColorRGB)fromColor);
             Log($"Brightness{r.l}");
             Log($"HSL : {r.ToString()}");
             Color c = HSL.convHSL2RGB(r);
@@ -785,14 +853,14 @@ namespace TesterDeDessin
             lblColor2.BackColor = HSL.convHSL2RGB(r.h, r.s, r.l * 1.25f);
 
             Log("gekk mano");
-            Log($"return Color white HSL: {HSL.convRGB2HSL(Color.FromArgb(255,255,255))}");
+            Log($"return Color white HSL: {HSL.convRGB2HSL(Color.FromArgb(255, 255, 255))}");
             Log($"return Color black HSL: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 0))}");
             Log($"return Color red1: {HSL.convRGB2HSL(Color.FromArgb(255, 1, 0))}");
             Log($"return Color green: {HSL.convRGB2HSL(Color.FromArgb(0, 255, 0))}");
             Log($"return Color blue: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 255))}");
             Log($"return Color halfblue: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 128))}");
             Log($"return Color blue64: {HSL.convRGB2HSL(Color.FromArgb(0, 0, 64))}");
-            Log($"return Color : {HSL.convHSL2RGB(0,0,0).ToString()}");
+            Log($"return Color : {HSL.convHSL2RGB(0, 0, 0).ToString()}");
             Log($"return Color : {HSL.convHSL2RGB(1, 1, 1)}");
             Log($"return Color : {HSL.convHSL2RGB(1.1, 1, 1)}");
             Log($"return Color : {HSL.convHSL2RGB(1, 1.1, 1)}");
@@ -828,11 +896,153 @@ namespace TesterDeDessin
         {
             if (trackBar2.Value == 0) trackBar2.Value = 10;
         }
+
+        private void ChooseSourceFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            dlg.ShowDialog();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                setTextureFolder(dlg.SelectedPath);
+            }
+        }
+
+        private void setSourceFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setTextureFolder(@"C:\Users\olivierH\-dev-\IMG\textures\opaqalicia\textures_opaque");
+        }
+        private void setTextureFolder(string selfolder)
+        {
+            lblTextureFolder.Text = selfolder;
+            DirectoryInfo di = new DirectoryInfo(selfolder);
+            TextureFolderFileList = di.GetFiles("*.png");
+            nbImaTexturesEmbedded = TextureFolderFileList.Count();
+            imaTextures = new Image[nbImaTexturesEmbedded];
+            for (int i = 0; i < nbImaTexturesEmbedded; i++)
+            {
+                imaTextures[i] = Image.FromFile(TextureFolderFileList[i].FullName);
+            }
+            imaIndex[1] = 0;
+            pbs[1].Image = imaTextures[0];
+        }
+
+        private void resetToEmbeddedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            initTextureList();
+            imaIndex[1] = 0;
+            pbs[1].Image = imaTextures[0];
+            lblTextureFolder.Text = "(embedded)";
+        }
+
+        private void btnBlendAuto_Click(object sender, EventArgs e)
+        {
+            lstArithmetics.SelectedIndex = ((lstArithmetics.SelectedIndex + 1) % lstArithmetics.Items.Count);
+            //btnBlend_Click(null,null);
+        }
+
+        int lstArithmeticsPrevIndex = -1;
+        int lstArithmeticsGoPrevIndex = -1;
+        private void lstArithmetics_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lstArithmeticsGoPrevIndex = lstArithmeticsPrevIndex;
+            lstArithmeticsPrevIndex = lstArithmetics.SelectedIndex;
+            if (lstArithmeticsGoPrevIndex > -1) btnBlend_Click(null, null); //prevent doing it just after init
+        }
+
+        private void btnBlendAutoPrev_Click(object sender, EventArgs e)
+        {
+            if (lstArithmeticsGoPrevIndex > -1)
+            {
+
+                lstArithmeticsPrevIndex = lstArithmetics.SelectedIndex;
+                lstArithmetics.SelectedIndex = lstArithmeticsGoPrevIndex;
+
+            }
+        }
+
+        private void chkConsiderOpacity_CheckedChanged(object sender, EventArgs e)
+        {
+            btnBlend_Click(null, null);
+        }
+
+        private void btnSavePicResult_Click(object sender, EventArgs e)
+        {
+            string filenameD = DateTime.Now.ToString("u").Replace(":", "").Replace(" ", "_").Substring(0, 15);
+            string filename = $"s{imaIndex[0]}_txtr{imaIndex[1]}_{TextureFolderFileList[imaIndex[1]].Name.Replace(".png", "")}_{(chkConsiderOpacity.Checked ? "HO" + trackBarTextureOpacity.Value : "-o")}_'{lstArithmetics.SelectedItem}'_{filenameD}.png";
+            picResult.Image.Save("C:\\Users\\olivierH\\-dev-\\IMG\\textures\\tests\\" + filename, ImageFormat.Png);
+        }
+        private void TestEncoder()
+        {
+            Bitmap myBitmap;
+            ImageCodecInfo myImageCodecInfo;
+            Encoder myEncoder;
+            EncoderParameter myEncoderParameter;
+            EncoderParameters myEncoderParameters;
+
+            // Create a Bitmap object based on a BMP file.
+            myBitmap = new Bitmap("Shapes.bmp");
+
+            // Get an ImageCodecInfo object that represents the JPEG codec.
+            myImageCodecInfo = GetEncoderInfo("image/png");
+
+            // Create an Encoder object based on the GUID
+
+            // for the Quality parameter category.
+            myEncoder = Encoder.Quality;
+
+            // Create an EncoderParameters object.
+
+            // An EncoderParameters object has an array of EncoderParameter
+
+            // objects. In this case, there is only one
+
+            // EncoderParameter object in the array.
+            myEncoderParameters = new EncoderParameters(1);
+
+            // Save the bitmap as a JPEG file with quality level 25.
+            myEncoderParameter = new EncoderParameter(myEncoder, 25L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            myBitmap.Save("Shapes025.jpg", myImageCodecInfo, myEncoderParameters);
+
+            // Save the bitmap as a JPEG file with quality level 50.
+            myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            myBitmap.Save("Shapes050.jpg", myImageCodecInfo, myEncoderParameters);
+
+            // Save the bitmap as a JPEG file with quality level 75.
+            myEncoderParameter = new EncoderParameter(myEncoder, 75L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            myBitmap.Save("Shapes075.jpg", myImageCodecInfo, myEncoderParameters);
+        }
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            int j;
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (j = 0; j < encoders.Length; ++j)
+            {
+                if (encoders[j].MimeType == mimeType)
+                    return encoders[j];
+            }
+            return null;
+        }
+
+        private void trackBarTextureOpacity_ValueChanged(object sender, EventArgs e)
+        {
+            toolStripStatusLabelValueChange.Text = trackBarTextureOpacity.Value.ToString();
+            btnBlend_Click(null, null);
+        }
+
+        private void trackBarTextureOpacity_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) { trackBarTextureOpacity.Value = 255; }
+        }
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    
+
 
 /*
  * https://learn.microsoft.com/en-us/dotnet/api/system.drawing.graphics.drawimage?view=dotnet-plat-ext-6.0#system-drawing-graphics-drawimage(system-drawing-image-system-drawing-pointf()-system-drawing-rectanglef-system-drawing-graphicsunit)
