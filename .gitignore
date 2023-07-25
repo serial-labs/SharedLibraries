@@ -185,3 +185,4 @@ $RECYCLE.BIN/
 [Nn]u[Gg]et-[Pp]ub/*/*.nupkg
 *.bak
 /.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
