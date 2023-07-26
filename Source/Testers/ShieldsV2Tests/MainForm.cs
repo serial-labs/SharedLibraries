@@ -1,5 +1,6 @@
 using seriallabs;
 using seriallabs.Dessin.heraldry;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
@@ -32,7 +33,7 @@ namespace ShieldsV2Tests
         {
             get
             {
-                if(_clean_outer_attr is null)
+                if (_clean_outer_attr is null)
                 {
                     ImageAttributes cleanupOuterAttributes = new();
                     List<ColorMap> colorMappings = new();
@@ -41,7 +42,7 @@ namespace ShieldsV2Tests
 
                     _clean_outer_attr = cleanupOuterAttributes;
                 }
-                
+
                 return _clean_outer_attr;
             }
         }
@@ -140,6 +141,8 @@ namespace ShieldsV2Tests
             const int WIDTH = 1200;
             const int HEIGHT = 1400;
 
+            Stopwatch sw = Stopwatch.StartNew();
+
             Bitmap result = new(WIDTH, HEIGHT);
 
             using Graphics g = Graphics.FromImage(result);
@@ -218,12 +221,14 @@ namespace ShieldsV2Tests
                 sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
                 GraphicsUnit.Pixel);
 
-            shieldAddedPicbox.Image = new Bitmap(result);
+            var copy = new Bitmap(result);
+
+            shieldAddedPicbox.Image = copy;
 
             g.Clear(new Color());
 
             g.DrawImage(
-                shieldAddedPicbox.Image,
+                copy,
                 destR,
                 sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
                 GraphicsUnit.Pixel,
@@ -231,6 +236,8 @@ namespace ShieldsV2Tests
 
             // END
             resultPictureBox.Image = result;
+
+            renderLabel.Text = $"Rendered: {sw.ElapsedMilliseconds}ms";
 
             Cursor = Cursors.Default;
             renderButton.Enabled = true;

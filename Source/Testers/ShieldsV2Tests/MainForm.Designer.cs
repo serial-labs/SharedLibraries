@@ -45,6 +45,8 @@
             renderButton = new Button();
             backgroundPicBox = new PictureBox();
             shieldAddedPicbox = new PictureBox();
+            statusStrip = new StatusStrip();
+            renderLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -53,6 +55,7 @@
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)backgroundPicBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)shieldAddedPicbox).BeginInit();
+            statusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -232,11 +235,28 @@
             shieldAddedPicbox.TabIndex = 23;
             shieldAddedPicbox.TabStop = false;
             // 
+            // statusStrip
+            // 
+            statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel });
+            statusStrip.Location = new Point(0, 660);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1459, 22);
+            statusStrip.TabIndex = 24;
+            statusStrip.Text = "statusStrip1";
+            // 
+            // renderLabel
+            // 
+            renderLabel.BackColor = Color.FromArgb(192, 255, 192);
+            renderLabel.Name = "renderLabel";
+            renderLabel.Size = new Size(12, 17);
+            renderLabel.Text = "-";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1459, 659);
+            ClientSize = new Size(1459, 682);
+            Controls.Add(statusStrip);
             Controls.Add(shieldAddedPicbox);
             Controls.Add(backgroundPicBox);
             Controls.Add(renderButton);
@@ -264,6 +284,8 @@
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)backgroundPicBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)shieldAddedPicbox).EndInit();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -287,5 +309,7 @@
         private Button renderButton;
         private PictureBox backgroundPicBox;
         private PictureBox shieldAddedPicbox;
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel renderLabel;
     }
 }
