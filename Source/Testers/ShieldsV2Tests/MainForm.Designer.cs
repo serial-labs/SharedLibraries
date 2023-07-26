@@ -107,6 +107,7 @@
             resultPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             resultPictureBox.TabIndex = 3;
             resultPictureBox.TabStop = false;
+            resultPictureBox.Click += resultPictureBox_Click;
             // 
             // colorizerdPartitionPicBox
             // 

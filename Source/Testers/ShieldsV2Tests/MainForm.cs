@@ -3,6 +3,7 @@ using seriallabs.Dessin.heraldry;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace ShieldsV2Tests
 {
@@ -148,8 +149,8 @@ namespace ShieldsV2Tests
             using Graphics g = Graphics.FromImage(result);
 
             // CONFIG
-            g.SmoothingMode = SmoothingMode.HighQuality;
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.SmoothingMode = SmoothingMode.HighSpeed;
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
             GraphicsUnit gu = g.PageUnit;
 
@@ -171,7 +172,7 @@ namespace ShieldsV2Tests
                 lock (CurrentFieldImg)
                 {
                     gField.DrawImage(
-                        new Bitmap(CurrentFieldImg),
+                        CurrentFieldImg,
                         destR,
                         sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
                         GraphicsUnit.Pixel,
@@ -243,6 +244,7 @@ namespace ShieldsV2Tests
             renderButton.Enabled = true;
         }
 
+
         private static void AddAllOffsettedColors(Color oldColor, Color newColor, List<ColorMap> mappings)
         {
             const int COLOR_SPREAD_OFFSET = 3;
@@ -297,7 +299,27 @@ namespace ShieldsV2Tests
         private void partitionPictureBox_Click(object sender, EventArgs e) => NextPartitionImage();
         private void fieldPictureBox_Click(object sender, EventArgs e) => NextFieldImg();
 
+        private void resultPictureBox_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new()
+            {
+                Filter = "PNG Image|*.png",
+                Title = "Save image",
+                FileName = "shield.png"
+            };
+
+            dialog.ShowDialog();
+
+            if (string.IsNullOrWhiteSpace(dialog.FileName))
+                return;
+            FileStream fs = (FileStream)dialog.OpenFile();
+
+            resultPictureBox.Image.Save(fs, ImageFormat.Png);
+        }
+
         private void renderButton_Click(object sender, EventArgs e) => Render();
         #endregion
+
+        
     }
 }
