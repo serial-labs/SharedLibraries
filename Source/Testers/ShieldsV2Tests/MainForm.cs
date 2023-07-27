@@ -113,7 +113,7 @@ namespace ShieldsV2Tests
 
             // Init other lists
             emfQualityList.DataSource = Enum.GetValues(typeof(CompositingQuality)).Cast<CompositingQuality>().ToList();
-            emfQualityList.SelectedValue = CompositingQuality.HighSpeed;
+            emfQualityList.SelectedItem = CompositingQuality.HighSpeed;
         }
         #endregion
 
