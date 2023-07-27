@@ -27,9 +27,9 @@ namespace ShieldsV2Tests
             { Tincture.Field, Color.FromArgb(0, 0, 0, 0) },
         };
 
-        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 64, 0); // Vert
-        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 64); // Bleu
-        private static readonly Color T3_REF_COLOR = Color.FromArgb(64, 0, 0); // Rouge
+        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 255, 0); // Vert
+        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 255); // Bleu
+        private static readonly Color T3_REF_COLOR = Color.FromArgb(255, 0, 0); // Rouge
         private static readonly Color OUTER_REF_COLOR = Color.FromArgb(255, 0, 255); // Magenta intense
 
         private static ImageAttributes _clean_outer_attr;
