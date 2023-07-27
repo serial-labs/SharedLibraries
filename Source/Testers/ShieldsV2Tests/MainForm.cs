@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace ShieldsV2Tests
 {
     public partial class MainForm : Form
     {
-        // https://stackoverflow.com/questions/1783130/draw-emf-antialiased
-        // https://stackoverflow.com/questions/37967951/how-to-enable-anti-aliasing-when-rendering-wmf-to-bitmap-in-c-wpf-winforms
-
         #region Constants
         private const string ROOT_FOLDER = @"C:/Icono/Shields/V2";
 
@@ -78,17 +77,17 @@ namespace ShieldsV2Tests
             // Fill image lists
             Shields = Directory.GetFiles(ROOT_FOLDER)
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => Image.FromFile(file))
+                .Select(file => ConvertToEmfPlus(new Metafile(file)))
                 .ToList();
 
             Partitions = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Partitions"))
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => Image.FromFile(file))
+                .Select(file => ConvertToEmfPlus(new Metafile(file)))
                 .ToList();
 
             Fields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Fields"))
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => Image.FromFile(file))
+                .Select(file => ConvertToEmfPlus(new Metafile(file)))
                 .ToList();
 
             // Init current images
@@ -149,7 +148,6 @@ namespace ShieldsV2Tests
 
             if (!displaySteps)
             {
-                partitionStepPicbox.Image = null;
                 colorizedFieldPicBox.Image = null;
                 backgroundPicBox.Image = null;
                 shieldAddedPicbox.Image = null;
@@ -195,30 +193,17 @@ namespace ShieldsV2Tests
             }
 
             // PARTITION
-            Bitmap partition = new(CurrentPartitionImg, canva.Width, canva.Height);
-
-            if (displaySteps)
-                partitionStepPicbox.Image = new Bitmap(partition);
-
             ImageAttributes partitionImageAttributes = ComputeImageAttributeForTinctures(PartitionT1, PartitionT2);
 
             lock (CurrentPartitionImg)
             {
                 gCanva.DrawImage(
-                    new Bitmap(CurrentPartitionImg),
+                    CurrentPartitionImg,
                     destR,
                     0, 0, CurrentPartitionImg.Width, CurrentPartitionImg.Height,
                     GraphicsUnit.Pixel,
                     partitionImageAttributes);
             }
-
-            //colorizerdPartitionPicBox.Image = new Bitmap(canva);
-
-            //g.DrawImage(
-            //    colorizedPartition,
-            //    destR,
-            //    sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
-            //    GraphicsUnit.Pixel);
 
             if (displaySteps)
                 backgroundPicBox.Image = new Bitmap(canva);
@@ -419,6 +404,56 @@ namespace ShieldsV2Tests
         private void OnPictureBoxMouseMove(object sender, MouseEventArgs e) => DrawZoomedRegion((PictureBox)sender, e.X, e.Y);
         #endregion
 
+        #region EMF To EMF+
 
+        // https://stackoverflow.com/questions/1783130/draw-emf-antialiased
+
+        // https://stackoverflow.com/questions/37967951/how-to-enable-anti-aliasing-when-rendering-wmf-to-bitmap-in-c-wpf-winforms
+
+        [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern int GdipConvertToEmfPlus(
+            HandleRef graphics,
+            HandleRef metafile,
+            out bool conversionSuccess,
+            EmfType emfType,
+            [MarshalAs(UnmanagedType.LPWStr)]
+            string description,
+            out IntPtr convertedMetafile);
+
+        private static Image ConvertToEmfPlus(Metafile metafile)
+        {
+            using Bitmap bmp = new(metafile.Width, metafile.Height);
+            using var graphics = Graphics.FromImage(bmp);
+            //using var imageAttr = new ImageAttributes();
+
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+
+            var metafileHandleField = typeof(Metafile).GetField("nativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
+            var imageAttributesHandleField = typeof(ImageAttributes).GetField("nativeImageAttributes", BindingFlags.Instance | BindingFlags.NonPublic);
+            var graphicsHandleProperty = typeof(Graphics).GetProperty("NativeGraphics", BindingFlags.Instance | BindingFlags.NonPublic);
+            var setNativeImage = typeof(Image).GetMethod("SetNativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
+            IntPtr mf = (IntPtr)metafileHandleField.GetValue(metafile);
+            //IntPtr ia = (IntPtr)imageAttributesHandleField.GetValue(imageAttr);
+            IntPtr g = (IntPtr)graphicsHandleProperty.GetValue(graphics);
+
+            var status = GdipConvertToEmfPlus(new HandleRef(graphics, g),
+                                              new HandleRef(metafile, mf),
+                                              out bool isSuccess,
+                                              EmfType.EmfPlusOnly,
+                                              "",
+                                              out IntPtr emfPlusHandle);
+            if (status != 0)
+            {
+                throw new Exception("Can't convert");
+            }
+
+            Metafile emfPlus = (Metafile)System.Runtime.Serialization.FormatterServices.GetSafeUninitializedObject(typeof(Metafile));
+            setNativeImage.Invoke(emfPlus, new object[] { emfPlusHandle });
+
+            return emfPlus;
+        }
+        #endregion
     }
 }

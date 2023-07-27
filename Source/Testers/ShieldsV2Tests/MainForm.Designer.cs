@@ -51,7 +51,6 @@
             widthLabel = new Label();
             lookupPicBox = new PictureBox();
             displayStepsCheckBox = new CheckBox();
-            partitionStepPicbox = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -62,7 +61,6 @@
             statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)partitionStepPicbox).BeginInit();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -306,24 +304,11 @@
             displayStepsCheckBox.Text = "Display Steps (slower)";
             displayStepsCheckBox.UseVisualStyleBackColor = true;
             // 
-            // partitionStepPicbox
-            // 
-            partitionStepPicbox.BackgroundImage = Properties.Resources.transparent;
-            partitionStepPicbox.BorderStyle = BorderStyle.FixedSingle;
-            partitionStepPicbox.Location = new Point(350, 228);
-            partitionStepPicbox.Name = "partitionStepPicbox";
-            partitionStepPicbox.Size = new Size(180, 210);
-            partitionStepPicbox.SizeMode = PictureBoxSizeMode.StretchImage;
-            partitionStepPicbox.TabIndex = 29;
-            partitionStepPicbox.TabStop = false;
-            partitionStepPicbox.MouseMove += OnPictureBoxMouseMove;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1476, 681);
-            Controls.Add(partitionStepPicbox);
             Controls.Add(displayStepsCheckBox);
             Controls.Add(lookupPicBox);
             Controls.Add(renderButton);
@@ -358,7 +343,6 @@
             statusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)partitionStepPicbox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -388,6 +372,5 @@
         private PictureBox lookupPicBox;
         private ToolStripStatusLabel exceptMessageLabel;
         private CheckBox displayStepsCheckBox;
-        private PictureBox partitionStepPicbox;
     }
 }
