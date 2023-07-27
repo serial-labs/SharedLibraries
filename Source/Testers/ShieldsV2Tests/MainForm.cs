@@ -1,9 +1,11 @@
 using seriallabs;
+using seriallabs.Dessin;
 using seriallabs.Dessin.heraldry;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -26,9 +28,9 @@ namespace ShieldsV2Tests
             { Tincture.Field, Color.FromArgb(0, 0, 0, 0) },
         };
 
-        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 64, 0); // Vert
-        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 64); // Bleu
-        private static readonly Color T3_REF_COLOR = Color.FromArgb(64, 0, 0); // Rouge
+        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 255, 0); // Vert
+        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 255); // Bleu
+        private static readonly Color T3_REF_COLOR = Color.FromArgb(255, 0, 0); // Rouge
         private static readonly Color OUTER_REF_COLOR = Color.FromArgb(255, 0, 255); // Magenta intense
 
         private static ImageAttributes _clean_outer_attr;
@@ -52,11 +54,11 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Properties
-        private List<Metafile> Shields { get; set; }
+        private List<(Metafile Image, Region Mask3000w)> Shields { get; set; }
         private List<Metafile> Partitions { get; set; }
         private List<Metafile> Fields { get; set; }
 
-        private Metafile CurrentShieldImg { get; set; }
+        private (Metafile Image, Region Mask3000w) CurrentShieldImg { get; set; }
         private Metafile CurrentPartitionImg { get; set; }
         private Metafile CurrentFieldImg { get; set; }
 
@@ -75,19 +77,26 @@ namespace ShieldsV2Tests
             InitializeComponent();
 
             // Fill image lists
-            Shields = Directory.GetFiles(ROOT_FOLDER)
-                .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => new Metafile(file))
+            Shields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Shields"))
+                .Where(path => Path.GetExtension(path) == ".emf")
+                .Select(path =>
+                {
+                    Metafile img = new(path);
+                    using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shields", "Masks", Path.GetFileName(path)));
+                    using Bitmap bmp = new(maskImg, 3000, (int)(3000 * ((double)img.Height / img.Width)));
+                    Region reg = bmp.MakeNonTransparentRegion();
+                    return (img, reg);
+                })
                 .ToList();
 
             Partitions = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Partitions"))
-                .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => new Metafile(file))
+                .Where(path => Path.GetExtension(path) == ".emf")
+                .Select(path => new Metafile(path))
                 .ToList();
 
             Fields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Fields"))
-                .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => new Metafile(file))
+                .Where(path => Path.GetExtension(path) == ".emf")
+                .Select(path => new Metafile(path))
                 .ToList();
 
             // Init current images
@@ -103,13 +112,13 @@ namespace ShieldsV2Tests
             partitionT1list.SelectedItem = Tincture.Field;
 
             partitionT2list.DataSource = tinctures.ToList();
-            partitionT2list.SelectedItem = Tincture.Or;
+            partitionT2list.SelectedItem = Tincture.Vert;
 
             fieldT1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
-            fieldT1list.SelectedItem = Tincture.Sable;
+            fieldT1list.SelectedItem = Tincture.Gules;
 
             fieldT2list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
-            fieldT2list.SelectedItem = Tincture.Argent;
+            fieldT2list.SelectedItem = Tincture.Or;
 
             // Init other lists
             emfQualityList.DataSource = Enum.GetValues(typeof(CompositingQuality)).Cast<CompositingQuality>().ToList();
@@ -120,10 +129,10 @@ namespace ShieldsV2Tests
         #region Methods
 
         #region Base Images
-        public void SetCurrentShieldImage(Metafile image)
+        public void SetCurrentShieldImage((Metafile Image, Region Mask3000w) shieldImg)
         {
-            CurrentShieldImg = image;
-            shieldPictureBox.Image = image;
+            CurrentShieldImg = shieldImg;
+            shieldPictureBox.Image = shieldImg.Image;
         }
         public void SetCurrentPartitionImg(Metafile image)
         {
@@ -154,37 +163,43 @@ namespace ShieldsV2Tests
             {
                 colorizedFieldPicBox.Image = null;
                 backgroundPicBox.Image = null;
-                shieldAddedPicbox.Image = null;
+                colorizerdPartitionPicBox.Image = null;
             }
 
             SmoothingMode emfSmoothing = smoothingCheckBox.Checked ? SmoothingMode.AntiAlias : SmoothingMode.None;
-            CompositingQuality emfQuality = (CompositingQuality) emfQualityList.SelectedValue;
+            CompositingQuality emfQuality = (CompositingQuality)emfQualityList.SelectedValue;
 
-            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg, emfSmoothing, emfQuality);
+            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
             Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
             Metafile partitionMetaFile = ConvertToEmfPlus(CurrentPartitionImg, emfSmoothing, emfQuality);
 
             // GO
             Stopwatch sw = Stopwatch.StartNew();
 
-            const float RATIO = 7f / 6f;  // Width / Height
+            float ratio = (float)shieldMetaFile.Height / shieldMetaFile.Width;
 
             int width = widthSlider.Value * 100;
 
-            Bitmap result = new(width, (int)(width * RATIO));
-            using Bitmap canva = new(result);
+            Bitmap canva = new(width, (int)(width * ratio));
 
             using Graphics gCanva = Graphics.FromImage(canva);
 
             // CONFIG
             gCanva.SmoothingMode = SmoothingMode.None;
             gCanva.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //gCanva.Clip = new Region(new Rectangle(250, 250, 750, 750));
 
             GraphicsUnit gu = gCanva.PageUnit;
 
             RectangleF destRf = canva.GetBounds(ref gu);
             Rectangle destR = destRf.ToRectangle();
+
+            // MASK
+            Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
+            System.Drawing.Drawing2D.Matrix maskTransform = new();
+            float maskScaleRatio = width / 3000f;
+            maskTransform.Scale(maskScaleRatio, maskScaleRatio);
+            mask.Transform(maskTransform);
+            gCanva.Clip = mask;
 
             // FIELD
             if (PartitionT1 == Tincture.Field || PartitionT2 == Tincture.Field)
@@ -205,6 +220,22 @@ namespace ShieldsV2Tests
             // PARTITION
             ImageAttributes partitionImageAttributes = ComputeImageAttributeForTinctures(PartitionT1, PartitionT2);
 
+            if (displaySteps)
+            {
+                Bitmap colorizedPartition = new(canva.Width, canva.Height);
+                using Graphics gPartition = Graphics.FromImage(colorizedPartition);
+                gPartition.Clip = mask;
+
+                gPartition.DrawImage(
+                    partitionMetaFile,
+                    destR,
+                    0, 0, partitionMetaFile.Width, partitionMetaFile.Height,
+                    GraphicsUnit.Pixel,
+                    partitionImageAttributes);
+
+                colorizerdPartitionPicBox.Image = new Bitmap(colorizedPartition);
+            }
+
             gCanva.DrawImage(
                 partitionMetaFile,
                 destR,
@@ -216,26 +247,16 @@ namespace ShieldsV2Tests
                 backgroundPicBox.Image = new Bitmap(canva);
 
             // SHIELD
+            gCanva.Clip = new(); // Do not set to null (exception)
+
             gCanva.DrawImage(
                 shieldMetaFile,
                 destR,
                 0, 0, shieldMetaFile.Width, shieldMetaFile.Height,
                 GraphicsUnit.Pixel);
 
-            if (displaySteps)
-                shieldAddedPicbox.Image = new Bitmap(canva);
-
-            using Graphics geResult = Graphics.FromImage(result);
-
-            geResult.DrawImage(
-                canva,
-                destR,
-                0, 0, canva.Width, canva.Height,
-                GraphicsUnit.Pixel,
-                CLEAN_OUTER_ATTRIBUTES);
-
             // END
-            resultPictureBox.Image = result;
+            resultPictureBox.Image = canva;
 
             renderLabel.Text = $"Rendered: {sw.ElapsedMilliseconds}ms";
 
@@ -289,19 +310,6 @@ namespace ShieldsV2Tests
             imageAttributes.SetRemapTable(colorMappings.ToArray());
 
             return imageAttributes;
-        }
-
-        private static void RemoveOuterMagenta(Bitmap bmp)
-        {
-            Rectangle rect = new(0, 0, bmp.Width, bmp.Height);
-            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-            int bytes = bmpData.Stride * bmp.Height;
-            byte[] rgbValues = new byte[bytes];
-            byte[] r = new byte[bytes / 3];
-            byte[] g = new byte[bytes / 3];
-            byte[] b = new byte[bytes / 3];
-
         }
         #endregion
 
@@ -405,7 +413,7 @@ namespace ShieldsV2Tests
             string description,
             out IntPtr convertedMetafile);
 
-        private static Metafile ConvertToEmfPlus(Metafile metafile, SmoothingMode smoothingMode, CompositingQuality quality)
+        private static Metafile ConvertToEmfPlus(Metafile metafile, SmoothingMode smoothingMode, CompositingQuality quality, CompositingMode compositingMode = CompositingMode.SourceOver)
         {
             // De ce que je comprends, on a juste besoin d'un Graphics pour communiquer les paramètres de smoothing, etc...
             // Donc on fait une Bitmap minuscule pour économiser des ressources
@@ -414,6 +422,7 @@ namespace ShieldsV2Tests
 
             graphics.SmoothingMode = smoothingMode;
             graphics.CompositingQuality = quality;
+            graphics.CompositingMode = compositingMode;
 
             var metafileHandleField = typeof(Metafile).GetField("nativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
             var imageAttributesHandleField = typeof(ImageAttributes).GetField("nativeImageAttributes", BindingFlags.Instance | BindingFlags.NonPublic);
