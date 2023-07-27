@@ -1,4 +1,5 @@
 using seriallabs;
+using seriallabs.Dessin;
 using seriallabs.Dessin.heraldry;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -52,11 +53,11 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Properties
-        private List<Metafile> Shields { get; set; }
+        private List<(Metafile Image, Region Mask3000)> Shields { get; set; }
         private List<Metafile> Partitions { get; set; }
         private List<Metafile> Fields { get; set; }
 
-        private Metafile CurrentShieldImg { get; set; }
+        private (Metafile Image, Region Mask3000) CurrentShieldImg { get; set; }
         private Metafile CurrentPartitionImg { get; set; }
         private Metafile CurrentFieldImg { get; set; }
 
@@ -77,7 +78,12 @@ namespace ShieldsV2Tests
             // Fill image lists
             Shields = Directory.GetFiles(ROOT_FOLDER)
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => new Metafile(file))
+                .Select(file => 
+                { 
+                    Metafile img = new(file); 
+                    Region reg = new Bitmap(img, 3000, (int)((double)img.Height / img.Width) * 3000).MakeNonTransparentRegion(); 
+                    return (img, reg); 
+                })
                 .ToList();
 
             Partitions = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Partitions"))
@@ -120,10 +126,10 @@ namespace ShieldsV2Tests
         #region Methods
 
         #region Base Images
-        public void SetCurrentShieldImage(Metafile image)
+        public void SetCurrentShieldImage((Metafile Image, Region Mask3000) shieldImage)
         {
-            CurrentShieldImg = image;
-            shieldPictureBox.Image = image;
+            CurrentShieldImg = shieldImage;
+            shieldPictureBox.Image = shieldImage.Image;
         }
         public void SetCurrentPartitionImg(Metafile image)
         {
@@ -136,7 +142,7 @@ namespace ShieldsV2Tests
             fieldPictureBox.Image = image;
         }
 
-        public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.IndexOf(CurrentShieldImg) + 1) % Shields.Count]);
+        public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.FindIndex(x => x == CurrentShieldImg) + 1) % Shields.Count]);
         public void NextPartitionImage() => SetCurrentPartitionImg(Partitions[(Partitions.IndexOf(CurrentPartitionImg) + 1) % Partitions.Count]);
         public void NextFieldImg() => SetCurrentFieldImg(Fields[(Fields.IndexOf(CurrentFieldImg) + 1) % Fields.Count]);
         #endregion
@@ -160,19 +166,18 @@ namespace ShieldsV2Tests
             SmoothingMode emfSmoothing = smoothingCheckBox.Checked ? SmoothingMode.AntiAlias : SmoothingMode.None;
             CompositingQuality emfQuality = (CompositingQuality) emfQualityList.SelectedValue;
 
-            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg, emfSmoothing, emfQuality);
+            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
             Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
             Metafile partitionMetaFile = ConvertToEmfPlus(CurrentPartitionImg, emfSmoothing, emfQuality);
 
             // GO
             Stopwatch sw = Stopwatch.StartNew();
 
-            const float RATIO = 7f / 6f;  // Width / Height
+            float RATIO = (float)shieldMetaFile.Width / shieldMetaFile.Height;
 
             int width = widthSlider.Value * 100;
 
-            Bitmap result = new(width, (int)(width * RATIO));
-            using Bitmap canva = new(result);
+            Bitmap canva = new(width, (int)(width * RATIO));
 
             using Graphics gCanva = Graphics.FromImage(canva);
 
@@ -184,6 +189,14 @@ namespace ShieldsV2Tests
 
             RectangleF destRf = canva.GetBounds(ref gu);
             Rectangle destR = destRf.ToRectangle();
+
+            // MASK
+            System.Drawing.Drawing2D.Matrix maskScaleMatrix = new();
+            float maskScaleRatio = (width / 3000f);
+            maskScaleMatrix.Scale(maskScaleRatio, maskScaleRatio * RATIO);
+            Region shieldMask = new(CurrentShieldImg.Mask3000.GetRegionData());
+            shieldMask.Transform(maskScaleMatrix);
+            gCanva.Clip = shieldMask;
 
             // FIELD
             if (PartitionT1 == Tincture.Field || PartitionT2 == Tincture.Field)
@@ -219,22 +232,14 @@ namespace ShieldsV2Tests
                 shieldMetaFile,
                 destR,
                 0, 0, shieldMetaFile.Width, shieldMetaFile.Height,
-                GraphicsUnit.Pixel);
+                GraphicsUnit.Pixel,
+                CLEAN_OUTER_ATTRIBUTES);
 
             if (displaySteps)
                 shieldAddedPicbox.Image = new Bitmap(canva);
 
-            using Graphics geResult = Graphics.FromImage(result);
-
-            geResult.DrawImage(
-                canva,
-                destR,
-                0, 0, canva.Width, canva.Height,
-                GraphicsUnit.Pixel,
-                CLEAN_OUTER_ATTRIBUTES);
-
             // END
-            resultPictureBox.Image = result;
+            resultPictureBox.Image = canva;
 
             renderLabel.Text = $"Rendered: {sw.ElapsedMilliseconds}ms";
 
@@ -244,7 +249,7 @@ namespace ShieldsV2Tests
 
         private static void AddAllOffsettedColors(Color oldColor, Color newColor, List<ColorMap> mappings)
         {
-            const int COLOR_SPREAD_OFFSET = 3;
+            const int COLOR_SPREAD_OFFSET = 2;
 
             static int SafeStart(int colorValue) => Math.Max(0, colorValue - COLOR_SPREAD_OFFSET);
             static int SafeEnd(int colorValue) => Math.Min(255, colorValue + COLOR_SPREAD_OFFSET);
@@ -288,6 +293,19 @@ namespace ShieldsV2Tests
             imageAttributes.SetRemapTable(colorMappings.ToArray());
 
             return imageAttributes;
+        }
+
+        private static void RemoveOuterMagenta(Bitmap bmp)
+        {
+            Rectangle rect = new(0, 0, bmp.Width, bmp.Height);
+            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            int bytes = bmpData.Stride * bmp.Height;
+            byte[] rgbValues = new byte[bytes];
+            byte[] r = new byte[bytes / 3];
+            byte[] g = new byte[bytes / 3];
+            byte[] b = new byte[bytes / 3];
+
         }
         #endregion
 
