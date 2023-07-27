@@ -51,6 +51,9 @@
             widthLabel = new Label();
             lookupPicBox = new PictureBox();
             displayStepsCheckBox = new CheckBox();
+            smoothingCheckBox = new CheckBox();
+            emfQualityList = new ComboBox();
+            qualityContainer = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -61,6 +64,7 @@
             statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
+            qualityContainer.SuspendLayout();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -75,7 +79,6 @@
             shieldPictureBox.TabIndex = 0;
             shieldPictureBox.TabStop = false;
             shieldPictureBox.Click += shieldPictureBox_Click;
-            shieldPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // fieldPictureBox
             // 
@@ -89,7 +92,6 @@
             fieldPictureBox.TabIndex = 1;
             fieldPictureBox.TabStop = false;
             fieldPictureBox.Click += fieldPictureBox_Click;
-            fieldPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // partitionPictureBox
             // 
@@ -103,7 +105,6 @@
             partitionPictureBox.TabIndex = 2;
             partitionPictureBox.TabStop = false;
             partitionPictureBox.Click += partitionPictureBox_Click;
-            partitionPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // resultPictureBox
             // 
@@ -297,18 +298,51 @@
             displayStepsCheckBox.AutoSize = true;
             displayStepsCheckBox.Checked = true;
             displayStepsCheckBox.CheckState = CheckState.Checked;
-            displayStepsCheckBox.Location = new Point(370, 126);
+            displayStepsCheckBox.Location = new Point(350, 126);
             displayStepsCheckBox.Name = "displayStepsCheckBox";
             displayStepsCheckBox.Size = new Size(140, 19);
             displayStepsCheckBox.TabIndex = 28;
             displayStepsCheckBox.Text = "Display Steps (slower)";
             displayStepsCheckBox.UseVisualStyleBackColor = true;
             // 
+            // smoothingCheckBox
+            // 
+            smoothingCheckBox.AutoSize = true;
+            smoothingCheckBox.Checked = true;
+            smoothingCheckBox.CheckState = CheckState.Checked;
+            smoothingCheckBox.Location = new Point(350, 151);
+            smoothingCheckBox.Name = "smoothingCheckBox";
+            smoothingCheckBox.Size = new Size(111, 19);
+            smoothingCheckBox.TabIndex = 3;
+            smoothingCheckBox.Text = "EMF Smoothing";
+            smoothingCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // emfQualityList
+            // 
+            emfQualityList.DropDownStyle = ComboBoxStyle.DropDownList;
+            emfQualityList.FormattingEnabled = true;
+            emfQualityList.Location = new Point(6, 22);
+            emfQualityList.Name = "emfQualityList";
+            emfQualityList.Size = new Size(168, 23);
+            emfQualityList.TabIndex = 2;
+            // 
+            // qualityContainer
+            // 
+            qualityContainer.Controls.Add(emfQualityList);
+            qualityContainer.Location = new Point(350, 175);
+            qualityContainer.Name = "qualityContainer";
+            qualityContainer.Size = new Size(180, 57);
+            qualityContainer.TabIndex = 29;
+            qualityContainer.TabStop = false;
+            qualityContainer.Text = "EMF Quality";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1476, 681);
+            Controls.Add(qualityContainer);
+            Controls.Add(smoothingCheckBox);
             Controls.Add(displayStepsCheckBox);
             Controls.Add(lookupPicBox);
             Controls.Add(renderButton);
@@ -343,6 +377,7 @@
             statusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).EndInit();
+            qualityContainer.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -372,5 +407,8 @@
         private PictureBox lookupPicBox;
         private ToolStripStatusLabel exceptMessageLabel;
         private CheckBox displayStepsCheckBox;
+        private CheckBox smoothingCheckBox;
+        private ComboBox emfQualityList;
+        private GroupBox qualityContainer;
     }
 }

@@ -52,13 +52,13 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Properties
-        private List<Image> Shields { get; set; }
-        private List<Image> Partitions { get; set; }
-        private List<Image> Fields { get; set; }
+        private List<Metafile> Shields { get; set; }
+        private List<Metafile> Partitions { get; set; }
+        private List<Metafile> Fields { get; set; }
 
-        private Image CurrentShieldImg { get; set; }
-        private Image CurrentPartitionImg { get; set; }
-        private Image CurrentFieldImg { get; set; }
+        private Metafile CurrentShieldImg { get; set; }
+        private Metafile CurrentPartitionImg { get; set; }
+        private Metafile CurrentFieldImg { get; set; }
 
         private Tincture PartitionT1 => (Tincture)partitionT1list.SelectedValue;
         private Tincture PartitionT2 => (Tincture)partitionT2list.SelectedValue;
@@ -77,17 +77,17 @@ namespace ShieldsV2Tests
             // Fill image lists
             Shields = Directory.GetFiles(ROOT_FOLDER)
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => ConvertToEmfPlus(new Metafile(file)))
+                .Select(file => new Metafile(file))
                 .ToList();
 
             Partitions = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Partitions"))
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => ConvertToEmfPlus(new Metafile(file)))
+                .Select(file => new Metafile(file))
                 .ToList();
 
             Fields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Fields"))
                 .Where(file => Path.GetExtension(file) == ".emf")
-                .Select(file => ConvertToEmfPlus(new Metafile(file)))
+                .Select(file => new Metafile(file))
                 .ToList();
 
             // Init current images
@@ -110,23 +110,27 @@ namespace ShieldsV2Tests
 
             fieldT2list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
             fieldT2list.SelectedItem = Tincture.Argent;
+
+            // Init other lists
+            emfQualityList.DataSource = Enum.GetValues(typeof(CompositingQuality)).Cast<CompositingQuality>().ToList();
+            emfQualityList.SelectedValue = CompositingQuality.HighSpeed;
         }
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         #region Base Images
-        public void SetCurrentShieldImage(Image image)
+        public void SetCurrentShieldImage(Metafile image)
         {
             CurrentShieldImg = image;
             shieldPictureBox.Image = image;
         }
-        public void SetCurrentPartitionImg(Image image)
+        public void SetCurrentPartitionImg(Metafile image)
         {
             CurrentPartitionImg = image;
             partitionPictureBox.Image = image;
         }
-        public void SetCurrentFieldImg(Image image)
+        public void SetCurrentFieldImg(Metafile image)
         {
             CurrentFieldImg = image;
             fieldPictureBox.Image = image;
@@ -153,11 +157,19 @@ namespace ShieldsV2Tests
                 shieldAddedPicbox.Image = null;
             }
 
+            SmoothingMode emfSmoothing = smoothingCheckBox.Checked ? SmoothingMode.AntiAlias : SmoothingMode.None;
+            CompositingQuality emfQuality = (CompositingQuality) emfQualityList.SelectedValue;
+
+            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg, emfSmoothing, emfQuality);
+            Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
+            Metafile partitionMetaFile = ConvertToEmfPlus(CurrentPartitionImg, emfSmoothing, emfQuality);
+
+            // GO
+            Stopwatch sw = Stopwatch.StartNew();
+
             const float RATIO = 7f / 6f;  // Width / Height
 
             int width = widthSlider.Value * 100;
-
-            Stopwatch sw = Stopwatch.StartNew();
 
             Bitmap result = new(width, (int)(width * RATIO));
             using Bitmap canva = new(result);
@@ -165,8 +177,8 @@ namespace ShieldsV2Tests
             using Graphics gCanva = Graphics.FromImage(canva);
 
             // CONFIG
-            gCanva.SmoothingMode = SmoothingMode.AntiAlias;
-            gCanva.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            gCanva.SmoothingMode = SmoothingMode.None;
+            gCanva.InterpolationMode = InterpolationMode.NearestNeighbor;
 
             GraphicsUnit gu = gCanva.PageUnit;
 
@@ -178,15 +190,12 @@ namespace ShieldsV2Tests
             {
                 ImageAttributes fieldImageAttributes = ComputeImageAttributeForTinctures(FieldT1, FieldT2);
 
-                lock (CurrentFieldImg)
-                {
-                    gCanva.DrawImage(
-                        CurrentFieldImg,
-                        destR,
-                        0, 0, CurrentFieldImg.Width, CurrentFieldImg.Height,
-                        GraphicsUnit.Pixel,
-                        fieldImageAttributes);
-                }
+                gCanva.DrawImage(
+                    fieldMetaFile,
+                    destR,
+                    0, 0, fieldMetaFile.Width, fieldMetaFile.Height,
+                    GraphicsUnit.Pixel,
+                    fieldImageAttributes);
 
                 if (displaySteps)
                     colorizedFieldPicBox.Image = new Bitmap(canva);
@@ -195,28 +204,22 @@ namespace ShieldsV2Tests
             // PARTITION
             ImageAttributes partitionImageAttributes = ComputeImageAttributeForTinctures(PartitionT1, PartitionT2);
 
-            lock (CurrentPartitionImg)
-            {
-                gCanva.DrawImage(
-                    CurrentPartitionImg,
-                    destR,
-                    0, 0, CurrentPartitionImg.Width, CurrentPartitionImg.Height,
-                    GraphicsUnit.Pixel,
-                    partitionImageAttributes);
-            }
+            gCanva.DrawImage(
+                partitionMetaFile,
+                destR,
+                0, 0, partitionMetaFile.Width, partitionMetaFile.Height,
+                GraphicsUnit.Pixel,
+                partitionImageAttributes);
 
             if (displaySteps)
                 backgroundPicBox.Image = new Bitmap(canva);
 
             // SHIELD
-            lock (CurrentShieldImg)
-            {
-                gCanva.DrawImage(
-                    CurrentShieldImg,
-                    destR,
-                    0, 0, CurrentShieldImg.Width, CurrentShieldImg.Height,
-                    GraphicsUnit.Pixel);
-            }
+            gCanva.DrawImage(
+                shieldMetaFile,
+                destR,
+                0, 0, shieldMetaFile.Width, shieldMetaFile.Height,
+                GraphicsUnit.Pixel);
 
             if (displaySteps)
                 shieldAddedPicbox.Image = new Bitmap(canva);
@@ -372,6 +375,58 @@ namespace ShieldsV2Tests
         }
         #endregion
 
+        #region EMF To EMF+
+
+        // https://stackoverflow.com/questions/1783130/draw-emf-antialiased
+
+        // https://stackoverflow.com/questions/37967951/how-to-enable-anti-aliasing-when-rendering-wmf-to-bitmap-in-c-wpf-winforms
+
+        [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern int GdipConvertToEmfPlus(
+            HandleRef graphics,
+            HandleRef metafile,
+            out bool conversionSuccess,
+            EmfType emfType,
+            [MarshalAs(UnmanagedType.LPWStr)]
+            string description,
+            out IntPtr convertedMetafile);
+
+        private static Metafile ConvertToEmfPlus(Metafile metafile, SmoothingMode smoothingMode, CompositingQuality quality)
+        {
+            // De ce que je comprends, on a juste besoin d'un Graphics pour communiquer les paramètres de smoothing, etc...
+            // Donc on fait une Bitmap minuscule pour économiser des ressources
+            using Bitmap bmp = new(1, 1);
+            using var graphics = Graphics.FromImage(bmp);
+
+            graphics.SmoothingMode = smoothingMode;
+            graphics.CompositingQuality = quality;
+
+            var metafileHandleField = typeof(Metafile).GetField("nativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
+            var imageAttributesHandleField = typeof(ImageAttributes).GetField("nativeImageAttributes", BindingFlags.Instance | BindingFlags.NonPublic);
+            var graphicsHandleProperty = typeof(Graphics).GetProperty("NativeGraphics", BindingFlags.Instance | BindingFlags.NonPublic);
+            var setNativeImage = typeof(Image).GetMethod("SetNativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
+            IntPtr mf = (IntPtr)metafileHandleField.GetValue(metafile);
+            IntPtr g = (IntPtr)graphicsHandleProperty.GetValue(graphics);
+
+            var status = GdipConvertToEmfPlus(new HandleRef(graphics, g),
+                                              new HandleRef(metafile, mf),
+                                              out bool isSuccess,
+                                              EmfType.EmfPlusOnly,
+                                              "",
+                                              out IntPtr emfPlusHandle);
+            if (status != 0)
+            {
+                throw new Exception("Can't convert");
+            }
+
+            Metafile emfPlus = (Metafile)System.Runtime.Serialization.FormatterServices.GetSafeUninitializedObject(typeof(Metafile));
+            setNativeImage.Invoke(emfPlus, new object[] { emfPlusHandle });
+
+            return emfPlus;
+        }
+
+        #endregion
+
         #endregion
 
         #region Events Handlers
@@ -404,56 +459,5 @@ namespace ShieldsV2Tests
         private void OnPictureBoxMouseMove(object sender, MouseEventArgs e) => DrawZoomedRegion((PictureBox)sender, e.X, e.Y);
         #endregion
 
-        #region EMF To EMF+
-
-        // https://stackoverflow.com/questions/1783130/draw-emf-antialiased
-
-        // https://stackoverflow.com/questions/37967951/how-to-enable-anti-aliasing-when-rendering-wmf-to-bitmap-in-c-wpf-winforms
-
-        [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        internal static extern int GdipConvertToEmfPlus(
-            HandleRef graphics,
-            HandleRef metafile,
-            out bool conversionSuccess,
-            EmfType emfType,
-            [MarshalAs(UnmanagedType.LPWStr)]
-            string description,
-            out IntPtr convertedMetafile);
-
-        private static Image ConvertToEmfPlus(Metafile metafile)
-        {
-            using Bitmap bmp = new(metafile.Width, metafile.Height);
-            using var graphics = Graphics.FromImage(bmp);
-            //using var imageAttr = new ImageAttributes();
-
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-
-            var metafileHandleField = typeof(Metafile).GetField("nativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
-            var imageAttributesHandleField = typeof(ImageAttributes).GetField("nativeImageAttributes", BindingFlags.Instance | BindingFlags.NonPublic);
-            var graphicsHandleProperty = typeof(Graphics).GetProperty("NativeGraphics", BindingFlags.Instance | BindingFlags.NonPublic);
-            var setNativeImage = typeof(Image).GetMethod("SetNativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
-            IntPtr mf = (IntPtr)metafileHandleField.GetValue(metafile);
-            //IntPtr ia = (IntPtr)imageAttributesHandleField.GetValue(imageAttr);
-            IntPtr g = (IntPtr)graphicsHandleProperty.GetValue(graphics);
-
-            var status = GdipConvertToEmfPlus(new HandleRef(graphics, g),
-                                              new HandleRef(metafile, mf),
-                                              out bool isSuccess,
-                                              EmfType.EmfPlusOnly,
-                                              "",
-                                              out IntPtr emfPlusHandle);
-            if (status != 0)
-            {
-                throw new Exception("Can't convert");
-            }
-
-            Metafile emfPlus = (Metafile)System.Runtime.Serialization.FormatterServices.GetSafeUninitializedObject(typeof(Metafile));
-            setNativeImage.Invoke(emfPlus, new object[] { emfPlusHandle });
-
-            return emfPlus;
-        }
-        #endregion
     }
 }
