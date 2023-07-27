@@ -32,7 +32,6 @@
             fieldPictureBox = new PictureBox();
             partitionPictureBox = new PictureBox();
             resultPictureBox = new PictureBox();
-            colorizerdPartitionPicBox = new PictureBox();
             colorizedFieldPicBox = new PictureBox();
             label1 = new Label();
             label2 = new Label();
@@ -47,15 +46,23 @@
             shieldAddedPicbox = new PictureBox();
             statusStrip = new StatusStrip();
             renderLabel = new ToolStripStatusLabel();
+            exceptMessageLabel = new ToolStripStatusLabel();
+            widthSlider = new TrackBar();
+            widthLabel = new Label();
+            lookupPicBox = new PictureBox();
+            displayStepsCheckBox = new CheckBox();
+            partitionStepPicbox = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)colorizerdPartitionPicBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)backgroundPicBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)shieldAddedPicbox).BeginInit();
             statusStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)partitionStepPicbox).BeginInit();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -70,6 +77,7 @@
             shieldPictureBox.TabIndex = 0;
             shieldPictureBox.TabStop = false;
             shieldPictureBox.Click += shieldPictureBox_Click;
+            shieldPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // fieldPictureBox
             // 
@@ -83,6 +91,7 @@
             fieldPictureBox.TabIndex = 1;
             fieldPictureBox.TabStop = false;
             fieldPictureBox.Click += fieldPictureBox_Click;
+            fieldPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // partitionPictureBox
             // 
@@ -96,6 +105,7 @@
             partitionPictureBox.TabIndex = 2;
             partitionPictureBox.TabStop = false;
             partitionPictureBox.Click += partitionPictureBox_Click;
+            partitionPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // resultPictureBox
             // 
@@ -103,22 +113,12 @@
             resultPictureBox.BorderStyle = BorderStyle.FixedSingle;
             resultPictureBox.Location = new Point(908, 12);
             resultPictureBox.Name = "resultPictureBox";
-            resultPictureBox.Size = new Size(540, 630);
+            resultPictureBox.Size = new Size(556, 642);
             resultPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             resultPictureBox.TabIndex = 3;
             resultPictureBox.TabStop = false;
             resultPictureBox.Click += resultPictureBox_Click;
-            // 
-            // colorizerdPartitionPicBox
-            // 
-            colorizerdPartitionPicBox.BackgroundImage = Properties.Resources.transparent;
-            colorizerdPartitionPicBox.BorderStyle = BorderStyle.FixedSingle;
-            colorizerdPartitionPicBox.Location = new Point(350, 228);
-            colorizerdPartitionPicBox.Name = "colorizerdPartitionPicBox";
-            colorizerdPartitionPicBox.Size = new Size(180, 210);
-            colorizerdPartitionPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            colorizerdPartitionPicBox.TabIndex = 6;
-            colorizerdPartitionPicBox.TabStop = false;
+            resultPictureBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // colorizedFieldPicBox
             // 
@@ -130,6 +130,7 @@
             colorizedFieldPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
             colorizedFieldPicBox.TabIndex = 5;
             colorizedFieldPicBox.TabStop = false;
+            colorizedFieldPicBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // label1
             // 
@@ -206,7 +207,7 @@
             // renderButton
             // 
             renderButton.Cursor = Cursors.Hand;
-            renderButton.Location = new Point(350, 12);
+            renderButton.Location = new Point(350, 64);
             renderButton.Name = "renderButton";
             renderButton.Size = new Size(180, 56);
             renderButton.TabIndex = 21;
@@ -218,30 +219,32 @@
             // 
             backgroundPicBox.BackgroundImage = Properties.Resources.transparent;
             backgroundPicBox.BorderStyle = BorderStyle.FixedSingle;
-            backgroundPicBox.Location = new Point(536, 333);
+            backgroundPicBox.Location = new Point(536, 444);
             backgroundPicBox.Name = "backgroundPicBox";
             backgroundPicBox.Size = new Size(180, 210);
             backgroundPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
             backgroundPicBox.TabIndex = 22;
             backgroundPicBox.TabStop = false;
+            backgroundPicBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // shieldAddedPicbox
             // 
             shieldAddedPicbox.BackgroundImage = Properties.Resources.transparent;
             shieldAddedPicbox.BorderStyle = BorderStyle.FixedSingle;
-            shieldAddedPicbox.Location = new Point(722, 333);
+            shieldAddedPicbox.Location = new Point(722, 444);
             shieldAddedPicbox.Name = "shieldAddedPicbox";
             shieldAddedPicbox.Size = new Size(180, 210);
             shieldAddedPicbox.SizeMode = PictureBoxSizeMode.StretchImage;
             shieldAddedPicbox.TabIndex = 23;
             shieldAddedPicbox.TabStop = false;
+            shieldAddedPicbox.MouseMove += OnPictureBoxMouseMove;
             // 
             // statusStrip
             // 
-            statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel });
-            statusStrip.Location = new Point(0, 660);
+            statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel, exceptMessageLabel });
+            statusStrip.Location = new Point(0, 659);
             statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1459, 22);
+            statusStrip.Size = new Size(1476, 22);
             statusStrip.TabIndex = 24;
             statusStrip.Text = "statusStrip1";
             // 
@@ -252,15 +255,83 @@
             renderLabel.Size = new Size(12, 17);
             renderLabel.Text = "-";
             // 
+            // exceptMessageLabel
+            // 
+            exceptMessageLabel.BackColor = Color.IndianRed;
+            exceptMessageLabel.Name = "exceptMessageLabel";
+            exceptMessageLabel.Size = new Size(12, 17);
+            exceptMessageLabel.Text = "-";
+            // 
+            // widthSlider
+            // 
+            widthSlider.Cursor = Cursors.Hand;
+            widthSlider.LargeChange = 10;
+            widthSlider.Location = new Point(350, 33);
+            widthSlider.Maximum = 30;
+            widthSlider.Minimum = 1;
+            widthSlider.Name = "widthSlider";
+            widthSlider.Size = new Size(180, 45);
+            widthSlider.TabIndex = 25;
+            widthSlider.Value = 10;
+            widthSlider.ValueChanged += widthSlider_ValueChanged;
+            // 
+            // widthLabel
+            // 
+            widthLabel.AutoSize = true;
+            widthLabel.Location = new Point(350, 15);
+            widthLabel.Name = "widthLabel";
+            widthLabel.Size = new Size(116, 15);
+            widthLabel.TabIndex = 26;
+            widthLabel.Text = "Image width: 1000px";
+            // 
+            // lookupPicBox
+            // 
+            lookupPicBox.BackgroundImage = Properties.Resources.transparent;
+            lookupPicBox.BorderStyle = BorderStyle.FixedSingle;
+            lookupPicBox.Location = new Point(536, 64);
+            lookupPicBox.Name = "lookupPicBox";
+            lookupPicBox.Size = new Size(366, 374);
+            lookupPicBox.TabIndex = 27;
+            lookupPicBox.TabStop = false;
+            // 
+            // displayStepsCheckBox
+            // 
+            displayStepsCheckBox.AutoSize = true;
+            displayStepsCheckBox.Checked = true;
+            displayStepsCheckBox.CheckState = CheckState.Checked;
+            displayStepsCheckBox.Location = new Point(370, 126);
+            displayStepsCheckBox.Name = "displayStepsCheckBox";
+            displayStepsCheckBox.Size = new Size(140, 19);
+            displayStepsCheckBox.TabIndex = 28;
+            displayStepsCheckBox.Text = "Display Steps (slower)";
+            displayStepsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // partitionStepPicbox
+            // 
+            partitionStepPicbox.BackgroundImage = Properties.Resources.transparent;
+            partitionStepPicbox.BorderStyle = BorderStyle.FixedSingle;
+            partitionStepPicbox.Location = new Point(350, 228);
+            partitionStepPicbox.Name = "partitionStepPicbox";
+            partitionStepPicbox.Size = new Size(180, 210);
+            partitionStepPicbox.SizeMode = PictureBoxSizeMode.StretchImage;
+            partitionStepPicbox.TabIndex = 29;
+            partitionStepPicbox.TabStop = false;
+            partitionStepPicbox.MouseMove += OnPictureBoxMouseMove;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1459, 682);
+            ClientSize = new Size(1476, 681);
+            Controls.Add(partitionStepPicbox);
+            Controls.Add(displayStepsCheckBox);
+            Controls.Add(lookupPicBox);
+            Controls.Add(renderButton);
+            Controls.Add(widthLabel);
+            Controls.Add(widthSlider);
             Controls.Add(statusStrip);
             Controls.Add(shieldAddedPicbox);
             Controls.Add(backgroundPicBox);
-            Controls.Add(renderButton);
             Controls.Add(fieldT2list);
             Controls.Add(fieldT1list);
             Controls.Add(label3);
@@ -269,7 +340,6 @@
             Controls.Add(partitionT1list);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(colorizerdPartitionPicBox);
             Controls.Add(colorizedFieldPicBox);
             Controls.Add(resultPictureBox);
             Controls.Add(partitionPictureBox);
@@ -281,12 +351,14 @@
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)colorizerdPartitionPicBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)backgroundPicBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)shieldAddedPicbox).EndInit();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
+            ((System.ComponentModel.ISupportInitialize)lookupPicBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)partitionStepPicbox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -297,7 +369,6 @@
         private PictureBox fieldPictureBox;
         private PictureBox partitionPictureBox;
         private PictureBox resultPictureBox;
-        private PictureBox colorizerdPartitionPicBox;
         private PictureBox colorizedFieldPicBox;
         private Label label1;
         private Label label2;
@@ -312,5 +383,11 @@
         private PictureBox shieldAddedPicbox;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel renderLabel;
+        private TrackBar widthSlider;
+        private Label widthLabel;
+        private PictureBox lookupPicBox;
+        private ToolStripStatusLabel exceptMessageLabel;
+        private CheckBox displayStepsCheckBox;
+        private PictureBox partitionStepPicbox;
     }
 }

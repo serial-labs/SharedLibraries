@@ -3,12 +3,15 @@ using seriallabs.Dessin.heraldry;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
+using System.Drawing.Text;
 
 namespace ShieldsV2Tests
 {
     public partial class MainForm : Form
     {
+        // https://stackoverflow.com/questions/1783130/draw-emf-antialiased
+        // https://stackoverflow.com/questions/37967951/how-to-enable-anti-aliasing-when-rendering-wmf-to-bitmap-in-c-wpf-winforms
+
         #region Constants
         private const string ROOT_FOLDER = @"C:/Icono/Shields/V2";
 
@@ -24,9 +27,9 @@ namespace ShieldsV2Tests
             { Tincture.Field, Color.FromArgb(0, 0, 0, 0) },
         };
 
-        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 128, 0); // Vert moyen
-        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 255); // Bleu intense
-        private static readonly Color T3_REF_COLOR = Color.FromArgb(127, 0, 0); // Rouge moyen
+        private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 64, 0); // Vert
+        private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 64); // Bleu
+        private static readonly Color T3_REF_COLOR = Color.FromArgb(64, 0, 0); // Rouge
         private static readonly Color OUTER_REF_COLOR = Color.FromArgb(255, 0, 255); // Magenta intense
 
         private static ImageAttributes _clean_outer_attr;
@@ -112,6 +115,8 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Public Methods
+
+        #region Base Images
         public void SetCurrentShieldImage(Image image)
         {
             CurrentShieldImg = image;
@@ -131,107 +136,112 @@ namespace ShieldsV2Tests
         public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.IndexOf(CurrentShieldImg) + 1) % Shields.Count]);
         public void NextPartitionImage() => SetCurrentPartitionImg(Partitions[(Partitions.IndexOf(CurrentPartitionImg) + 1) % Partitions.Count]);
         public void NextFieldImg() => SetCurrentFieldImg(Fields[(Fields.IndexOf(CurrentFieldImg) + 1) % Fields.Count]);
+        #endregion
 
-
+        #region Rendering
         public void Render()
         {
             // INIT
             renderButton.Enabled = false;
             Cursor = Cursors.WaitCursor;
 
-            const int WIDTH = 1200;
-            const int HEIGHT = 1400;
+            bool displaySteps = displayStepsCheckBox.Checked;
+
+            if (!displaySteps)
+            {
+                partitionStepPicbox.Image = null;
+                colorizedFieldPicBox.Image = null;
+                backgroundPicBox.Image = null;
+                shieldAddedPicbox.Image = null;
+            }
+
+            const float RATIO = 7f / 6f;  // Width / Height
+
+            int width = widthSlider.Value * 100;
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            Bitmap result = new(WIDTH, HEIGHT);
+            Bitmap result = new(width, (int)(width * RATIO));
+            using Bitmap canva = new(result);
 
-            using Graphics g = Graphics.FromImage(result);
+            using Graphics gCanva = Graphics.FromImage(canva);
 
             // CONFIG
-            g.SmoothingMode = SmoothingMode.HighSpeed;
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            gCanva.SmoothingMode = SmoothingMode.AntiAlias;
+            gCanva.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-            GraphicsUnit gu = g.PageUnit;
+            GraphicsUnit gu = gCanva.PageUnit;
 
-            RectangleF destRf = result.GetBounds(ref gu);
+            RectangleF destRf = canva.GetBounds(ref gu);
             Rectangle destR = destRf.ToRectangle();
 
-            Rectangle sourceR = new(0, 0, WIDTH, HEIGHT);
-
             // FIELD
-            Bitmap colorizedField = null;
             if (PartitionT1 == Tincture.Field || PartitionT2 == Tincture.Field)
             {
-                colorizedField = new(result.Width, result.Height);
-
-                using Graphics gField = Graphics.FromImage(colorizedField);
-
                 ImageAttributes fieldImageAttributes = ComputeImageAttributeForTinctures(FieldT1, FieldT2);
 
                 lock (CurrentFieldImg)
                 {
-                    gField.DrawImage(
+                    gCanva.DrawImage(
                         CurrentFieldImg,
                         destR,
-                        sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
+                        0, 0, CurrentFieldImg.Width, CurrentFieldImg.Height,
                         GraphicsUnit.Pixel,
                         fieldImageAttributes);
                 }
 
-                colorizedFieldPicBox.Image = colorizedField;
-
-                g.DrawImage(
-                    colorizedField,
-                    destR,
-                    sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
-                    GraphicsUnit.Pixel);
+                if (displaySteps)
+                    colorizedFieldPicBox.Image = new Bitmap(canva);
             }
 
             // PARTITION
-            Bitmap colorizedPartition = new(result.Width, result.Height);
+            Bitmap partition = new(CurrentPartitionImg, canva.Width, canva.Height);
 
-            using Graphics gPartition = Graphics.FromImage(colorizedPartition);
+            if (displaySteps)
+                partitionStepPicbox.Image = new Bitmap(partition);
 
             ImageAttributes partitionImageAttributes = ComputeImageAttributeForTinctures(PartitionT1, PartitionT2);
 
             lock (CurrentPartitionImg)
             {
-                gPartition.DrawImage(
+                gCanva.DrawImage(
                     new Bitmap(CurrentPartitionImg),
                     destR,
-                    sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
+                    0, 0, CurrentPartitionImg.Width, CurrentPartitionImg.Height,
                     GraphicsUnit.Pixel,
                     partitionImageAttributes);
             }
 
-            colorizerdPartitionPicBox.Image = colorizedPartition;
+            //colorizerdPartitionPicBox.Image = new Bitmap(canva);
 
-            g.DrawImage(
-                colorizedPartition,
-                destR,
-                sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
-                GraphicsUnit.Pixel);
+            //g.DrawImage(
+            //    colorizedPartition,
+            //    destR,
+            //    sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
+            //    GraphicsUnit.Pixel);
 
-            backgroundPicBox.Image = new Bitmap(result);
+            if (displaySteps)
+                backgroundPicBox.Image = new Bitmap(canva);
 
             // SHIELD
-            g.DrawImage(
-                CurrentShieldImg,
+            lock (CurrentShieldImg)
+            {
+                gCanva.DrawImage(
+                    CurrentShieldImg,
+                    destR,
+                    0, 0, CurrentShieldImg.Width, CurrentShieldImg.Height,
+                    GraphicsUnit.Pixel);
+            }
+
+            if (displaySteps)
+                shieldAddedPicbox.Image = new Bitmap(canva);
+
+            using Graphics geResult = Graphics.FromImage(result);
+
+            geResult.DrawImage(
+                canva,
                 destR,
-                sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
-                GraphicsUnit.Pixel);
-
-            var copy = new Bitmap(result);
-
-            shieldAddedPicbox.Image = copy;
-
-            g.Clear(new Color());
-
-            g.DrawImage(
-                copy,
-                destR,
-                sourceR.Left, sourceR.Top, sourceR.Width, sourceR.Height,
+                0, 0, canva.Width, canva.Height,
                 GraphicsUnit.Pixel,
                 CLEAN_OUTER_ATTRIBUTES);
 
@@ -243,7 +253,6 @@ namespace ShieldsV2Tests
             Cursor = Cursors.Default;
             renderButton.Enabled = true;
         }
-
 
         private static void AddAllOffsettedColors(Color oldColor, Color newColor, List<ColorMap> mappings)
         {
@@ -294,6 +303,92 @@ namespace ShieldsV2Tests
         }
         #endregion
 
+        #region Zoom on cursor
+        private void DrawZoomedRegion(PictureBox sourcePb, int sourceX, int sourceY)
+        {
+            if (sourcePb?.Image is null)
+                return;
+
+            const int ZOOM_FACTOR = 15;
+
+            Point real = GetRealCoordOr0(sourcePb, sourceX, sourceY);
+
+            //lastZoomCoord = new Point(sourceX, sourceY);
+
+            try
+            {
+                int zoomedZoneW = 1 + (lookupPicBox.ClientRectangle.Width - 1) / ZOOM_FACTOR; //arrondir au pixel sup si dépasse. ex. à zF=3, 15=>5 et 16=>6
+                int zoomedZoneH = 1 + (lookupPicBox.ClientRectangle.Height - 1) / ZOOM_FACTOR;
+                int zoomedZone_Left = real.X - zoomedZoneW / 2; if (zoomedZone_Left < 0) zoomedZone_Left = 0;
+                int zoomedZone_Right = real.Y - zoomedZoneH / 2; if (zoomedZone_Right < 0) zoomedZone_Right = 0;
+                Point offsetgrid = new Point(ZOOM_FACTOR / 2, ZOOM_FACTOR / 2);
+
+                Rectangle sourceR = new Rectangle(zoomedZone_Left, zoomedZone_Right, zoomedZoneW, zoomedZoneH);
+                Rectangle destR = new Rectangle(0, 0, zoomedZoneW * ZOOM_FACTOR, zoomedZoneH * ZOOM_FACTOR);
+
+                Bitmap bmp = new Bitmap(lookupPicBox.ClientRectangle.Width, lookupPicBox.ClientRectangle.Height);
+
+                //Pen pen = new Pen(Color.FromArgb(10 + ZOOM_FACTOR * 100 / 25, lblColor2.BackColor));
+
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+                    g.CompositingQuality = CompositingQuality.HighQuality;
+                    g.CompositingMode = CompositingMode.SourceCopy;
+                    g.TextRenderingHint = TextRenderingHint.SingleBitPerPixel;
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.PixelOffsetMode = PixelOffsetMode.None; //https://stackoverflow.com/questions/28441479/what-is-pixeloffsetmode
+
+                    g.DrawImage(sourcePb.Image, destR, sourceR, GraphicsUnit.Pixel);
+
+                    //for (int i = offsetgrid.X; i < destR.Width; i += ZOOM_FACTOR)
+                    //    g.DrawLine(pen, i, 0, i, destR.Height);
+                    //for (int i = offsetgrid.Y; i < destR.Height; i += ZOOM_FACTOR)
+                    //    g.DrawLine(pen, 0, i, destR.Width, i);
+                }
+                Color colour = bmp.GetPixel(zoomedZoneW / 2, zoomedZoneH / 2);
+
+                lookupPicBox.Image = bmp;
+
+                exceptMessageLabel.Text = "-";
+            }
+            catch (Exception ex)
+            {
+                exceptMessageLabel.Text = ex.Message;
+            }
+        }
+
+        public static Point GetRealCoordOr0(PictureBox pb, int mouseX, int mouseY)
+        {
+            if (pb.Image == null)
+                return default;
+
+            int realW = pb.Image.Width;
+            int realH = pb.Image.Height;
+
+            int currentW = pb.ClientRectangle.Width; //Obtient le rectangle qui représente la zone cliente du contrôle.
+            int currentH = pb.ClientRectangle.Height;
+
+            double zoomW = (currentW / (double)realW);
+            double zoomH = (currentH / (double)realH);
+            double zoomActual = Math.Min(zoomW, zoomH);
+            double padX = zoomActual == zoomW ? 0 : (currentW - (zoomActual * realW)) / 2;
+            double padY = zoomActual == zoomH ? 0 : (currentH - (zoomActual * realH)) / 2;
+
+            int realX = (int)((mouseX - padX) / zoomActual);
+            int realY = (int)((mouseY - padY) / zoomActual);
+
+            if (realX < 0) realX = 0;
+            if (realX >= realW) realX = realW - 1;
+            if (realY < 0) realY = 0;
+            if (realY >= realH) realY = realH - 1;
+
+            return new Point(realX, realY);
+        }
+        #endregion
+
+        #endregion
+
         #region Events Handlers
         private void shieldPictureBox_Click(object sender, EventArgs e) => NextShieldImage();
         private void partitionPictureBox_Click(object sender, EventArgs e) => NextPartitionImage();
@@ -318,8 +413,12 @@ namespace ShieldsV2Tests
         }
 
         private void renderButton_Click(object sender, EventArgs e) => Render();
+
+        private void widthSlider_ValueChanged(object sender, EventArgs e) => widthLabel.Text = $"Image width: {widthSlider.Value * 100}px";
+
+        private void OnPictureBoxMouseMove(object sender, MouseEventArgs e) => DrawZoomedRegion((PictureBox)sender, e.X, e.Y);
         #endregion
 
-        
+
     }
 }
