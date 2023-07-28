@@ -45,6 +45,7 @@
             backgroundPicBox = new PictureBox();
             statusStrip = new StatusStrip();
             renderLabel = new ToolStripStatusLabel();
+            finalSizeLabel = new ToolStripStatusLabel();
             exceptMessageLabel = new ToolStripStatusLabel();
             widthSlider = new TrackBar();
             widthLabel = new Label();
@@ -54,7 +55,6 @@
             emfQualityList = new ComboBox();
             qualityContainer = new GroupBox();
             colorizerdPartitionPicBox = new PictureBox();
-            finalSizeLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -243,6 +243,13 @@
             renderLabel.Size = new Size(12, 17);
             renderLabel.Text = "-";
             // 
+            // finalSizeLabel
+            // 
+            finalSizeLabel.BackColor = SystemColors.ActiveCaption;
+            finalSizeLabel.Name = "finalSizeLabel";
+            finalSizeLabel.Size = new Size(12, 17);
+            finalSizeLabel.Text = "-";
+            // 
             // exceptMessageLabel
             // 
             exceptMessageLabel.BackColor = Color.IndianRed;
@@ -336,13 +343,6 @@
             colorizerdPartitionPicBox.TabIndex = 23;
             colorizerdPartitionPicBox.TabStop = false;
             colorizerdPartitionPicBox.MouseMove += OnPictureBoxMouseMove;
-            // 
-            // finalSizeLabel
-            // 
-            finalSizeLabel.BackColor = SystemColors.ActiveCaption;
-            finalSizeLabel.Name = "finalSizeLabel";
-            finalSizeLabel.Size = new Size(12, 17);
-            finalSizeLabel.Text = "-";
             // 
             // MainForm
             // 

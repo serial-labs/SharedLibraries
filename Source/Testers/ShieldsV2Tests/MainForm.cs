@@ -202,17 +202,16 @@ namespace ShieldsV2Tests
             // CONFIG
             gCanva.SmoothingMode = SmoothingMode.None;
             gCanva.InterpolationMode = InterpolationMode.NearestNeighbor;
-            gCanva.CompositingMode = CompositingMode.SourceCopy;
 
             GraphicsUnit gu = gCanva.PageUnit;
 
             // MASK
-            //Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
-            //System.Drawing.Drawing2D.Matrix maskTransform = new();
-            //float maskScaleRatio = width / 3000f;
-            //maskTransform.Scale(maskScaleRatio, maskScaleRatio);
-            //mask.Transform(maskTransform);
-            //gCanva.Clip = mask;
+            Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
+            System.Drawing.Drawing2D.Matrix maskTransform = new();
+            maskTransform.Scale((float)destinationScale, (float)destinationScale);
+            maskTransform.Translate(-usefullArea3000w.X, -usefullArea3000w.Y);
+            mask.Transform(maskTransform);
+            gCanva.Clip = mask;
 
             // FIELD
             if (OrdinaryT1 == Tincture.Field || OrdinaryT2 == Tincture.Field)
@@ -468,6 +467,7 @@ namespace ShieldsV2Tests
 
             if (string.IsNullOrWhiteSpace(dialog.FileName))
                 return;
+
             FileStream fs = (FileStream)dialog.OpenFile();
 
             resultPictureBox.Image.Save(fs, ImageFormat.Png);
