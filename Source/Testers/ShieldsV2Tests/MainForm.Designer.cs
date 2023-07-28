@@ -54,7 +54,6 @@
             smoothingCheckBox = new CheckBox();
             emfQualityList = new ComboBox();
             qualityContainer = new GroupBox();
-            colorizerdPartitionPicBox = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -65,7 +64,6 @@
             ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
             qualityContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)colorizerdPartitionPicBox).BeginInit();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -219,7 +217,7 @@
             // 
             backgroundPicBox.BackgroundImage = Properties.Resources.transparent;
             backgroundPicBox.BorderStyle = BorderStyle.FixedSingle;
-            backgroundPicBox.Location = new Point(722, 444);
+            backgroundPicBox.Location = new Point(536, 444);
             backgroundPicBox.Name = "backgroundPicBox";
             backgroundPicBox.Size = new Size(180, 210);
             backgroundPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -332,18 +330,6 @@
             qualityContainer.TabStop = false;
             qualityContainer.Text = "EMF Quality";
             // 
-            // colorizerdPartitionPicBox
-            // 
-            colorizerdPartitionPicBox.BackgroundImage = Properties.Resources.transparent;
-            colorizerdPartitionPicBox.BorderStyle = BorderStyle.FixedSingle;
-            colorizerdPartitionPicBox.Location = new Point(536, 444);
-            colorizerdPartitionPicBox.Name = "colorizerdPartitionPicBox";
-            colorizerdPartitionPicBox.Size = new Size(180, 210);
-            colorizerdPartitionPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            colorizerdPartitionPicBox.TabIndex = 23;
-            colorizerdPartitionPicBox.TabStop = false;
-            colorizerdPartitionPicBox.MouseMove += OnPictureBoxMouseMove;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -357,7 +343,6 @@
             Controls.Add(widthLabel);
             Controls.Add(widthSlider);
             Controls.Add(statusStrip);
-            Controls.Add(colorizerdPartitionPicBox);
             Controls.Add(backgroundPicBox);
             Controls.Add(fieldT2list);
             Controls.Add(fieldT1list);
@@ -385,7 +370,6 @@
             ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).EndInit();
             qualityContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)colorizerdPartitionPicBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -417,7 +401,6 @@
         private CheckBox smoothingCheckBox;
         private ComboBox emfQualityList;
         private GroupBox qualityContainer;
-        private PictureBox colorizerdPartitionPicBox;
         private ToolStripStatusLabel finalSizeLabel;
     }
 }

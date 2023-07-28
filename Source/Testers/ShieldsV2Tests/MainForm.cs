@@ -165,12 +165,13 @@ namespace ShieldsV2Tests
             {
                 colorizedFieldPicBox.Image = null;
                 backgroundPicBox.Image = null;
-                colorizerdPartitionPicBox.Image = null;
             }
 
             SmoothingMode emfSmoothing = smoothingCheckBox.Checked ? SmoothingMode.AntiAlias : SmoothingMode.None;
             CompositingQuality emfQuality = (CompositingQuality)emfQualityList.SelectedValue;
 
+            // Conversion à faire au chargement des images
+            // Ici on les refait à chaque fois pour pouvoir modifier les paramètres de qualité de rendu
             Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
             Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
             Metafile ordinaryMetaFile = ConvertToEmfPlus(CurrentOrdinaryImg, emfSmoothing, emfQuality);
@@ -178,14 +179,14 @@ namespace ShieldsV2Tests
             // GO
             Stopwatch sw = Stopwatch.StartNew();
 
+            // CALCUL TAILLE CANVA ET ZONE DE DRAW
             Rectangle usefullArea3000w = CurrentShieldImg.Area3000w;
-
-            double sourceAspectRatio = (double)CurrentShieldImg.Image.Height / CurrentShieldImg.Image.Width;
 
             double canvaAspectRatio = (double)usefullArea3000w.Height / usefullArea3000w.Width;
             int canvaWidth = widthSlider.Value * 100;
             int canvaHeight = (int)(canvaWidth * canvaAspectRatio);
 
+            double sourceAspectRatio = (double)CurrentShieldImg.Image.Height / CurrentShieldImg.Image.Width;
             double destinationScale = (double)canvaWidth / usefullArea3000w.Width;
 
             Rectangle destR = new()
@@ -198,12 +199,6 @@ namespace ShieldsV2Tests
 
             Bitmap canva = new(canvaWidth, canvaHeight);
             using Graphics gCanva = Graphics.FromImage(canva);
-
-            // CONFIG
-            gCanva.SmoothingMode = SmoothingMode.None;
-            gCanva.InterpolationMode = InterpolationMode.NearestNeighbor;
-
-            GraphicsUnit gu = gCanva.PageUnit;
 
             // MASK
             Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
