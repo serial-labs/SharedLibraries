@@ -54,11 +54,11 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Properties
-        private List<(Metafile Image, Region Mask3000w)> Shields { get; set; }
+        private List<(Metafile Image, Region Mask3000w, Rectangle Area3000w)> Shields { get; set; }
         private List<Metafile> Ordinaries { get; set; }
         private List<Metafile> Fields { get; set; }
 
-        private (Metafile Image, Region Mask3000w) CurrentShieldImg { get; set; }
+        private (Metafile Image, Region Mask3000w, Rectangle Area3000w) CurrentShieldImg { get; set; }
         private Metafile CurrentOrdinaryImg { get; set; }
         private Metafile CurrentFieldImg { get; set; }
 
@@ -85,7 +85,9 @@ namespace ShieldsV2Tests
                     using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shields", "Masks", Path.GetFileName(path)));
                     using Bitmap bmp = new(maskImg, 3000, (int)(3000 * ((double)img.Height / img.Width)));
                     Region reg = bmp.MakeNonTransparentRegion();
-                    return (img, reg);
+                    using Bitmap bmp2 = new(img, 3000, (int)(3000 * ((double)img.Height / img.Width)));
+                    Rectangle area = bmp2.FindRectangleAroundPic();
+                    return (img, reg, area);
                 })
                 .ToList();
 
@@ -129,7 +131,7 @@ namespace ShieldsV2Tests
         #region Methods
 
         #region Base Images
-        public void SetCurrentShieldImage((Metafile Image, Region Mask3000w) shieldImg)
+        public void SetCurrentShieldImage((Metafile Image, Region Mask3000w, Rectangle Area3000w) shieldImg)
         {
             CurrentShieldImg = shieldImg;
             shieldPictureBox.Image = shieldImg.Image;
@@ -176,12 +178,25 @@ namespace ShieldsV2Tests
             // GO
             Stopwatch sw = Stopwatch.StartNew();
 
-            float ratio = (float)shieldMetaFile.Height / shieldMetaFile.Width;
+            Rectangle usefullArea3000w = CurrentShieldImg.Area3000w;
 
-            int width = widthSlider.Value * 100;
+            double sourceAspectRatio = (double)CurrentShieldImg.Image.Height / CurrentShieldImg.Image.Width;
 
-            Bitmap canva = new(width, (int)(width * ratio));
+            double canvaAspectRatio = (double)usefullArea3000w.Height / usefullArea3000w.Width;
+            int canvaWidth = widthSlider.Value * 100;
+            int canvaHeight = (int)(canvaWidth * canvaAspectRatio);
 
+            double destinationScale = (double)canvaWidth / usefullArea3000w.Width;
+
+            Rectangle destR = new()
+            {
+                X = -(int)(usefullArea3000w.X * destinationScale),
+                Y = -(int)(usefullArea3000w.Y * destinationScale),
+                Width = (int)(3000 * destinationScale),
+                Height = (int)(3000 * sourceAspectRatio * destinationScale),
+            };
+
+            Bitmap canva = new(canvaWidth, canvaHeight);
             using Graphics gCanva = Graphics.FromImage(canva);
 
             // CONFIG
@@ -191,16 +206,13 @@ namespace ShieldsV2Tests
 
             GraphicsUnit gu = gCanva.PageUnit;
 
-            RectangleF destRf = canva.GetBounds(ref gu);
-            Rectangle destR = destRf.ToRectangle();
-
             // MASK
-            Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
-            System.Drawing.Drawing2D.Matrix maskTransform = new();
-            float maskScaleRatio = width / 3000f;
-            maskTransform.Scale(maskScaleRatio, maskScaleRatio);
-            mask.Transform(maskTransform);
-            gCanva.Clip = mask;
+            //Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
+            //System.Drawing.Drawing2D.Matrix maskTransform = new();
+            //float maskScaleRatio = width / 3000f;
+            //maskTransform.Scale(maskScaleRatio, maskScaleRatio);
+            //mask.Transform(maskTransform);
+            //gCanva.Clip = mask;
 
             // FIELD
             if (OrdinaryT1 == Tincture.Field || OrdinaryT2 == Tincture.Field)
@@ -220,22 +232,6 @@ namespace ShieldsV2Tests
 
             // PARTITION
             ImageAttributes ordinaryImageAttributes = ComputeImageAttributeFor(OrdinaryT1, OrdinaryT2);
-
-            if (displaySteps)
-            {
-                Bitmap colorizedOrdinary = new(canva.Width, canva.Height);
-                using Graphics gOrdinary = Graphics.FromImage(colorizedOrdinary);
-                gOrdinary.Clip = mask;
-
-                gOrdinary.DrawImage(
-                    ordinaryMetaFile,
-                    destR,
-                    0, 0, ordinaryMetaFile.Width, ordinaryMetaFile.Height,
-                    GraphicsUnit.Pixel,
-                    ordinaryImageAttributes);
-
-                colorizerdPartitionPicBox.Image = new Bitmap(colorizedOrdinary);
-            }
 
             gCanva.DrawImage(
                 ordinaryMetaFile,
@@ -260,6 +256,7 @@ namespace ShieldsV2Tests
             resultPictureBox.Image = canva;
 
             renderLabel.Text = $"Rendered: {sw.ElapsedMilliseconds}ms";
+            finalSizeLabel.Text = $"W: {resultPictureBox.Image.Width} - H: {resultPictureBox.Image.Height}";
 
             Cursor = Cursors.Default;
             renderButton.Enabled = true;

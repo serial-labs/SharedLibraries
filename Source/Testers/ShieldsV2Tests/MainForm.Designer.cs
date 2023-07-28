@@ -54,6 +54,7 @@
             emfQualityList = new ComboBox();
             qualityContainer = new GroupBox();
             colorizerdPartitionPicBox = new PictureBox();
+            finalSizeLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
@@ -149,21 +150,21 @@
             label2.TabIndex = 10;
             label2.Text = "T2";
             // 
-            // partitionT1list
+            // ordinaryT1list
             // 
             ordinaryT1list.DropDownStyle = ComboBoxStyle.DropDownList;
             ordinaryT1list.FormattingEnabled = true;
             ordinaryT1list.Location = new Point(223, 228);
-            ordinaryT1list.Name = "partitionT1list";
+            ordinaryT1list.Name = "ordinaryT1list";
             ordinaryT1list.Size = new Size(121, 23);
             ordinaryT1list.TabIndex = 15;
             // 
-            // partitionT2list
+            // ordinaryT2list
             // 
             ordinaryT2list.DropDownStyle = ComboBoxStyle.DropDownList;
             ordinaryT2list.FormattingEnabled = true;
             ordinaryT2list.Location = new Point(223, 257);
-            ordinaryT2list.Name = "partitionT2list";
+            ordinaryT2list.Name = "ordinaryT2list";
             ordinaryT2list.Size = new Size(121, 23);
             ordinaryT2list.TabIndex = 16;
             // 
@@ -228,7 +229,7 @@
             // 
             // statusStrip
             // 
-            statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel, exceptMessageLabel });
+            statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel, finalSizeLabel, exceptMessageLabel });
             statusStrip.Location = new Point(0, 659);
             statusStrip.Name = "statusStrip";
             statusStrip.Size = new Size(1476, 22);
@@ -336,6 +337,13 @@
             colorizerdPartitionPicBox.TabStop = false;
             colorizerdPartitionPicBox.MouseMove += OnPictureBoxMouseMove;
             // 
+            // finalSizeLabel
+            // 
+            finalSizeLabel.BackColor = SystemColors.ActiveCaption;
+            finalSizeLabel.Name = "finalSizeLabel";
+            finalSizeLabel.Size = new Size(12, 17);
+            finalSizeLabel.Text = "-";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -410,5 +418,6 @@
         private ComboBox emfQualityList;
         private GroupBox qualityContainer;
         private PictureBox colorizerdPartitionPicBox;
+        private ToolStripStatusLabel finalSizeLabel;
     }
 }
