@@ -35,8 +35,8 @@
             colorizedFieldPicBox = new PictureBox();
             label1 = new Label();
             label2 = new Label();
-            partitionT1list = new ComboBox();
-            partitionT2list = new ComboBox();
+            ordinaryT1list = new ComboBox();
+            ordinaryT2list = new ComboBox();
             fieldT2list = new ComboBox();
             fieldT1list = new ComboBox();
             label3 = new Label();
@@ -151,21 +151,21 @@
             // 
             // partitionT1list
             // 
-            partitionT1list.DropDownStyle = ComboBoxStyle.DropDownList;
-            partitionT1list.FormattingEnabled = true;
-            partitionT1list.Location = new Point(223, 228);
-            partitionT1list.Name = "partitionT1list";
-            partitionT1list.Size = new Size(121, 23);
-            partitionT1list.TabIndex = 15;
+            ordinaryT1list.DropDownStyle = ComboBoxStyle.DropDownList;
+            ordinaryT1list.FormattingEnabled = true;
+            ordinaryT1list.Location = new Point(223, 228);
+            ordinaryT1list.Name = "partitionT1list";
+            ordinaryT1list.Size = new Size(121, 23);
+            ordinaryT1list.TabIndex = 15;
             // 
             // partitionT2list
             // 
-            partitionT2list.DropDownStyle = ComboBoxStyle.DropDownList;
-            partitionT2list.FormattingEnabled = true;
-            partitionT2list.Location = new Point(223, 257);
-            partitionT2list.Name = "partitionT2list";
-            partitionT2list.Size = new Size(121, 23);
-            partitionT2list.TabIndex = 16;
+            ordinaryT2list.DropDownStyle = ComboBoxStyle.DropDownList;
+            ordinaryT2list.FormattingEnabled = true;
+            ordinaryT2list.Location = new Point(223, 257);
+            ordinaryT2list.Name = "partitionT2list";
+            ordinaryT2list.Size = new Size(121, 23);
+            ordinaryT2list.TabIndex = 16;
             // 
             // fieldT2list
             // 
@@ -355,8 +355,8 @@
             Controls.Add(fieldT1list);
             Controls.Add(label3);
             Controls.Add(label4);
-            Controls.Add(partitionT2list);
-            Controls.Add(partitionT1list);
+            Controls.Add(ordinaryT2list);
+            Controls.Add(ordinaryT1list);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(colorizedFieldPicBox);
@@ -391,8 +391,8 @@
         private PictureBox colorizedFieldPicBox;
         private Label label1;
         private Label label2;
-        private ComboBox partitionT1list;
-        private ComboBox partitionT2list;
+        private ComboBox ordinaryT1list;
+        private ComboBox ordinaryT2list;
         private ComboBox fieldT2list;
         private ComboBox fieldT1list;
         private Label label3;

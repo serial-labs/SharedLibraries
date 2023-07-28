@@ -55,15 +55,15 @@ namespace ShieldsV2Tests
 
         #region Properties
         private List<(Metafile Image, Region Mask3000w)> Shields { get; set; }
-        private List<Metafile> Partitions { get; set; }
+        private List<Metafile> Ordinaries { get; set; }
         private List<Metafile> Fields { get; set; }
 
         private (Metafile Image, Region Mask3000w) CurrentShieldImg { get; set; }
-        private Metafile CurrentPartitionImg { get; set; }
+        private Metafile CurrentOrdinaryImg { get; set; }
         private Metafile CurrentFieldImg { get; set; }
 
-        private Tincture PartitionT1 => (Tincture)partitionT1list.SelectedValue;
-        private Tincture PartitionT2 => (Tincture)partitionT2list.SelectedValue;
+        private Tincture OrdinaryT1 => (Tincture)ordinaryT1list.SelectedValue;
+        private Tincture OrdinaryT2 => (Tincture)ordinaryT2list.SelectedValue;
 
 
         private Tincture FieldT1 => (Tincture)fieldT1list.SelectedValue;
@@ -89,7 +89,7 @@ namespace ShieldsV2Tests
                 })
                 .ToList();
 
-            Partitions = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Partitions"))
+            Ordinaries = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Ordinaries"))
                 .Where(path => Path.GetExtension(path) == ".emf")
                 .Select(path => new Metafile(path))
                 .ToList();
@@ -101,18 +101,18 @@ namespace ShieldsV2Tests
 
             // Init current images
             SetCurrentShieldImage(Shields[0]);
-            SetCurrentPartitionImg(Partitions[0]);
+            SetCurrentPartitionImg(Ordinaries[0]);
             SetCurrentFieldImg(Fields[0]);
 
             // Init tinctures lists
             var tinctures = Enum.GetValues(typeof(Tincture))
                 .Cast<Tincture>();
 
-            partitionT1list.DataSource = tinctures.ToList();
-            partitionT1list.SelectedItem = Tincture.Vert;
+            ordinaryT1list.DataSource = tinctures.ToList();
+            ordinaryT1list.SelectedItem = Tincture.Vert;
 
-            partitionT2list.DataSource = tinctures.ToList();
-            partitionT2list.SelectedItem = Tincture.Field;
+            ordinaryT2list.DataSource = tinctures.ToList();
+            ordinaryT2list.SelectedItem = Tincture.Field;
 
             fieldT1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
             fieldT1list.SelectedItem = Tincture.Gules;
@@ -136,7 +136,7 @@ namespace ShieldsV2Tests
         }
         public void SetCurrentPartitionImg(Metafile image)
         {
-            CurrentPartitionImg = image;
+            CurrentOrdinaryImg = image;
             partitionPictureBox.Image = image;
         }
         public void SetCurrentFieldImg(Metafile image)
@@ -146,7 +146,7 @@ namespace ShieldsV2Tests
         }
 
         public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.IndexOf(CurrentShieldImg) + 1) % Shields.Count]);
-        public void NextPartitionImage() => SetCurrentPartitionImg(Partitions[(Partitions.IndexOf(CurrentPartitionImg) + 1) % Partitions.Count]);
+        public void NextPartitionImage() => SetCurrentPartitionImg(Ordinaries[(Ordinaries.IndexOf(CurrentOrdinaryImg) + 1) % Ordinaries.Count]);
         public void NextFieldImg() => SetCurrentFieldImg(Fields[(Fields.IndexOf(CurrentFieldImg) + 1) % Fields.Count]);
         #endregion
 
@@ -171,7 +171,7 @@ namespace ShieldsV2Tests
 
             Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
             Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
-            Metafile partitionMetaFile = ConvertToEmfPlus(CurrentPartitionImg, emfSmoothing, emfQuality);
+            Metafile ordinaryMetaFile = ConvertToEmfPlus(CurrentOrdinaryImg, emfSmoothing, emfQuality);
 
             // GO
             Stopwatch sw = Stopwatch.StartNew();
@@ -203,9 +203,9 @@ namespace ShieldsV2Tests
             gCanva.Clip = mask;
 
             // FIELD
-            if (PartitionT1 == Tincture.Field || PartitionT2 == Tincture.Field)
+            if (OrdinaryT1 == Tincture.Field || OrdinaryT2 == Tincture.Field)
             {
-                ImageAttributes fieldImageAttributes = ComputeImageAttributeForField(FieldT1, FieldT2);
+                ImageAttributes fieldImageAttributes = ComputeImageAttributeFor(FieldT1, FieldT2);
 
                 gCanva.DrawImage(
                     fieldMetaFile,
@@ -219,30 +219,30 @@ namespace ShieldsV2Tests
             }
 
             // PARTITION
-            ImageAttributes partitionImageAttributes = ComputeImageAttributeForPartition(PartitionT1, PartitionT2);
+            ImageAttributes ordinaryImageAttributes = ComputeImageAttributeFor(OrdinaryT1, OrdinaryT2);
 
             if (displaySteps)
             {
-                Bitmap colorizedPartition = new(canva.Width, canva.Height);
-                using Graphics gPartition = Graphics.FromImage(colorizedPartition);
-                gPartition.Clip = mask;
+                Bitmap colorizedOrdinary = new(canva.Width, canva.Height);
+                using Graphics gOrdinary = Graphics.FromImage(colorizedOrdinary);
+                gOrdinary.Clip = mask;
 
-                gPartition.DrawImage(
-                    partitionMetaFile,
+                gOrdinary.DrawImage(
+                    ordinaryMetaFile,
                     destR,
-                    0, 0, partitionMetaFile.Width, partitionMetaFile.Height,
+                    0, 0, ordinaryMetaFile.Width, ordinaryMetaFile.Height,
                     GraphicsUnit.Pixel,
-                    partitionImageAttributes);
+                    ordinaryImageAttributes);
 
-                colorizerdPartitionPicBox.Image = new Bitmap(colorizedPartition);
+                colorizerdPartitionPicBox.Image = new Bitmap(colorizedOrdinary);
             }
 
             gCanva.DrawImage(
-                partitionMetaFile,
+                ordinaryMetaFile,
                 destR,
-                0, 0, partitionMetaFile.Width, partitionMetaFile.Height,
+                0, 0, ordinaryMetaFile.Width, ordinaryMetaFile.Height,
                 GraphicsUnit.Pixel,
-                partitionImageAttributes);
+                ordinaryImageAttributes);
 
             if (displaySteps)
                 backgroundPicBox.Image = new Bitmap(canva);
@@ -297,22 +297,7 @@ namespace ShieldsV2Tests
                 }
             }
         }
-        private static ImageAttributes ComputeImageAttributeForField(Tincture t1, Tincture t2)
-        {
-            ImageAttributes imageAttributes = new();
-            List<ColorMap> colorMappings = new();
-
-            // T1
-            AddAllOffsettedColors(T1_REF_COLOR, TINCTURES_TO_COLORS[t1], colorMappings);
-
-            // T2
-            AddAllOffsettedColors(T2_REF_COLOR, TINCTURES_TO_COLORS[t2], colorMappings);
-
-            imageAttributes.SetRemapTable(colorMappings.ToArray());
-
-            return imageAttributes;
-        }
-        private static ImageAttributes ComputeImageAttributeForPartition(Tincture t1, Tincture t2)
+        private static ImageAttributes ComputeImageAttributeFor(Tincture t1, Tincture t2)
         {
             ImageAttributes imageAttributes = new();
             List<ColorMap> colorMappings = new();
