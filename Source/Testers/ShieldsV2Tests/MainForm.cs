@@ -109,10 +109,10 @@ namespace ShieldsV2Tests
                 .Cast<Tincture>();
 
             partitionT1list.DataSource = tinctures.ToList();
-            partitionT1list.SelectedItem = Tincture.Field;
+            partitionT1list.SelectedItem = Tincture.Vert;
 
             partitionT2list.DataSource = tinctures.ToList();
-            partitionT2list.SelectedItem = Tincture.Vert;
+            partitionT2list.SelectedItem = Tincture.Field;
 
             fieldT1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
             fieldT1list.SelectedItem = Tincture.Gules;
@@ -187,6 +187,7 @@ namespace ShieldsV2Tests
             // CONFIG
             gCanva.SmoothingMode = SmoothingMode.None;
             gCanva.InterpolationMode = InterpolationMode.NearestNeighbor;
+            gCanva.CompositingMode = CompositingMode.SourceCopy;
 
             GraphicsUnit gu = gCanva.PageUnit;
 
@@ -204,7 +205,7 @@ namespace ShieldsV2Tests
             // FIELD
             if (PartitionT1 == Tincture.Field || PartitionT2 == Tincture.Field)
             {
-                ImageAttributes fieldImageAttributes = ComputeImageAttributeForTinctures(FieldT1, FieldT2);
+                ImageAttributes fieldImageAttributes = ComputeImageAttributeForField(FieldT1, FieldT2);
 
                 gCanva.DrawImage(
                     fieldMetaFile,
@@ -218,7 +219,7 @@ namespace ShieldsV2Tests
             }
 
             // PARTITION
-            ImageAttributes partitionImageAttributes = ComputeImageAttributeForTinctures(PartitionT1, PartitionT2);
+            ImageAttributes partitionImageAttributes = ComputeImageAttributeForPartition(PartitionT1, PartitionT2);
 
             if (displaySteps)
             {
@@ -296,7 +297,22 @@ namespace ShieldsV2Tests
                 }
             }
         }
-        private static ImageAttributes ComputeImageAttributeForTinctures(Tincture t1, Tincture t2)
+        private static ImageAttributes ComputeImageAttributeForField(Tincture t1, Tincture t2)
+        {
+            ImageAttributes imageAttributes = new();
+            List<ColorMap> colorMappings = new();
+
+            // T1
+            AddAllOffsettedColors(T1_REF_COLOR, TINCTURES_TO_COLORS[t1], colorMappings);
+
+            // T2
+            AddAllOffsettedColors(T2_REF_COLOR, TINCTURES_TO_COLORS[t2], colorMappings);
+
+            imageAttributes.SetRemapTable(colorMappings.ToArray());
+
+            return imageAttributes;
+        }
+        private static ImageAttributes ComputeImageAttributeForPartition(Tincture t1, Tincture t2)
         {
             ImageAttributes imageAttributes = new();
             List<ColorMap> colorMappings = new();
