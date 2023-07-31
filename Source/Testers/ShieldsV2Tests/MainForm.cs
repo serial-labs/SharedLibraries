@@ -15,6 +15,7 @@ namespace ShieldsV2Tests
     {
         #region Constants
         private const string ROOT_FOLDER = @"C:/Icono/Shields";
+        private const int MASK_REF_WIDTH = 1000;
 
         private static readonly IReadOnlyDictionary<Tincture, Color> TINCTURES_TO_COLORS = new Dictionary<Tincture, Color>()
         {
@@ -31,26 +32,6 @@ namespace ShieldsV2Tests
         private static readonly Color T1_REF_COLOR = Color.FromArgb(0, 255, 0); // Vert
         private static readonly Color T2_REF_COLOR = Color.FromArgb(0, 0, 255); // Bleu
         private static readonly Color T3_REF_COLOR = Color.FromArgb(255, 0, 0); // Rouge
-        private static readonly Color OUTER_REF_COLOR = Color.FromArgb(255, 0, 255); // Magenta intense
-
-        private static ImageAttributes _clean_outer_attr;
-        private static ImageAttributes CLEAN_OUTER_ATTRIBUTES
-        {
-            get
-            {
-                if (_clean_outer_attr is null)
-                {
-                    ImageAttributes cleanupOuterAttributes = new();
-                    List<ColorMap> colorMappings = new();
-                    AddAllOffsettedColors(OUTER_REF_COLOR, Color.FromArgb(0, 0, 0, 0), colorMappings);
-                    cleanupOuterAttributes.SetRemapTable(colorMappings.ToArray());
-
-                    _clean_outer_attr = cleanupOuterAttributes;
-                }
-
-                return _clean_outer_attr;
-            }
-        }
         #endregion
 
         #region Properties
@@ -60,14 +41,19 @@ namespace ShieldsV2Tests
 
         private (Metafile Image, Region Mask3000w, Rectangle Area3000w) CurrentShieldImg { get; set; }
         private Metafile CurrentOrdinaryImg { get; set; }
-        private Metafile CurrentFieldImg { get; set; }
+        private Metafile CurrentField1Img { get; set; }
+        private Metafile CurrentField2Img { get; set; }
+
 
         private Tincture OrdinaryT1 => (Tincture)ordinaryT1list.SelectedValue;
         private Tincture OrdinaryT2 => (Tincture)ordinaryT2list.SelectedValue;
 
 
-        private Tincture FieldT1 => (Tincture)fieldT1list.SelectedValue;
-        private Tincture FieldT2 => (Tincture)fieldT2list.SelectedValue;
+        private Tincture Field1T1 => (Tincture)field1T1list.SelectedValue;
+        private Tincture Field1T2 => (Tincture)field1T2list.SelectedValue;
+
+        private Tincture Field2T1 => (Tincture)field2T1list.SelectedValue;
+        private Tincture Field2T2 => (Tincture)field2T2list.SelectedValue;
 
         #endregion
 
@@ -83,9 +69,9 @@ namespace ShieldsV2Tests
                 {
                     Metafile img = new(path);
                     using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shields", "Masks", Path.GetFileName(path)));
-                    using Bitmap bmp = new(maskImg, 3000, (int)(3000 * ((double)img.Height / img.Width)));
+                    using Bitmap bmp = new(maskImg, MASK_REF_WIDTH, (int)(MASK_REF_WIDTH * ((double)img.Height / img.Width)));
                     Region reg = bmp.MakeNonTransparentRegion();
-                    using Bitmap bmp2 = new(img, 3000, (int)(3000 * ((double)img.Height / img.Width)));
+                    using Bitmap bmp2 = new(img, MASK_REF_WIDTH, (int)(MASK_REF_WIDTH * ((double)img.Height / img.Width)));
                     Rectangle area = bmp2.FindRectangleAroundPic();
                     return (img, reg, area);
                 })
@@ -104,7 +90,8 @@ namespace ShieldsV2Tests
             // Init current images
             SetCurrentShieldImage(Shields[0]);
             SetCurrentPartitionImg(Ordinaries[0]);
-            SetCurrentFieldImg(Fields[0]);
+            SetField1Img(Fields[0]);
+            SetField2Img(Fields[0]);
 
             // Init tinctures lists
             var tinctures = Enum.GetValues(typeof(Tincture))
@@ -116,11 +103,17 @@ namespace ShieldsV2Tests
             ordinaryT2list.DataSource = tinctures.ToList();
             ordinaryT2list.SelectedItem = Tincture.Field;
 
-            fieldT1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
-            fieldT1list.SelectedItem = Tincture.Gules;
+            field1T1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
+            field1T1list.SelectedItem = Tincture.Gules;
 
-            fieldT2list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
-            fieldT2list.SelectedItem = Tincture.Or;
+            field1T2list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
+            field1T2list.SelectedItem = Tincture.Or;
+
+            field2T1list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
+            field2T1list.SelectedItem = Tincture.Sable;
+
+            field2T2list.DataSource = tinctures.Where(t => t != Tincture.Field).ToList();
+            field2T2list.SelectedItem = Tincture.Argent;
 
             // Init other lists
             emfQualityList.DataSource = Enum.GetValues(typeof(CompositingQuality)).Cast<CompositingQuality>().ToList();
@@ -141,15 +134,21 @@ namespace ShieldsV2Tests
             CurrentOrdinaryImg = image;
             partitionPictureBox.Image = image;
         }
-        public void SetCurrentFieldImg(Metafile image)
+        public void SetField1Img(Metafile image)
         {
-            CurrentFieldImg = image;
-            fieldPictureBox.Image = image;
+            CurrentField1Img = image;
+            field1PictureBox.Image = image;
+        }
+        public void SetField2Img(Metafile image)
+        {
+            CurrentField2Img = image;
+            field2PictureBox.Image = image;
         }
 
         public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.IndexOf(CurrentShieldImg) + 1) % Shields.Count]);
         public void NextPartitionImage() => SetCurrentPartitionImg(Ordinaries[(Ordinaries.IndexOf(CurrentOrdinaryImg) + 1) % Ordinaries.Count]);
-        public void NextFieldImg() => SetCurrentFieldImg(Fields[(Fields.IndexOf(CurrentFieldImg) + 1) % Fields.Count]);
+        public void NextFieldImg1() => SetField1Img(Fields[(Fields.IndexOf(CurrentField1Img) + 1) % Fields.Count]);
+        public void NextFieldImg2() => SetField2Img(Fields[(Fields.IndexOf(CurrentField2Img) + 1) % Fields.Count]);
         #endregion
 
         #region Rendering
@@ -172,8 +171,8 @@ namespace ShieldsV2Tests
 
             // Conversion à faire au chargement des images
             // Ici on les refait à chaque fois pour pouvoir modifier les paramètres de qualité de rendu
-            Metafile shieldMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
-            Metafile fieldMetaFile = ConvertToEmfPlus(CurrentFieldImg, emfSmoothing, emfQuality);
+            Metafile shieldBorderMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
+            Metafile fieldMetaFile = ConvertToEmfPlus(CurrentField1Img, emfSmoothing, emfQuality);
             Metafile ordinaryMetaFile = ConvertToEmfPlus(CurrentOrdinaryImg, emfSmoothing, emfQuality);
 
             // GO
@@ -191,10 +190,10 @@ namespace ShieldsV2Tests
 
             Rectangle destR = new()
             {
-                X = -(int)(usefullArea3000w.X * destinationScale) - (canvaWidth / 500), // - (canvaWidth / 500) : ajustement pour les marges vides de quelques pixels (valeur obtenue empyriquement)
-                Y = -(int)(usefullArea3000w.Y * destinationScale) - (canvaHeight / 500),
-                Width = (int)(3000 * destinationScale) + (canvaWidth / 300),
-                Height = (int)(3000 * sourceAspectRatio * destinationScale),
+                X = -(int)(usefullArea3000w.X * destinationScale), // - (canvaWidth / 500) : ajustement pour les marges vides de quelques pixels (valeur obtenue empyriquement)
+                Y = -(int)(usefullArea3000w.Y * destinationScale),
+                Width = (int)(MASK_REF_WIDTH * destinationScale),
+                Height = (int)(MASK_REF_WIDTH * sourceAspectRatio * destinationScale),
             };
 
             Bitmap canva = new(canvaWidth, canvaHeight);
@@ -211,7 +210,7 @@ namespace ShieldsV2Tests
             // FIELD
             if (OrdinaryT1 == Tincture.Field || OrdinaryT2 == Tincture.Field)
             {
-                ImageAttributes fieldImageAttributes = ComputeImageAttributeFor(FieldT1, FieldT2);
+                ImageAttributes fieldImageAttributes = ComputeImageAttributeFor(Field1T1, Field1T2);
 
                 gCanva.DrawImage(
                     fieldMetaFile,
@@ -241,16 +240,16 @@ namespace ShieldsV2Tests
             gCanva.Clip = new(); // Do not set to null (exception)
 
             gCanva.DrawImage(
-                shieldMetaFile,
+                shieldBorderMetaFile,
                 destR,
-                0, 0, shieldMetaFile.Width, shieldMetaFile.Height,
+                0, 0, shieldBorderMetaFile.Width, shieldBorderMetaFile.Height,
                 GraphicsUnit.Pixel);
 
             // END
             resultPictureBox.Image = canva;
 
             renderLabel.Text = $"Rendered: {sw.ElapsedMilliseconds}ms";
-            finalSizeLabel.Text = $"W: {resultPictureBox.Image.Width} - H: {resultPictureBox.Image.Height}";
+            finalSizeLabel.Text = $"W: {resultPictureBox.Image.Width} - H: {resultPictureBox.Image.Height} ({(float)resultPictureBox.Image.Height / resultPictureBox.Image.Width})";
 
             Cursor = Cursors.Default;
             renderButton.Enabled = true;
@@ -447,7 +446,8 @@ namespace ShieldsV2Tests
         #region Events Handlers
         private void shieldPictureBox_Click(object sender, EventArgs e) => NextShieldImage();
         private void partitionPictureBox_Click(object sender, EventArgs e) => NextPartitionImage();
-        private void fieldPictureBox_Click(object sender, EventArgs e) => NextFieldImg();
+        private void fieldPictureBox_Click(object sender, EventArgs e) => NextFieldImg1();
+        private void field2PictureBox_Click(object sender, EventArgs e) => NextFieldImg2();
 
         private void resultPictureBox_Click(object sender, EventArgs e)
         {
@@ -474,6 +474,5 @@ namespace ShieldsV2Tests
 
         private void OnPictureBoxMouseMove(object sender, MouseEventArgs e) => DrawZoomedRegion((PictureBox)sender, e.X, e.Y);
         #endregion
-
     }
 }

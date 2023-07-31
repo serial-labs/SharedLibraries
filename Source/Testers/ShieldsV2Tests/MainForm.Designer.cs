@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             shieldPictureBox = new PictureBox();
-            fieldPictureBox = new PictureBox();
+            field1PictureBox = new PictureBox();
             partitionPictureBox = new PictureBox();
             resultPictureBox = new PictureBox();
             colorizedFieldPicBox = new PictureBox();
@@ -37,8 +37,8 @@
             label2 = new Label();
             ordinaryT1list = new ComboBox();
             ordinaryT2list = new ComboBox();
-            fieldT2list = new ComboBox();
-            fieldT1list = new ComboBox();
+            field1T2list = new ComboBox();
+            field1T1list = new ComboBox();
             label3 = new Label();
             label4 = new Label();
             renderButton = new Button();
@@ -54,8 +54,16 @@
             smoothingCheckBox = new CheckBox();
             emfQualityList = new ComboBox();
             qualityContainer = new GroupBox();
+            groupBox1 = new GroupBox();
+            groupBox2 = new GroupBox();
+            field2PictureBox = new PictureBox();
+            groupBox3 = new GroupBox();
+            label5 = new Label();
+            label6 = new Label();
+            field2T1list = new ComboBox();
+            field2T2list = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)fieldPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)field1PictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).BeginInit();
@@ -64,6 +72,10 @@
             ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
             qualityContainer.SuspendLayout();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)field2PictureBox).BeginInit();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // shieldPictureBox
@@ -79,18 +91,18 @@
             shieldPictureBox.TabStop = false;
             shieldPictureBox.Click += shieldPictureBox_Click;
             // 
-            // fieldPictureBox
+            // field1PictureBox
             // 
-            fieldPictureBox.BackgroundImage = Properties.Resources.transparent;
-            fieldPictureBox.BorderStyle = BorderStyle.FixedSingle;
-            fieldPictureBox.Cursor = Cursors.Hand;
-            fieldPictureBox.Location = new Point(12, 444);
-            fieldPictureBox.Name = "fieldPictureBox";
-            fieldPictureBox.Size = new Size(180, 210);
-            fieldPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            fieldPictureBox.TabIndex = 1;
-            fieldPictureBox.TabStop = false;
-            fieldPictureBox.Click += fieldPictureBox_Click;
+            field1PictureBox.BackgroundImage = Properties.Resources.transparent;
+            field1PictureBox.BorderStyle = BorderStyle.FixedSingle;
+            field1PictureBox.Cursor = Cursors.Hand;
+            field1PictureBox.Location = new Point(12, 444);
+            field1PictureBox.Name = "field1PictureBox";
+            field1PictureBox.Size = new Size(180, 210);
+            field1PictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            field1PictureBox.TabIndex = 1;
+            field1PictureBox.TabStop = false;
+            field1PictureBox.Click += fieldPictureBox_Click;
             // 
             // partitionPictureBox
             // 
@@ -109,7 +121,7 @@
             // 
             resultPictureBox.BackgroundImage = Properties.Resources.transparent;
             resultPictureBox.BorderStyle = BorderStyle.FixedSingle;
-            resultPictureBox.Location = new Point(908, 12);
+            resultPictureBox.Location = new Point(756, 12);
             resultPictureBox.Name = "resultPictureBox";
             resultPictureBox.Size = new Size(556, 642);
             resultPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -122,7 +134,7 @@
             // 
             colorizedFieldPicBox.BackgroundImage = Properties.Resources.transparent;
             colorizedFieldPicBox.BorderStyle = BorderStyle.FixedSingle;
-            colorizedFieldPicBox.Location = new Point(350, 444);
+            colorizedFieldPicBox.Location = new Point(384, 444);
             colorizedFieldPicBox.Name = "colorizedFieldPicBox";
             colorizedFieldPicBox.Size = new Size(180, 210);
             colorizedFieldPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -133,7 +145,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(198, 231);
+            label1.Location = new Point(9, 25);
             label1.Name = "label1";
             label1.Size = new Size(19, 15);
             label1.TabIndex = 8;
@@ -142,7 +154,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(198, 260);
+            label2.Location = new Point(9, 54);
             label2.Name = "label2";
             label2.Size = new Size(19, 15);
             label2.TabIndex = 10;
@@ -152,42 +164,42 @@
             // 
             ordinaryT1list.DropDownStyle = ComboBoxStyle.DropDownList;
             ordinaryT1list.FormattingEnabled = true;
-            ordinaryT1list.Location = new Point(223, 228);
+            ordinaryT1list.Location = new Point(34, 22);
             ordinaryT1list.Name = "ordinaryT1list";
-            ordinaryT1list.Size = new Size(121, 23);
+            ordinaryT1list.Size = new Size(140, 23);
             ordinaryT1list.TabIndex = 15;
             // 
             // ordinaryT2list
             // 
             ordinaryT2list.DropDownStyle = ComboBoxStyle.DropDownList;
             ordinaryT2list.FormattingEnabled = true;
-            ordinaryT2list.Location = new Point(223, 257);
+            ordinaryT2list.Location = new Point(34, 51);
             ordinaryT2list.Name = "ordinaryT2list";
-            ordinaryT2list.Size = new Size(121, 23);
+            ordinaryT2list.Size = new Size(140, 23);
             ordinaryT2list.TabIndex = 16;
             // 
-            // fieldT2list
+            // field1T2list
             // 
-            fieldT2list.DropDownStyle = ComboBoxStyle.DropDownList;
-            fieldT2list.FormattingEnabled = true;
-            fieldT2list.Location = new Point(223, 473);
-            fieldT2list.Name = "fieldT2list";
-            fieldT2list.Size = new Size(121, 23);
-            fieldT2list.TabIndex = 20;
+            field1T2list.DropDownStyle = ComboBoxStyle.DropDownList;
+            field1T2list.FormattingEnabled = true;
+            field1T2list.Location = new Point(34, 50);
+            field1T2list.Name = "field1T2list";
+            field1T2list.Size = new Size(140, 23);
+            field1T2list.TabIndex = 20;
             // 
-            // fieldT1list
+            // field1T1list
             // 
-            fieldT1list.DropDownStyle = ComboBoxStyle.DropDownList;
-            fieldT1list.FormattingEnabled = true;
-            fieldT1list.Location = new Point(223, 444);
-            fieldT1list.Name = "fieldT1list";
-            fieldT1list.Size = new Size(121, 23);
-            fieldT1list.TabIndex = 19;
+            field1T1list.DropDownStyle = ComboBoxStyle.DropDownList;
+            field1T1list.FormattingEnabled = true;
+            field1T1list.Location = new Point(34, 21);
+            field1T1list.Name = "field1T1list";
+            field1T1list.Size = new Size(140, 23);
+            field1T1list.TabIndex = 19;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(198, 476);
+            label3.Location = new Point(9, 53);
             label3.Name = "label3";
             label3.Size = new Size(19, 15);
             label3.TabIndex = 18;
@@ -196,7 +208,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(198, 447);
+            label4.Location = new Point(9, 24);
             label4.Name = "label4";
             label4.Size = new Size(19, 15);
             label4.TabIndex = 17;
@@ -205,9 +217,9 @@
             // renderButton
             // 
             renderButton.Cursor = Cursors.Hand;
-            renderButton.Location = new Point(350, 64);
+            renderButton.Location = new Point(384, 9);
             renderButton.Name = "renderButton";
-            renderButton.Size = new Size(180, 56);
+            renderButton.Size = new Size(180, 49);
             renderButton.TabIndex = 21;
             renderButton.Text = "GO";
             renderButton.UseVisualStyleBackColor = true;
@@ -217,7 +229,7 @@
             // 
             backgroundPicBox.BackgroundImage = Properties.Resources.transparent;
             backgroundPicBox.BorderStyle = BorderStyle.FixedSingle;
-            backgroundPicBox.Location = new Point(536, 444);
+            backgroundPicBox.Location = new Point(570, 444);
             backgroundPicBox.Name = "backgroundPicBox";
             backgroundPicBox.Size = new Size(180, 210);
             backgroundPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -230,7 +242,7 @@
             statusStrip.Items.AddRange(new ToolStripItem[] { renderLabel, finalSizeLabel, exceptMessageLabel });
             statusStrip.Location = new Point(0, 659);
             statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1476, 22);
+            statusStrip.Size = new Size(1320, 22);
             statusStrip.TabIndex = 24;
             statusStrip.Text = "statusStrip1";
             // 
@@ -259,7 +271,7 @@
             // 
             widthSlider.Cursor = Cursors.Hand;
             widthSlider.LargeChange = 10;
-            widthSlider.Location = new Point(350, 33);
+            widthSlider.Location = new Point(570, 32);
             widthSlider.Maximum = 30;
             widthSlider.Minimum = 1;
             widthSlider.Name = "widthSlider";
@@ -271,7 +283,7 @@
             // widthLabel
             // 
             widthLabel.AutoSize = true;
-            widthLabel.Location = new Point(350, 15);
+            widthLabel.Location = new Point(570, 9);
             widthLabel.Name = "widthLabel";
             widthLabel.Size = new Size(116, 15);
             widthLabel.TabIndex = 26;
@@ -281,7 +293,7 @@
             // 
             lookupPicBox.BackgroundImage = Properties.Resources.transparent;
             lookupPicBox.BorderStyle = BorderStyle.FixedSingle;
-            lookupPicBox.Location = new Point(536, 64);
+            lookupPicBox.Location = new Point(384, 64);
             lookupPicBox.Name = "lookupPicBox";
             lookupPicBox.Size = new Size(366, 374);
             lookupPicBox.TabIndex = 27;
@@ -292,7 +304,7 @@
             displayStepsCheckBox.AutoSize = true;
             displayStepsCheckBox.Checked = true;
             displayStepsCheckBox.CheckState = CheckState.Checked;
-            displayStepsCheckBox.Location = new Point(350, 126);
+            displayStepsCheckBox.Location = new Point(198, 12);
             displayStepsCheckBox.Name = "displayStepsCheckBox";
             displayStepsCheckBox.Size = new Size(140, 19);
             displayStepsCheckBox.TabIndex = 28;
@@ -304,7 +316,7 @@
             smoothingCheckBox.AutoSize = true;
             smoothingCheckBox.Checked = true;
             smoothingCheckBox.CheckState = CheckState.Checked;
-            smoothingCheckBox.Location = new Point(350, 151);
+            smoothingCheckBox.Location = new Point(198, 37);
             smoothingCheckBox.Name = "smoothingCheckBox";
             smoothingCheckBox.Size = new Size(111, 19);
             smoothingCheckBox.TabIndex = 3;
@@ -323,18 +335,110 @@
             // qualityContainer
             // 
             qualityContainer.Controls.Add(emfQualityList);
-            qualityContainer.Location = new Point(350, 175);
+            qualityContainer.Location = new Point(198, 61);
             qualityContainer.Name = "qualityContainer";
             qualityContainer.Size = new Size(180, 57);
             qualityContainer.TabIndex = 29;
             qualityContainer.TabStop = false;
             qualityContainer.Text = "EMF Quality";
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(ordinaryT1list);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(ordinaryT2list);
+            groupBox1.Location = new Point(198, 181);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(180, 83);
+            groupBox1.TabIndex = 30;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Ordinary";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(label3);
+            groupBox2.Controls.Add(label4);
+            groupBox2.Controls.Add(field1T1list);
+            groupBox2.Controls.Add(field1T2list);
+            groupBox2.Location = new Point(198, 270);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(180, 81);
+            groupBox2.TabIndex = 31;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Field 1";
+            // 
+            // field2PictureBox
+            // 
+            field2PictureBox.BackgroundImage = Properties.Resources.transparent;
+            field2PictureBox.BorderStyle = BorderStyle.FixedSingle;
+            field2PictureBox.Cursor = Cursors.Hand;
+            field2PictureBox.Location = new Point(198, 444);
+            field2PictureBox.Name = "field2PictureBox";
+            field2PictureBox.Size = new Size(180, 210);
+            field2PictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            field2PictureBox.TabIndex = 32;
+            field2PictureBox.TabStop = false;
+            field2PictureBox.Click += field2PictureBox_Click;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(label5);
+            groupBox3.Controls.Add(label6);
+            groupBox3.Controls.Add(field2T1list);
+            groupBox3.Controls.Add(field2T2list);
+            groupBox3.Location = new Point(198, 357);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(180, 81);
+            groupBox3.TabIndex = 32;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Field 2";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(9, 53);
+            label5.Name = "label5";
+            label5.Size = new Size(19, 15);
+            label5.TabIndex = 18;
+            label5.Text = "T2";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(9, 24);
+            label6.Name = "label6";
+            label6.Size = new Size(19, 15);
+            label6.TabIndex = 17;
+            label6.Text = "T1";
+            // 
+            // field2T1list
+            // 
+            field2T1list.DropDownStyle = ComboBoxStyle.DropDownList;
+            field2T1list.FormattingEnabled = true;
+            field2T1list.Location = new Point(34, 21);
+            field2T1list.Name = "field2T1list";
+            field2T1list.Size = new Size(140, 23);
+            field2T1list.TabIndex = 19;
+            // 
+            // field2T2list
+            // 
+            field2T2list.DropDownStyle = ComboBoxStyle.DropDownList;
+            field2T2list.FormattingEnabled = true;
+            field2T2list.Location = new Point(34, 50);
+            field2T2list.Name = "field2T2list";
+            field2T2list.Size = new Size(140, 23);
+            field2T2list.TabIndex = 20;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1476, 681);
+            ClientSize = new Size(1320, 681);
+            Controls.Add(groupBox3);
+            Controls.Add(field2PictureBox);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
             Controls.Add(qualityContainer);
             Controls.Add(smoothingCheckBox);
             Controls.Add(displayStepsCheckBox);
@@ -344,23 +448,15 @@
             Controls.Add(widthSlider);
             Controls.Add(statusStrip);
             Controls.Add(backgroundPicBox);
-            Controls.Add(fieldT2list);
-            Controls.Add(fieldT1list);
-            Controls.Add(label3);
-            Controls.Add(label4);
-            Controls.Add(ordinaryT2list);
-            Controls.Add(ordinaryT1list);
-            Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(colorizedFieldPicBox);
             Controls.Add(resultPictureBox);
             Controls.Add(partitionPictureBox);
-            Controls.Add(fieldPictureBox);
+            Controls.Add(field1PictureBox);
             Controls.Add(shieldPictureBox);
             Name = "MainForm";
             Text = "ShieldsV2";
             ((System.ComponentModel.ISupportInitialize)shieldPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)fieldPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)field1PictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).EndInit();
@@ -370,6 +466,13 @@
             ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).EndInit();
             qualityContainer.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)field2PictureBox).EndInit();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -377,7 +480,7 @@
         #endregion
 
         private PictureBox shieldPictureBox;
-        private PictureBox fieldPictureBox;
+        private PictureBox field1PictureBox;
         private PictureBox partitionPictureBox;
         private PictureBox resultPictureBox;
         private PictureBox colorizedFieldPicBox;
@@ -385,8 +488,8 @@
         private Label label2;
         private ComboBox ordinaryT1list;
         private ComboBox ordinaryT2list;
-        private ComboBox fieldT2list;
-        private ComboBox fieldT1list;
+        private ComboBox field1T2list;
+        private ComboBox field1T1list;
         private Label label3;
         private Label label4;
         private Button renderButton;
@@ -402,5 +505,13 @@
         private ComboBox emfQualityList;
         private GroupBox qualityContainer;
         private ToolStripStatusLabel finalSizeLabel;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
+        private PictureBox field2PictureBox;
+        private GroupBox groupBox3;
+        private Label label5;
+        private Label label6;
+        private ComboBox field2T1list;
+        private ComboBox field2T2list;
     }
 }
