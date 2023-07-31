@@ -191,9 +191,9 @@ namespace ShieldsV2Tests
 
             Rectangle destR = new()
             {
-                X = -(int)(usefullArea3000w.X * destinationScale),
-                Y = -(int)(usefullArea3000w.Y * destinationScale),
-                Width = (int)(3000 * destinationScale),
+                X = -(int)(usefullArea3000w.X * destinationScale) - (canvaWidth / 500), // - (canvaWidth / 500) : ajustement pour les marges vides de quelques pixels (valeur obtenue empyriquement)
+                Y = -(int)(usefullArea3000w.Y * destinationScale) - (canvaHeight / 500),
+                Width = (int)(3000 * destinationScale) + (canvaWidth / 300),
                 Height = (int)(3000 * sourceAspectRatio * destinationScale),
             };
 
