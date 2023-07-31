@@ -32,7 +32,7 @@
             field1PictureBox = new PictureBox();
             partitionPictureBox = new PictureBox();
             resultPictureBox = new PictureBox();
-            colorizedFieldPicBox = new PictureBox();
+            step1picBox = new PictureBox();
             label1 = new Label();
             label2 = new Label();
             ordinaryT1list = new ComboBox();
@@ -42,7 +42,7 @@
             label3 = new Label();
             label4 = new Label();
             renderButton = new Button();
-            backgroundPicBox = new PictureBox();
+            step2picBox = new PictureBox();
             statusStrip = new StatusStrip();
             renderLabel = new ToolStripStatusLabel();
             finalSizeLabel = new ToolStripStatusLabel();
@@ -66,8 +66,8 @@
             ((System.ComponentModel.ISupportInitialize)field1PictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)backgroundPicBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)step1picBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)step2picBox).BeginInit();
             statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lookupPicBox).BeginInit();
@@ -132,15 +132,15 @@
             // 
             // colorizedFieldPicBox
             // 
-            colorizedFieldPicBox.BackgroundImage = Properties.Resources.transparent;
-            colorizedFieldPicBox.BorderStyle = BorderStyle.FixedSingle;
-            colorizedFieldPicBox.Location = new Point(384, 444);
-            colorizedFieldPicBox.Name = "colorizedFieldPicBox";
-            colorizedFieldPicBox.Size = new Size(180, 210);
-            colorizedFieldPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            colorizedFieldPicBox.TabIndex = 5;
-            colorizedFieldPicBox.TabStop = false;
-            colorizedFieldPicBox.MouseMove += OnPictureBoxMouseMove;
+            step1picBox.BackgroundImage = Properties.Resources.transparent;
+            step1picBox.BorderStyle = BorderStyle.FixedSingle;
+            step1picBox.Location = new Point(384, 444);
+            step1picBox.Name = "colorizedFieldPicBox";
+            step1picBox.Size = new Size(180, 210);
+            step1picBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            step1picBox.TabIndex = 5;
+            step1picBox.TabStop = false;
+            step1picBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // label1
             // 
@@ -227,15 +227,15 @@
             // 
             // backgroundPicBox
             // 
-            backgroundPicBox.BackgroundImage = Properties.Resources.transparent;
-            backgroundPicBox.BorderStyle = BorderStyle.FixedSingle;
-            backgroundPicBox.Location = new Point(570, 444);
-            backgroundPicBox.Name = "backgroundPicBox";
-            backgroundPicBox.Size = new Size(180, 210);
-            backgroundPicBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            backgroundPicBox.TabIndex = 22;
-            backgroundPicBox.TabStop = false;
-            backgroundPicBox.MouseMove += OnPictureBoxMouseMove;
+            step2picBox.BackgroundImage = Properties.Resources.transparent;
+            step2picBox.BorderStyle = BorderStyle.FixedSingle;
+            step2picBox.Location = new Point(570, 444);
+            step2picBox.Name = "backgroundPicBox";
+            step2picBox.Size = new Size(180, 210);
+            step2picBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            step2picBox.TabIndex = 22;
+            step2picBox.TabStop = false;
+            step2picBox.MouseMove += OnPictureBoxMouseMove;
             // 
             // statusStrip
             // 
@@ -447,8 +447,8 @@
             Controls.Add(widthLabel);
             Controls.Add(widthSlider);
             Controls.Add(statusStrip);
-            Controls.Add(backgroundPicBox);
-            Controls.Add(colorizedFieldPicBox);
+            Controls.Add(step2picBox);
+            Controls.Add(step1picBox);
             Controls.Add(resultPictureBox);
             Controls.Add(partitionPictureBox);
             Controls.Add(field1PictureBox);
@@ -459,8 +459,8 @@
             ((System.ComponentModel.ISupportInitialize)field1PictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)partitionPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)resultPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)colorizedFieldPicBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)backgroundPicBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)step1picBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)step2picBox).EndInit();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)widthSlider).EndInit();
@@ -483,7 +483,7 @@
         private PictureBox field1PictureBox;
         private PictureBox partitionPictureBox;
         private PictureBox resultPictureBox;
-        private PictureBox colorizedFieldPicBox;
+        private PictureBox step1picBox;
         private Label label1;
         private Label label2;
         private ComboBox ordinaryT1list;
@@ -493,7 +493,7 @@
         private Label label3;
         private Label label4;
         private Button renderButton;
-        private PictureBox backgroundPicBox;
+        private PictureBox step2picBox;
         private StatusStrip statusStrip;
         private ToolStripStatusLabel renderLabel;
         private TrackBar widthSlider;

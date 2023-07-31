@@ -15,7 +15,8 @@ namespace ShieldsV2Tests
     {
         #region Constants
         private const string ROOT_FOLDER = @"C:/Icono/Shields";
-        private const int MASK_REF_WIDTH = 1000;
+        
+        public const int BASE_REGION_WIDTH = 1000;
 
         private static readonly IReadOnlyDictionary<Tincture, Color> TINCTURES_TO_COLORS = new Dictionary<Tincture, Color>()
         {
@@ -35,12 +36,12 @@ namespace ShieldsV2Tests
         #endregion
 
         #region Properties
-        private List<(Metafile Image, Region Mask3000w, Rectangle Area3000w)> Shields { get; set; }
-        private List<Metafile> Ordinaries { get; set; }
+        private List<(Metafile Image, Region MaskRefw, Rectangle AreaRefw)> Shields { get; set; }
+        private List<OrdinaryImage> Ordinaries { get; set; }
         private List<Metafile> Fields { get; set; }
 
-        private (Metafile Image, Region Mask3000w, Rectangle Area3000w) CurrentShieldImg { get; set; }
-        private Metafile CurrentOrdinaryImg { get; set; }
+        private (Metafile Image, Region MaskRefw, Rectangle AreaRefw) CurrentShieldImg { get; set; }
+        private OrdinaryImage CurrentOrdinaryImg { get; set; }
         private Metafile CurrentField1Img { get; set; }
         private Metafile CurrentField2Img { get; set; }
 
@@ -69,17 +70,16 @@ namespace ShieldsV2Tests
                 {
                     Metafile img = new(path);
                     using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shields", "Masks", Path.GetFileName(path)));
-                    using Bitmap bmp = new(maskImg, MASK_REF_WIDTH, (int)(MASK_REF_WIDTH * ((double)img.Height / img.Width)));
+                    using Bitmap bmp = new(maskImg, BASE_REGION_WIDTH, (int)(BASE_REGION_WIDTH * ((double)img.Height / img.Width)));
                     Region reg = bmp.MakeNonTransparentRegion();
-                    using Bitmap bmp2 = new(img, MASK_REF_WIDTH, (int)(MASK_REF_WIDTH * ((double)img.Height / img.Width)));
+                    using Bitmap bmp2 = new(img, BASE_REGION_WIDTH, (int)(BASE_REGION_WIDTH * ((double)img.Height / img.Width)));
                     Rectangle area = bmp2.FindRectangleAroundPic();
                     return (img, reg, area);
                 })
                 .ToList();
 
-            Ordinaries = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Ordinaries"))
-                .Where(path => Path.GetExtension(path) == ".emf")
-                .Select(path => new Metafile(path))
+            Ordinaries = Directory.GetDirectories(Path.Combine(ROOT_FOLDER, "Ordinaries"))
+                .Select(path => new OrdinaryImage(new DirectoryInfo(path).Name, path))
                 .ToList();
 
             Fields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Fields"))
@@ -89,7 +89,7 @@ namespace ShieldsV2Tests
 
             // Init current images
             SetCurrentShieldImage(Shields[0]);
-            SetCurrentPartitionImg(Ordinaries[0]);
+            SetCurrentOrdinaryImg(Ordinaries[0]);
             SetField1Img(Fields[0]);
             SetField2Img(Fields[0]);
 
@@ -129,10 +129,10 @@ namespace ShieldsV2Tests
             CurrentShieldImg = shieldImg;
             shieldPictureBox.Image = shieldImg.Image;
         }
-        public void SetCurrentPartitionImg(Metafile image)
+        public void SetCurrentOrdinaryImg(OrdinaryImage ordinary)
         {
-            CurrentOrdinaryImg = image;
-            partitionPictureBox.Image = image;
+            CurrentOrdinaryImg = ordinary;
+            partitionPictureBox.Image = ordinary.RenderFullImage();
         }
         public void SetField1Img(Metafile image)
         {
@@ -146,7 +146,7 @@ namespace ShieldsV2Tests
         }
 
         public void NextShieldImage() => SetCurrentShieldImage(Shields[(Shields.IndexOf(CurrentShieldImg) + 1) % Shields.Count]);
-        public void NextPartitionImage() => SetCurrentPartitionImg(Ordinaries[(Ordinaries.IndexOf(CurrentOrdinaryImg) + 1) % Ordinaries.Count]);
+        public void NextPartitionImage() => SetCurrentOrdinaryImg(Ordinaries[(Ordinaries.IndexOf(CurrentOrdinaryImg) + 1) % Ordinaries.Count]);
         public void NextFieldImg1() => SetField1Img(Fields[(Fields.IndexOf(CurrentField1Img) + 1) % Fields.Count]);
         public void NextFieldImg2() => SetField2Img(Fields[(Fields.IndexOf(CurrentField2Img) + 1) % Fields.Count]);
         #endregion
@@ -162,8 +162,8 @@ namespace ShieldsV2Tests
 
             if (!displaySteps)
             {
-                colorizedFieldPicBox.Image = null;
-                backgroundPicBox.Image = null;
+                step1picBox.Image = null;
+                step2picBox.Image = null;
             }
 
             SmoothingMode emfSmoothing = smoothingCheckBox.Checked ? SmoothingMode.AntiAlias : SmoothingMode.None;
@@ -172,14 +172,15 @@ namespace ShieldsV2Tests
             // Conversion à faire au chargement des images
             // Ici on les refait à chaque fois pour pouvoir modifier les paramètres de qualité de rendu
             Metafile shieldBorderMetaFile = ConvertToEmfPlus(CurrentShieldImg.Image, emfSmoothing, emfQuality);
-            Metafile fieldMetaFile = ConvertToEmfPlus(CurrentField1Img, emfSmoothing, emfQuality);
-            Metafile ordinaryMetaFile = ConvertToEmfPlus(CurrentOrdinaryImg, emfSmoothing, emfQuality);
+            Metafile field1MetaFile = ConvertToEmfPlus(CurrentField1Img, emfSmoothing, emfQuality);
+            Metafile field2MetaFile = ConvertToEmfPlus(CurrentField2Img, emfSmoothing, emfQuality);
+            Metafile ordinaryBorderFile = ConvertToEmfPlus(CurrentOrdinaryImg.Border_Image, emfSmoothing, emfQuality);
 
             // GO
             Stopwatch sw = Stopwatch.StartNew();
 
             // CALCUL TAILLE CANVA ET ZONE DE DRAW
-            Rectangle usefullArea3000w = CurrentShieldImg.Area3000w;
+            Rectangle usefullArea3000w = CurrentShieldImg.AreaRefw;
 
             double canvaAspectRatio = (double)usefullArea3000w.Height / usefullArea3000w.Width;
             int canvaWidth = widthSlider.Value * 100;
@@ -192,53 +193,68 @@ namespace ShieldsV2Tests
             {
                 X = -(int)(usefullArea3000w.X * destinationScale), // - (canvaWidth / 500) : ajustement pour les marges vides de quelques pixels (valeur obtenue empyriquement)
                 Y = -(int)(usefullArea3000w.Y * destinationScale),
-                Width = (int)(MASK_REF_WIDTH * destinationScale),
-                Height = (int)(MASK_REF_WIDTH * sourceAspectRatio * destinationScale),
+                Width = (int)(BASE_REGION_WIDTH * destinationScale),
+                Height = (int)(BASE_REGION_WIDTH * sourceAspectRatio * destinationScale),
             };
 
             Bitmap canva = new(canvaWidth, canvaHeight);
             using Graphics gCanva = Graphics.FromImage(canva);
 
-            // MASK
-            Region mask = new(CurrentShieldImg.Mask3000w.GetRegionData());
+            // MASK transform
             System.Drawing.Drawing2D.Matrix maskTransform = new();
             maskTransform.Scale((float)destinationScale, (float)destinationScale);
             maskTransform.Translate(-usefullArea3000w.X, -usefullArea3000w.Y);
-            mask.Transform(maskTransform);
-            gCanva.Clip = mask;
 
-            // FIELD
-            if (OrdinaryT1 == Tincture.Field || OrdinaryT2 == Tincture.Field)
+            void DrawFieldOrTinct(Region tinctRegion, Tincture tincture, Image fieldImg, Tincture fieldT1, Tincture fieldT2)
             {
-                ImageAttributes fieldImageAttributes = ComputeImageAttributeFor(Field1T1, Field1T2);
+                // Mask
+                Region drawRegion = new(CurrentShieldImg.MaskRefw.GetRegionData());
+                drawRegion.Intersect(tinctRegion);
+                drawRegion.Transform(maskTransform);
 
-                gCanva.DrawImage(
-                    fieldMetaFile,
-                    destR,
-                    0, 0, fieldMetaFile.Width, fieldMetaFile.Height,
-                    GraphicsUnit.Pixel,
-                    fieldImageAttributes);
+                gCanva.Clip = drawRegion;
 
-                if (displaySteps)
-                    colorizedFieldPicBox.Image = new Bitmap(canva);
+                if(tincture != Tincture.Field)
+                {
+                    gCanva.FillRectangle(new SolidBrush(TINCTURES_TO_COLORS[tincture]), destR);
+                }
+                else
+                {
+                    ImageAttributes fieldImageAttributes = ComputeImageAttributeFor(fieldT1, fieldT2);
+
+                    gCanva.DrawImage(
+                        fieldImg,
+                        destR,
+                        0, 0, fieldImg.Width, fieldImg.Height,
+                        GraphicsUnit.Pixel,
+                        fieldImageAttributes);
+                }
             }
 
-            // PARTITION
-            ImageAttributes ordinaryImageAttributes = ComputeImageAttributeFor(OrdinaryT1, OrdinaryT2);
-
-            gCanva.DrawImage(
-                ordinaryMetaFile,
-                destR,
-                0, 0, ordinaryMetaFile.Width, ordinaryMetaFile.Height,
-                GraphicsUnit.Pixel,
-                ordinaryImageAttributes);
+            // T1
+            DrawFieldOrTinct(CurrentOrdinaryImg.T1_Region, OrdinaryT1, field1MetaFile, Field1T1, Field1T2);
 
             if (displaySteps)
-                backgroundPicBox.Image = new Bitmap(canva);
+                step1picBox.Image = new Bitmap(canva);
 
-            // SHIELD
+            // T2
+            DrawFieldOrTinct(CurrentOrdinaryImg.T2_Region, OrdinaryT2, field2MetaFile, Field2T1, Field2T2);
+
+            if (displaySteps)
+                step2picBox.Image = new Bitmap(canva);
+
+            // Ordinary border
+            Region insideShield = new(CurrentShieldImg.MaskRefw.GetRegionData());
+            insideShield.Transform(maskTransform);
+            gCanva.Clip = insideShield;
+            gCanva.DrawImage(
+                ordinaryBorderFile,
+                destR,
+                0, 0, ordinaryBorderFile.Width, ordinaryBorderFile.Height,
+                GraphicsUnit.Pixel);
+
+            // Shield border
             gCanva.Clip = new(); // Do not set to null (exception)
-
             gCanva.DrawImage(
                 shieldBorderMetaFile,
                 destR,
