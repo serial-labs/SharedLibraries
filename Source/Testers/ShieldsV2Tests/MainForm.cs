@@ -14,7 +14,7 @@ namespace ShieldsV2Tests
     public partial class MainForm : Form
     {
         #region Constants
-        private const string ROOT_FOLDER = @"C:/Icono/Shields/V2";
+        private const string ROOT_FOLDER = @"C:/Icono/Shields";
 
         private static readonly IReadOnlyDictionary<Tincture, Color> TINCTURES_TO_COLORS = new Dictionary<Tincture, Color>()
         {
