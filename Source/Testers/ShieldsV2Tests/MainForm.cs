@@ -64,12 +64,12 @@ namespace ShieldsV2Tests
             InitializeComponent();
 
             // Fill image lists
-            Shields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Shields"))
+            Shields = Directory.GetFiles(Path.Combine(ROOT_FOLDER, "Shapes"))
                 .Where(path => Path.GetExtension(path) == ".emf")
                 .Select(path =>
                 {
                     Metafile img = new(path);
-                    using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shields", "Masks", Path.GetFileName(path)));
+                    using Metafile maskImg = new(Path.Combine(ROOT_FOLDER, "Shapes", "Masks", Path.GetFileName(path)));
                     using Bitmap bmp = new(maskImg, BASE_REGION_WIDTH, (int)(BASE_REGION_WIDTH * ((double)img.Height / img.Width)));
                     Region reg = bmp.MakeNonTransparentRegion();
                     using Bitmap bmp2 = new(img, BASE_REGION_WIDTH, (int)(BASE_REGION_WIDTH * ((double)img.Height / img.Width)));
